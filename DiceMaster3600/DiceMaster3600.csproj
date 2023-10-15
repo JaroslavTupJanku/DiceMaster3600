@@ -7,4 +7,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DiceMaster3600.Core\DiceMaster3600.Core.csproj" />
+    <ProjectReference Include="..\DiceMaster3600.Data\DiceMaster3600.Data.csproj" />
+  </ItemGroup>
+
 </Project>
