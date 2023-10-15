@@ -4,14 +4,14 @@
     "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Data\\DiceMaster3600.Data.csproj": {}
   },
   "projects": {
-    "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Data\\DiceMaster3600.Data.csproj": {
+    "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Core\\DiceMaster3600.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Data\\DiceMaster3600.Data.csproj",
-        "projectName": "DiceMaster3600.Data",
-        "projectPath": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Data\\DiceMaster3600.Data.csproj",
+        "projectUniqueName": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Core\\DiceMaster3600.Core.csproj",
+        "projectName": "DiceMaster3600.Core",
+        "projectPath": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Core\\DiceMaster3600.Core.csproj",
         "packagesPath": "C:\\Users\\Jaros\\.nuget\\packages\\",
-        "outputPath": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Data\\obj\\",
+        "outputPath": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -42,6 +42,83 @@
       "frameworks": {
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WPF": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Data\\DiceMaster3600.Data.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Data\\DiceMaster3600.Data.csproj",
+        "projectName": "DiceMaster3600.Data",
+        "projectPath": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Data\\DiceMaster3600.Data.csproj",
+        "packagesPath": "C:\\Users\\Jaros\\.nuget\\packages\\",
+        "outputPath": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Data\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Jaros\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0-windows"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0-windows7.0": {
+            "targetAlias": "net6.0-windows",
+            "projectReferences": {
+              "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Core\\DiceMaster3600.Core.csproj": {
+                "projectPath": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600.Core\\DiceMaster3600.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0-windows7.0": {
+          "targetAlias": "net6.0-windows",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[7.0.12, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
