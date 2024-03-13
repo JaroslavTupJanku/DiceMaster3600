@@ -4,72 +4,117 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
-        xmlns:local="clr-namespace:DiceMaster3600"
+        xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
         mc:Ignorable="d"
-        Height="450" Width="800" AllowsTransparency="True"
-        WindowStyle="None" Background="Transparent">
+        WindowState="Maximized"
+        Background="WhiteSmoke">
+    <Window.Resources>
+        <SolidColorBrush x:Key="SidebarBackgroundColor" Color="#4d95dc"/>
+        <SolidColorBrush x:Key="TopBarBackgroundColor" Color="#506165"/>
+        <SolidColorBrush x:Key="PrimaryButtonColor" Color="#f0f1f2"/>
+        <SolidColorBrush x:Key="SecondaryButtonColor" Color="#ffffff"/>
+        <SolidColorBrush x:Key="NegativeBalanceColor" Color="#E74C3C"/>
+        <SolidColorBrush x:Key="TextColor" Color="#333333"/>
+        <SolidColorBrush x:Key="LogoColor" Color="#464c58"/>
+        <SolidColorBrush x:Key="InvoiceBackgroundColor" Color="#ECF0F1"/>
+    </Window.Resources>
 
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
 
-    <Border Background="{StaticResource MeoptaBackgroundBrush}" CornerRadius="20">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="75"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Dice Master 3600"
+        <Grid Name="Logo" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource LogoColor}">
+            <TextBlock Text="DM 3600"
+                    Background="Transparent"
                     VerticalAlignment="Center"
-                    HorizontalAlignment="Left"
+                    HorizontalAlignment="Center"
                     FontFamily="{StaticResource MuseoFontFamily2}"
-                    Margin="15,0,15,0"
-                    Foreground="{StaticResource MeoptaBlueBrush}"
-                    FontSize="22"/>
+                    Foreground="WhiteSmoke"
+                    FontSize="22">
+            </TextBlock>
+        </Grid>
 
-            <StackPanel Grid.Row="1">
-                
-                <RadioButton Content="Home"
-                             Style="{StaticResource menuButtonStyle}"
-                             Height="50"
-                             Foreground="{StaticResource MeoptaBlueBrush}"
-                             FontSize="14"/>
-                <RadioButton Content="Menu1"
-                             Style="{StaticResource menuButtonStyle}"
-                             Height="50"
-                             Foreground="{StaticResource MeoptaBlueBrush}"
-                             FontSize="14"/>
-                <RadioButton Content="Menu2"
-                             Style="{StaticResource menuButtonStyle}"
-                             Height="50"
-                             Foreground="{StaticResource MeoptaBlueBrush}"
-                             FontSize="14"/>
-                <RadioButton Content="Menu3"
-                             Style="{StaticResource menuButtonStyle}"
-                             Height="50"
-                             Foreground="{StaticResource MeoptaBlueBrush}"
-                             FontSize="14"/>
-            </StackPanel>
-
-            <TextBox Width="250" 
-                     Height="40"
-                     Style="{StaticResource MeoTextBox}"
+        <Grid Name="TopBar" Background="{StaticResource SidebarBackgroundColor}" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBox Style="{StaticResource MeoTextBox}"
                      VerticalAlignment="Center"
                      HorizontalAlignment="Left"
-                     Margin="5"
-                     Grid.Column="1"/>
+                     Margin="10"/>
+            
+            <ComboBox VerticalAlignment="Center" Grid.Column="2" SelectedIndex="0" MinWidth="65" Style="{StaticResource MeoComboBox}">
+                <ComboBoxItem Content="English" />
+                <ComboBoxItem Content="Česky"/>
+            </ComboBox>
 
-            <ContentControl Grid.Row="1"
-                            Grid.Column="1"
-                            Margin="10"
-                            Content="{Binding CurrentView }"/>
+            <Separator Height="1" Width="Auto" Margin="20,5,0,5" Grid.Column="3" Background="WhiteSmoke">
+                <Separator.LayoutTransform>
+                    <RotateTransform Angle="90"/>
+                </Separator.LayoutTransform>
+            </Separator>
 
+            <Button Content="Logout" 
+                    Foreground="WhiteSmoke"
+                    Margin="5,0"
+                    Width="70"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    VerticalContentAlignment="Center" 
+                    HorizontalContentAlignment="Center"
+                    Grid.Column="4"/>
         </Grid>
-    </Border>
+
+
+
+        <StackPanel Grid.Row="1" Background="{StaticResource TopBarBackgroundColor}">
+            <RadioButton Content="Home"
+                             Style="{StaticResource menuButtonStyle}"
+                             Height="50"
+                             Foreground="WhiteSmoke"
+                             FontSize="14"/>
+            <RadioButton Content="Menu1"
+                             Style="{StaticResource menuButtonStyle}"
+                             Height="50"
+                             Foreground="WhiteSmoke"
+                             FontSize="14"/>
+            <RadioButton Content="Menu2"
+                             Style="{StaticResource menuButtonStyle}"
+                             Height="50"
+                             Foreground="WhiteSmoke"
+                             FontSize="14"/>
+            <RadioButton Content="Menu3"
+                             Style="{StaticResource menuButtonStyle}"
+                             Height="50"
+                                 Foreground="WhiteSmoke"
+                             FontSize="14"/>
+        </StackPanel>
+
+
+
+
+
+
+            <ContentControl Grid.Row="2"
+                        Grid.Column="1"
+                        Content="{Binding CurrentView}">
+            </ContentControl>
+        </Grid>
+        
 </Window>

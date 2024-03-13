@@ -3,16 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DiceMaster3600.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-
-    <StackPanel>
+             mc:Ignorable="d" Background="#ffffff">
+ 
+    <StackPanel Margin="10">
         <TextBlock Text="Dicover"
                    Foreground="{StaticResource MeoptaBlueBrush}"
                    FontSize="28"
                    HorizontalAlignment="Left"
                    Margin="0,0,0,20"/>
+
+        <!--<StackPanel Grid.Row="1" Background="{StaticResource PrimaryButtonColor}">
+            <TextBox Width="250" 
+                     Height="40"
+                     Style="{StaticResource MeoTextBox}"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Left"
+                     Margin="5"
+                     Grid.Column="1"/>
+        </StackPanel>-->
+        
         <StackPanel Orientation="Horizontal">
             <Border Width="400"
                     Height="200"

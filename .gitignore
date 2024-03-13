@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/DiceMaster3600/.vs/DiceMaster3600/FileContentIndex
+/DiceMaster3600/obj/Debug/net6.0-windows
+/DiceMaster3600/.vs/DiceMaster3600/v17/.suo
+/DiceMaster3600/.vs/DiceMaster3600/DesignTimeBuild/.dtbcache.v2

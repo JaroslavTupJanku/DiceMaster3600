@@ -71,9 +71,7 @@ C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\ref\Dic
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\bin\Debug\net6.0-windows\CommunityToolkit.Mvvm.dll
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Theme\ColoursTheme.baml
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Theme\FontTheme.baml
-C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Theme\MenuButtonTheme.baml
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\App.baml
-C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Theme\TextBoxTheme.baml
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\HomeView.g.cs
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\GeneratedInternalTypeHelper.g.cs
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\HomeView.baml
@@ -101,3 +99,11 @@ C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\bin\Debug\net6.0-windows\System.
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\bin\Debug\net6.0-windows\System.Diagnostics.EventLog.dll
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\bin\Debug\net6.0-windows\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.Messages.dll
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\bin\Debug\net6.0-windows\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.dll
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Controls\DiceControl.baml
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Controls\DiceControl.g.cs
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\bin\Debug\net6.0-windows\Material.Icons.dll
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\bin\Debug\net6.0-windows\Material.Icons.WPF.dll
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Controls\IconButton.g.cs
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Controls\IconButton.baml
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Theme\DiceItemTemplate.baml
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Theme\Styles.baml

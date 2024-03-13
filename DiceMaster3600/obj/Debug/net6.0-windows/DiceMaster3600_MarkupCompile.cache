@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\App.xaml
-6759881443
+887339031
 
-6-1844028668
-2351716950025
-MainWindow.xaml;View\HomeView.xaml;View\Theme\ColoursTheme.xaml;View\Theme\FontTheme.xaml;View\Theme\MenuButtonTheme.xaml;View\Theme\TextBoxTheme.xaml;
+81062483940
+2371432663392
+MainWindow.xaml;View\Controls\DiceControl.xaml;View\Controls\IconButton.xaml;View\HomeView.xaml;View\Theme\ColoursTheme.xaml;View\Theme\DiceItemTemplate.xaml;View\Theme\FontTheme.xaml;View\Theme\Styles.xaml;
 
 False
 

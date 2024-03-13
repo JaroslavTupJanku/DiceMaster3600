@@ -11,6 +11,7 @@
           "CommunityToolkit.Mvvm": "8.2.2",
           "DiceMaster3600.Core": "1.0.0",
           "DiceMaster3600.Data": "1.0.0",
+          "Material.Icons.WPF": "2.1.0",
           "Microsoft.Extensions.Hosting": "8.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0"
         },
@@ -23,6 +24,25 @@
           "lib/net6.0/CommunityToolkit.Mvvm.dll": {
             "assemblyVersion": "8.2.0.0",
             "fileVersion": "8.2.2.1"
+          }
+        }
+      },
+      "Material.Icons/2.1.0": {
+        "runtime": {
+          "lib/netstandard2.0/Material.Icons.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        }
+      },
+      "Material.Icons.WPF/2.1.0": {
+        "dependencies": {
+          "Material.Icons": "2.1.0"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Material.Icons.WPF.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
           }
         }
       },
@@ -745,6 +765,20 @@
       "sha512": "sha512-r0g0k9tGYdrnz8R7T3x5UiokDffeevzK/2P/9SBL6fqLgN8B157MIi/bVUWI1KAz6ZorZrK9AdABCWUeXZZsvA==",
       "path": "communitytoolkit.mvvm/8.2.2",
       "hashPath": "communitytoolkit.mvvm.8.2.2.nupkg.sha512"
+    },
+    "Material.Icons/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-oMMrh8mKnZwOKZJEI3hc4Y18+/FQDfXSMv21xbX4kq05gcvcD1M2zxrjgNQvygHhP4DTcFmDidqUJRmuPyV9Fg==",
+      "path": "material.icons/2.1.0",
+      "hashPath": "material.icons.2.1.0.nupkg.sha512"
+    },
+    "Material.Icons.WPF/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yG5CQA1CdezXXgeZB6fosCFW/jZVro7R2QAk95KK2051C1qqbECD4mZCJFnsX53TTxRQTQER6/It1kuoAtnalw==",
+      "path": "material.icons.wpf/2.1.0",
+      "hashPath": "material.icons.wpf.2.1.0.nupkg.sha512"
     },
     "Microsoft.Data.Sqlite.Core/7.0.12": {
       "type": "package",

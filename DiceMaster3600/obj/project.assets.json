@@ -18,6 +18,30 @@
           "buildTransitive/netstandard2.1/CommunityToolkit.Mvvm.targets": {}
         }
       },
+      "Material.Icons/2.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Material.Icons.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Material.Icons.dll": {}
+        }
+      },
+      "Material.Icons.WPF/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Material.Icons": "2.1.0"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/Material.Icons.WPF.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Material.Icons.WPF.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
       "Microsoft.Data.Sqlite.Core/7.0.12": {
         "type": "package",
         "dependencies": {
@@ -1094,6 +1118,35 @@
         "lib/netstandard2.1/CommunityToolkit.Mvvm.dll",
         "lib/netstandard2.1/CommunityToolkit.Mvvm.pdb",
         "lib/netstandard2.1/CommunityToolkit.Mvvm.xml"
+      ]
+    },
+    "Material.Icons/2.1.0": {
+      "sha512": "oMMrh8mKnZwOKZJEI3hc4Y18+/FQDfXSMv21xbX4kq05gcvcD1M2zxrjgNQvygHhP4DTcFmDidqUJRmuPyV9Fg==",
+      "type": "package",
+      "path": "material.icons/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.0/Material.Icons.dll",
+        "material.icons.2.1.0.nupkg.sha512",
+        "material.icons.nuspec"
+      ]
+    },
+    "Material.Icons.WPF/2.1.0": {
+      "sha512": "yG5CQA1CdezXXgeZB6fosCFW/jZVro7R2QAk95KK2051C1qqbECD4mZCJFnsX53TTxRQTQER6/It1kuoAtnalw==",
+      "type": "package",
+      "path": "material.icons.wpf/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net461/Material.Icons.WPF.dll",
+        "lib/net6.0-windows7.0/Material.Icons.WPF.dll",
+        "lib/net7.0-windows7.0/Material.Icons.WPF.dll",
+        "lib/netcoreapp3.1/Material.Icons.WPF.dll",
+        "material.icons.wpf.2.1.0.nupkg.sha512",
+        "material.icons.wpf.nuspec"
       ]
     },
     "Microsoft.Data.Sqlite.Core/7.0.12": {
@@ -2496,6 +2549,7 @@
       "CommunityToolkit.Mvvm >= 8.2.2",
       "DiceMaster3600.Core >= 1.0.0",
       "DiceMaster3600.Data >= 1.0.0",
+      "Material.Icons.WPF >= 2.1.0",
       "Microsoft.Extensions.Hosting >= 8.0.0",
       "Microsoft.Extensions.Hosting.Abstractions >= 8.0.0"
     ]
@@ -2553,6 +2607,10 @@
           "CommunityToolkit.Mvvm": {
             "target": "Package",
             "version": "[8.2.2, )"
+          },
+          "Material.Icons.WPF": {
+            "target": "Package",
+            "version": "[2.1.0, )"
           },
           "Microsoft.Extensions.Hosting": {
             "target": "Package",

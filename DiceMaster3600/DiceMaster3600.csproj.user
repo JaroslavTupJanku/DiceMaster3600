@@ -7,6 +7,12 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="View\Controls\DiceControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\Controls\IconButton.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\HomeView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -15,19 +21,25 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="View\Controls\DiceControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\Controls\IconButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\HomeView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\Theme\ColoursTheme.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="View\Theme\DiceItemTemplate.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\Theme\FontTheme.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\Theme\MenuButtonTheme.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\Theme\TextBoxTheme.xaml">
+    <Page Update="View\Theme\Styles.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

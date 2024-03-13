@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "g5eP3tRVCrly0uOJor++9JWGVaXoZ4loRL2bp/OfFSOjhp12L02h5Ugkf6LRK8rUf6ZyuAxqGxICFk2W6W+BRw==",
+  "dgSpecHash": "jV6XYNIuIU6kILaQwyyQnLuxwN8eDmOLucW5S1HWnRaFm9I5b2kVGM0c15VwWRT/0DaSV94QUI5mcKM5ymcq5A==",
   "success": true,
   "projectFilePath": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600\\DiceMaster3600.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Jaros\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.2\\communitytoolkit.mvvm.8.2.2.nupkg.sha512",
+    "C:\\Users\\Jaros\\.nuget\\packages\\material.icons\\2.1.0\\material.icons.2.1.0.nupkg.sha512",
+    "C:\\Users\\Jaros\\.nuget\\packages\\material.icons.wpf\\2.1.0\\material.icons.wpf.2.1.0.nupkg.sha512",
     "C:\\Users\\Jaros\\.nuget\\packages\\microsoft.data.sqlite.core\\7.0.12\\microsoft.data.sqlite.core.7.0.12.nupkg.sha512",
     "C:\\Users\\Jaros\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.12\\microsoft.entityframeworkcore.7.0.12.nupkg.sha512",
     "C:\\Users\\Jaros\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.12\\microsoft.entityframeworkcore.abstractions.7.0.12.nupkg.sha512",
