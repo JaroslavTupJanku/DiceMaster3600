@@ -68,3 +68,12 @@ C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\refint\
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\DiceMaster3600.pdb
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\DiceMaster3600.genruntimeconfig.cache
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\ref\DiceMaster3600.dll
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\bin\Debug\net6.0-windows\CommunityToolkit.Mvvm.dll
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Theme\ColoursTheme.baml
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Theme\FontTheme.baml
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Theme\MenuButtonTheme.baml
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\App.baml
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\Theme\TextBoxTheme.baml
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\HomeView.g.cs
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\GeneratedInternalTypeHelper.g.cs
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600\obj\Debug\net6.0-windows\View\HomeView.baml
