@@ -1,0 +1,75 @@
+﻿<Window x:Class="DiceMaster3600.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
+        xmlns:local="clr-namespace:DiceMaster3600"
+        mc:Ignorable="d"
+        Height="450" Width="800" AllowsTransparency="True"
+        WindowStyle="None" Background="Transparent">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Border Background="{StaticResource MeoptaBackgroundBrush}" CornerRadius="20">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Dice Master 3600"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    FontFamily="{StaticResource MuseoFontFamily2}"
+                    Margin="15,0,15,0"
+                    Foreground="{StaticResource MeoptaBlueBrush}"
+                    FontSize="22"/>
+
+            <StackPanel Grid.Row="1">
+                
+                <RadioButton Content="Home"
+                             Style="{StaticResource menuButtonStyle}"
+                             Height="50"
+                             Foreground="{StaticResource MeoptaBlueBrush}"
+                             FontSize="14"/>
+                <RadioButton Content="Menu1"
+                             Style="{StaticResource menuButtonStyle}"
+                             Height="50"
+                             Foreground="{StaticResource MeoptaBlueBrush}"
+                             FontSize="14"/>
+                <RadioButton Content="Menu2"
+                             Style="{StaticResource menuButtonStyle}"
+                             Height="50"
+                             Foreground="{StaticResource MeoptaBlueBrush}"
+                             FontSize="14"/>
+                <RadioButton Content="Menu3"
+                             Style="{StaticResource menuButtonStyle}"
+                             Height="50"
+                             Foreground="{StaticResource MeoptaBlueBrush}"
+                             FontSize="14"/>
+            </StackPanel>
+
+            <TextBox Width="250" 
+                     Height="40"
+                     Style="{StaticResource MeoTextBox}"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Left"
+                     Margin="5"
+                     Grid.Column="1"/>
+
+            <ContentControl Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="10"
+                            Content="{Binding CurrentView }"/>
+
+        </Grid>
+    </Border>
+</Window>
