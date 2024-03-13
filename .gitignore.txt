@@ -398,3 +398,4 @@ FodyWeavers.xsd
 
 # Mine
 *.suo
+*.dbcache.v2
