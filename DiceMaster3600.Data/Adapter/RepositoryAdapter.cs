@@ -3,14 +3,14 @@ using System.Data.SqlTypes;
 
 namespace DiceMaster3600.Data.Adapter
 {
-    public class RepositoryAdapter
+    public class SqlDatabaseAdapter
     {
         #region Fields
         private readonly SqlRepositories repos;
         #endregion
 
         #region Constructors
-        public RepositoryAdapter(SqlRepositories repositories) => repos = repositories;
+        public SqlDatabaseAdapter(SqlRepositories repositories) => repos = repositories;
         #endregion
 
         #region Methods
