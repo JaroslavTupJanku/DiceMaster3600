@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiceMaster3600", "DiceMaster3600.csproj", "{CDFAC3B5-FF4F-4851-9BEE-1CE7DDE82C8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiceMaster3600", "DiceMaster3600.csproj", "{CDFAC3B5-FF4F-4851-9BEE-1CE7DDE82C8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiceMaster3600.Core", "..\DiceMaster3600.Core\DiceMaster3600.Core.csproj", "{5E80652D-933F-4779-B6ED-2724632DA258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiceMaster3600.Core", "..\DiceMaster3600.Core\DiceMaster3600.Core.csproj", "{5E80652D-933F-4779-B6ED-2724632DA258}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiceMaster3600.Data", "..\DiceMaster3600.Data\DiceMaster3600.Data.csproj", "{07BFC232-2C80-4E31-BA45-BAFA0065167C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiceMaster3600.Data", "..\DiceMaster3600.Data\DiceMaster3600.Data.csproj", "{07BFC232-2C80-4E31-BA45-BAFA0065167C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

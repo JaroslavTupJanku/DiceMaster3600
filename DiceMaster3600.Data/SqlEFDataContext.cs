@@ -39,7 +39,6 @@ namespace DiceMaster3600.Data
 
             modelBuilder.Entity<FacultyEntity>().HasOne(f => f.University).WithMany(u => u.Faculties).HasForeignKey(f => f.UniversityId);
             modelBuilder.Entity<UserEntity>().HasOne(u => u.Faculty).WithMany().HasForeignKey(u => u.FacultyId);
-            modelBuilder.Entity<UserEntity>().HasOne(u => u.University).WithMany().HasForeignKey(u => u.UniversityId);
         }
     }
 }
