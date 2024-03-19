@@ -1,0 +1,60 @@
+﻿<Window x:Class="DiceMaster3600.View.LoginForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+        mc:Ignorable="d"
+        Title="LoginForm" >
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#FF2196F3"/>
+            <Setter Property="BorderBrush" Value="#FF2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Background gradient -->
+        <Rectangle Grid.RowSpan="2">
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#AF2196F3" Offset="0.3"/>
+                    <GradientStop Color="#FF1976D2" Offset="0.9"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <Grid Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Ellipse Width="50" Height="50" Fill="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <materialIcons:MaterialIcon Kind="Home" Foreground="#FF2196F3" VerticalAlignment="Center" Height="30" HorizontalAlignment="Center"/>
+            <TextBlock Text="LOGIN" Foreground="White" FontSize="18" Margin="0,70,0,0" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Border Grid.Row="1" Background="White" CornerRadius="10" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="20" Margin="10,20,10,10">
+            <StackPanel>
+                <TextBlock Text="Email" Foreground="{StaticResource MeoptaBackgroundBrush}" />
+                <TextBox x:Name="txtEmail" Width="200" Height="25" Text="abel@wpf.com" BorderThickness="0,0,0,1" FontSize="15" VerticalContentAlignment="Bottom" HorizontalAlignment="Left"/>
+                <TextBlock Text="Password" Foreground="{StaticResource MeoptaBackgroundBrush}" Margin="0,20,0,0" />
+                <PasswordBox x:Name="txtPassword" Width="200" Height="25" BorderThickness="0,0,0,1" FontSize="15"/>
+                <Button x:Name="btnLogin" Content="LOGIN"/>
+                <TextBlock Text="Not a Member?" Foreground="#FF2196F3" HorizontalAlignment="Center" Cursor="Hand" Margin="0,10,0,0"/>
+                <Button BorderThickness="0" Padding="10,0"  HorizontalAlignment="Center" Content="Sing Up" Background="White" Foreground="#FF2196F3" Margin="0,3,0,0"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
