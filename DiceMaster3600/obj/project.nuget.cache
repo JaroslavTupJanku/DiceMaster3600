@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jV6XYNIuIU6kILaQwyyQnLuxwN8eDmOLucW5S1HWnRaFm9I5b2kVGM0c15VwWRT/0DaSV94QUI5mcKM5ymcq5A==",
+  "dgSpecHash": "3MwT4077a05rI3ybi5fFIeVKSo5JL9wjnTRxyshaeA6O7LGtZbZbX9J7yKzFPs9oGmDRVbqjUrkdaqaQO+uiPQ==",
   "success": true,
   "projectFilePath": "C:\\Jarek\\Skola\\BP\\DiceMaster3600\\DiceMaster3600\\DiceMaster3600.csproj",
   "expectedPackageFiles": [
@@ -44,6 +44,7 @@
     "C:\\Users\\Jaros\\.nuget\\packages\\microsoft.extensions.options\\8.0.0\\microsoft.extensions.options.8.0.0.nupkg.sha512",
     "C:\\Users\\Jaros\\.nuget\\packages\\microsoft.extensions.options.configurationextensions\\8.0.0\\microsoft.extensions.options.configurationextensions.8.0.0.nupkg.sha512",
     "C:\\Users\\Jaros\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "C:\\Users\\Jaros\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.77\\microsoft.xaml.behaviors.wpf.1.1.77.nupkg.sha512",
     "C:\\Users\\Jaros\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.4\\sqlitepclraw.bundle_e_sqlite3.2.1.4.nupkg.sha512",
     "C:\\Users\\Jaros\\.nuget\\packages\\sqlitepclraw.core\\2.1.4\\sqlitepclraw.core.2.1.4.nupkg.sha512",
     "C:\\Users\\Jaros\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.4\\sqlitepclraw.lib.e_sqlite3.2.1.4.nupkg.sha512",
