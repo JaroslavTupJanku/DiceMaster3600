@@ -424,3 +424,5 @@ FodyWeavers.xsd
 /DiceMaster3600.Data/obj/Debug/net6.0-windows/DiceMaster3600.Data.csproj.AssemblyReference.cache
 /DiceMaster3600.Data/obj/Debug/net6.0-windows/DiceMaster3600.Data.dll
 /DiceMaster3600.Data/obj/Debug/net6.0-windows/DiceMaster3600.Data.pdb
+/DiceMaster3600/obj/Debug/net6.0-windows/View/HomeView.g.i.cs
+/DiceMaster3600/obj/Debug/net6.0-windows/App.g.i.cs
