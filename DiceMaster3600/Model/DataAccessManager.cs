@@ -25,6 +25,5 @@ namespace DiceMaster3600.Model
         #region Events
         #endregion
 
-
     }
 }

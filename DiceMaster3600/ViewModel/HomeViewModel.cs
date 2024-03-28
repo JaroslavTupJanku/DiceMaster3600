@@ -1,11 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LiveChartsCore.SkiaSharpView;
 
 namespace DiceMaster3600.ViewModel
 {
@@ -37,8 +32,6 @@ namespace DiceMaster3600.ViewModel
 
         #region Events
         #endregion
-
-
 
     }
 }

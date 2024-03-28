@@ -34,7 +34,7 @@
             </Grid.ColumnDefinitions>
             
             <controls:InfoDisplayPanel UnitText="Pt" 
-                                       TitleText="Best Score"
+                                   TitleText="Best Score"
                                    ValueText="3600/1000" 
                                    Grid.Column="1" 
                                    TargetGridBackground="{StaticResource MeoptaYellowBrush}"/>
