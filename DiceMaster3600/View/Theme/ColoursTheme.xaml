@@ -7,6 +7,7 @@
 
     <!-- Complementary / Secondary Colors -->
     <Color x:Key="MeoptaBlue">#1A4C8C</Color>
+    <Color x:Key="MeoptaLightBlue">#4d95dc</Color>
     <Color x:Key="MeoptaBronze">#BEA04D</Color>
     <Color x:Key="MeoptaYellow">#E7B035</Color>
 
@@ -19,12 +20,24 @@
     <SolidColorBrush x:Key="MeoptaLogoBlackBrush" Color="{StaticResource MeoptaLogoBlack}"/>
     <SolidColorBrush x:Key="MeoptaLogoWhiteBrush" Color="{StaticResource MeoptaLogoWhite}"/>
     <SolidColorBrush x:Key="MeoptaBlueBrush" Color="{StaticResource MeoptaBlue}"/>
+    <SolidColorBrush x:Key="MeoptaLightBlueBrush" Color="{StaticResource MeoptaLightBlue}"/>
     <SolidColorBrush x:Key="MeoptaBronzeBrush" Color="{StaticResource MeoptaBronze}"/>
     <SolidColorBrush x:Key="MeoptaYellowBrush" Color="{StaticResource MeoptaYellow}"/>
 
     <!-- Additional SolidColorBrushes for Background Colors -->
     <SolidColorBrush x:Key="MeoptaBackgroundBrush" Color="{StaticResource MeoptaBackground}"/>
     <SolidColorBrush x:Key="MeoptaDarkerBackgroundBrush" Color="{StaticResource MeoptaDarkerBackground}"/>
-    <SolidColorBrush x:Key="MeoptaDarkBackgroundBrush" Color="{StaticResource MeoptaDarkBackground}"/>
+    <SolidColorBrush x:Key="MeoptaDarkBackgroundBrush" Color="Gray"/>
+    <SolidColorBrush x:Key="MeoptaMostDarkBackgroundBrush" Color="{StaticResource MeoptaDarkBackground}"/>
+    
+    <!-- Additional SolidColorBrushes for Background Colors -->
+    
+    <SolidColorBrush x:Key="TopBarBackgroundColor" Color="#506165"/>
+    <SolidColorBrush x:Key="PrimaryButtonColor" Color="#f0f1f2"/>
+    <SolidColorBrush x:Key="SecondaryButtonColor" Color="#ffffff"/>
+    <SolidColorBrush x:Key="NegativeBalanceColor" Color="#E74C3C"/>
+    <SolidColorBrush x:Key="TextColor" Color="#333333"/>
+    <SolidColorBrush x:Key="LogoColor" Color="#464c58"/>
+    <SolidColorBrush x:Key="InvoiceBackgroundColor" Color="#ECF0F1"/>
 
 </ResourceDictionary>

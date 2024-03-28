@@ -18,7 +18,7 @@ namespace DiceMaster3600
             AppHost = Host.CreateDefaultBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton<SqlDatabaseAdapter>();
+                    services.AddSingleton<RepositoryAdapter>();
                     services.AddSingleton<ISqlRepositories, SqlRepositories>();
 
                 }).Build();

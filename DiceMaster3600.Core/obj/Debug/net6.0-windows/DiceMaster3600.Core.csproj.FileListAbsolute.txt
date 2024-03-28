@@ -1,10 +1,10 @@
-C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\bin\Debug\net6.0-windows\DiceMaster3600.Core.deps.json
-C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\bin\Debug\net6.0-windows\DiceMaster3600.Core.dll
-C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\bin\Debug\net6.0-windows\DiceMaster3600.Core.pdb
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\obj\Debug\net6.0-windows\DiceMaster3600.Core.GeneratedMSBuildEditorConfig.editorconfig
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\obj\Debug\net6.0-windows\DiceMaster3600.Core.AssemblyInfoInputs.cache
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\obj\Debug\net6.0-windows\DiceMaster3600.Core.AssemblyInfo.cs
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\obj\Debug\net6.0-windows\DiceMaster3600.Core.csproj.CoreCompileInputs.cache
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\bin\Debug\net6.0-windows\DiceMaster3600.Core.deps.json
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\bin\Debug\net6.0-windows\DiceMaster3600.Core.dll
+C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\bin\Debug\net6.0-windows\DiceMaster3600.Core.pdb
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\obj\Debug\net6.0-windows\DiceMaster3600.Core.dll
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\obj\Debug\net6.0-windows\refint\DiceMaster3600.Core.dll
 C:\Jarek\Skola\BP\DiceMaster3600\DiceMaster3600.Core\obj\Debug\net6.0-windows\DiceMaster3600.Core.pdb
