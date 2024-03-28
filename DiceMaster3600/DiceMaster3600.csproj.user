@@ -13,6 +13,9 @@
     <Compile Update="View\Controls\IconButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\Controls\InfoDisplayPanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\EntryForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -31,6 +34,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\Controls\IconButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\Controls\InfoDisplayPanel.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\EntryForm.xaml">

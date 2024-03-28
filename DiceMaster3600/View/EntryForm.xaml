@@ -78,7 +78,7 @@
         <Grid Background="{StaticResource MeoptaBlueBrush}">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent">
                 <Grid Grid.Row="0">
-                    <Ellipse Style="{StaticResource GenderEllipseStyle}" Fill="{StaticResource MeoptaLightBlueBrush}" Width="120" Height="120" />
+                    <Ellipse Style="{StaticResource GenderEllipseStyle}" Fill="{StaticResource MeoptaYellowBrush}" Width="120" Height="120" />
                     <materialIcons:MaterialIcon Kind="FaceFemale" Foreground="White"  VerticalAlignment="Center" Height="80" HorizontalAlignment="Center"/>
                 </Grid>
                 <TextBlock Text="Lets get you set up" FontSize="25" Margin="0,20" FontWeight="Bold" Foreground="WhiteSmoke"/>

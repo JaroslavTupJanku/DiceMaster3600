@@ -3,109 +3,56 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
+             xmlns:controls="clr-namespace:DiceMaster3600.View.Controls"
+             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
              mc:Ignorable="d" Background="#ffffff">
- 
-    <StackPanel Margin="10">
-        <TextBlock Text="Dicover"
-                   Foreground="{StaticResource MeoptaBlueBrush}"
-                   FontSize="28"
-                   HorizontalAlignment="Left"
-                   Margin="0,0,0,20"/>
 
-        <!--<StackPanel Grid.Row="1" Background="{StaticResource PrimaryButtonColor}">
-            <TextBox Width="250" 
-                     Height="40"
-                     Style="{StaticResource MeoTextBox}"
-                     VerticalAlignment="Center"
-                     HorizontalAlignment="Left"
-                     Margin="5"
-                     Grid.Column="1"/>
-        </StackPanel>-->
-        
-        <StackPanel Orientation="Horizontal">
-            <Border Width="400"
-                    Height="200"
-                    CornerRadius="10">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
-                        <GradientStop Color="{StaticResource MeoptaYellow}" Offset="0.0"/>
-                        <GradientStop Color="{StaticResource MeoptaBronze}" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <Grid>
-                    <StackPanel>
-                        <TextBlock Text="World leader&#x0a;in global finance"
-                                   Foreground="White"
-                                   FontSize="28"
-                                   Margin="20,10,10,0"
-                                   />
-                        <TextBlock Text="Get Started today!"
-                                   Foreground="White"
-                                   FontSize="18"
-                                   Margin="20,10,10,0"/>
-                    </StackPanel>
-                    <Image Width="150"
-                               Height="149"
-                               HorizontalAlignment="Right"
-                               VerticalAlignment="Bottom"
-                               Source="/Images/Dices.png" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,17">
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="161.445"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
-                </Grid>
-            </Border>
-            <Border Width="200"
-                    Height="200"
-                    Margin="50,0,0,0"
-                    CornerRadius="10">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
-                        <GradientStop Color="{StaticResource MeoptaYellow}" Offset="0.0"/>
-                        <GradientStop Color="{StaticResource MeoptaBronze}" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-            </Border>
-        </StackPanel>
+    <UserControl.DataContext>
+        <vm:HomeViewModel/>
+    </UserControl.DataContext>
 
-        <StackPanel>
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="Margin" Value="15, 0,0,0"/>
-                </Style>
-            </StackPanel.Resources>
+    <Grid Margin="30">
+        <Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" MinWidth="400"/>
+                <ColumnDefinition Width="*" MinWidth="20"/>
+                <ColumnDefinition Width="Auto" MinWidth="400"/>
+                <ColumnDefinition Width="*" MinWidth="20"/>
+                <ColumnDefinition Width="Auto" MinWidth="400"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             
-            <TextBlock Text="Most Watched"
-                   Foreground="{StaticResource MeoptaBlueBrush}"
-                   FontSize="20"
-                   HorizontalAlignment="Left"
-                   Margin="0,0,0,10"/>
-                
-            <StackPanel Orientation="Horizontal">
-                <Border Width="150"
-                        Height="150"
-                        Background="Purple"
-                        CornerRadius="10"
-                        Margin="0"/>
-                <Border Width="150"
-                        Height="150"
-                        Background="Purple"
-                        CornerRadius="10"/>
-                <Border Width="150"
-                        Height="150"
-                        Background="Purple"
-                        CornerRadius="10"/>
-                <Border Width="150"
-                        Height="150"
-                        Background="Purple"
-                        CornerRadius="10"/>
-            </StackPanel>
+            <controls:InfoDisplayPanel UnitText="Pt" 
+                                       TitleText="Best Score"
+                                   ValueText="3600/1000" 
+                                   Grid.Column="1" 
+                                   TargetGridBackground="{StaticResource MeoptaYellowBrush}"/>
 
-        </StackPanel>
-    </StackPanel>
+            <controls:InfoDisplayPanel UnitText="pt"
+                                   TitleText="Avarage Score"
+                                   Grid.Column="3"       
+                                   ValueText="100030"
+                                   TargetGridBackground="{StaticResource MeoptaBlueBrush}"/>
+
+            <controls:InfoDisplayPanel TitleText="Best Player"
+                                   Grid.Column="5"
+                                   ValueText="Jaroslav Janků"
+                                   TargetGridBackground="{StaticResource MeoptaBronzeBrush}"/>
+        </Grid>
+
+        <lvc:CartesianChart Series="{Binding Series}" 
+                            Grid.Row="1"/>
+
+    </Grid>
 </UserControl>

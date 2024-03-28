@@ -27,7 +27,8 @@
     <!-- Additional SolidColorBrushes for Background Colors -->
     <SolidColorBrush x:Key="MeoptaBackgroundBrush" Color="{StaticResource MeoptaBackground}"/>
     <SolidColorBrush x:Key="MeoptaDarkerBackgroundBrush" Color="{StaticResource MeoptaDarkerBackground}"/>
-    <SolidColorBrush x:Key="MeoptaDarkBackgroundBrush" Color="{StaticResource MeoptaDarkBackground}"/>
+    <SolidColorBrush x:Key="MeoptaDarkBackgroundBrush" Color="Gray"/>
+    <SolidColorBrush x:Key="MeoptaMostDarkBackgroundBrush" Color="{StaticResource MeoptaDarkBackground}"/>
     
     <!-- Additional SolidColorBrushes for Background Colors -->
     

@@ -10,22 +10,6 @@ namespace DiceMaster3600.View.Controls
         #endregion
 
         #region Properties
-        #endregion
-
-        #region Constructors
-        #endregion
-
-        #region Methods
-        #endregion
-
-        #region Events
-        #endregion
-
-
-        #region Fields
-        #endregion
-
-        #region Properties
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
             "Value", typeof(int), typeof(DiceControl), new PropertyMetadata(0, OnValueChanged));
 

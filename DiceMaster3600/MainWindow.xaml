@@ -26,17 +26,10 @@
         </Grid.RowDefinitions>
 
         <Grid Name="Logo" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource LogoColor}">
-            <TextBlock Text="DM 3600"
-                    Background="Transparent"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    FontFamily="{StaticResource MuseoFontFamily2}"
-                    Foreground="WhiteSmoke"
-                    FontSize="22">
-            </TextBlock>
+            <materialIcons:MaterialIcon Kind="DiceMultiple" Foreground="WhiteSmoke" VerticalAlignment="Center" Height="50" HorizontalAlignment="Center"/>
         </Grid>
 
-        <Grid Name="TopBar" Background="{StaticResource SidebarBackgroundColor}" Grid.Column="1">
+        <Grid Name="TopBar" Background="{StaticResource MeoptaLightBlueBrush}" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -83,32 +76,31 @@
                              Height="50"
                              Foreground="WhiteSmoke"
                              FontSize="14"/>
-            <RadioButton Content="Menu1"
+            <RadioButton Content="LeaderBoard"
                              Style="{StaticResource menuButtonStyle}"
                              Height="50"
                              Foreground="WhiteSmoke"
                              FontSize="14"/>
-            <RadioButton Content="Menu2"
+            <RadioButton Content="Game"
                              Style="{StaticResource menuButtonStyle}"
                              Height="50"
                              Foreground="WhiteSmoke"
                              FontSize="14"/>
-            <RadioButton Content="Menu3"
+            <RadioButton Content="Settings"
                              Style="{StaticResource menuButtonStyle}"
                              Height="50"
                                  Foreground="WhiteSmoke"
                              FontSize="14"/>
+            <RadioButton Content="Admin Panel"
+                             Style="{StaticResource menuButtonStyle}"
+                             Height="50"
+                             Foreground="WhiteSmoke"
+                             FontSize="14"/>
         </StackPanel>
 
-
-
-
-
-
-            <ContentControl Grid.Row="2"
-                        Grid.Column="1"
-                        Content="{Binding CurrentView}">
-            </ContentControl>
-        </Grid>
+        <ScrollViewer Grid.Row="2" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <ContentControl Content="{Binding CurrentView}"/>
+        </ScrollViewer >
+    </Grid>
         
 </Window>
