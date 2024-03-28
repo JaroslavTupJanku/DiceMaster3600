@@ -403,3 +403,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/DiceMaster3600/obj/Debug/net6.0-windows/DiceMaster3600.designer.deps.json
