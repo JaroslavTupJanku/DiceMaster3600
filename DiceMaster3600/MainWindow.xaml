@@ -6,13 +6,17 @@
         xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
         xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
         xmlns:h="clr-namespace:DiceMaster3600.View.Helpers"
+        xmlns:view="clr-namespace:DiceMaster3600.View"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
         mc:Ignorable="d"
         WindowState="Maximized"
         Background="WhiteSmoke">
 
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
+    <!--<Window.Resources>
+        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+            <view:HomeView />
+        </DataTemplate>
+    </Window.Resources>-->
 
     <Grid>
         <Grid.ColumnDefinitions>

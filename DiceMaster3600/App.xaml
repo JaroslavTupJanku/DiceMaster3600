@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="View/Theme/FontTheme.xaml"/>
                 <ResourceDictionary Source="View/Theme/Styles.xaml"/>
                 <ResourceDictionary Source="View/Theme/DiceItemTemplate.xaml"/>
+                <ResourceDictionary Source="View/Theme/UserItemTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type vm:HomeViewModel}">

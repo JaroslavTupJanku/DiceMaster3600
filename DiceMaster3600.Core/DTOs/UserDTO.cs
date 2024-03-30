@@ -12,6 +12,7 @@ namespace DiceMaster3600.Core.DTOs
         public int NumberOfPoints { get; set; }
         public string EmailAddress { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-        public string Surname { get; set; } = string.Empty;
+        public string Surname { get; set; } = string.Empty;     
+        public string WholeName => $"{Name} {Surname}";
     }
 }

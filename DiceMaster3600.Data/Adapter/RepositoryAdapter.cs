@@ -6,11 +6,11 @@ namespace DiceMaster3600.Data.Adapter
     public class RepositoryAdapter
     {
         #region Fields
-        private readonly SqlRepositories repos;
+        private readonly ISqlRepositories repos;
         #endregion
 
         #region Constructors
-        public RepositoryAdapter(SqlRepositories repositories) => repos = repositories;
+        public RepositoryAdapter(ISqlRepositories repositories) => repos = repositories;
         #endregion
 
         #region Methods
