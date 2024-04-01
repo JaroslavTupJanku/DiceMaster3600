@@ -11,7 +11,7 @@ namespace DiceMaster3600
     {
         public MainWindow()
         {
-            DataContext = App.AppHost!.Services.GetRequiredService<MainViewModel>();            
+            DataContext = App.AppHost!.Services.GetService<MainViewModel>();            
             InitializeComponent();
         }
     }

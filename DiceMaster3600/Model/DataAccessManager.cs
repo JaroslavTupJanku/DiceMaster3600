@@ -99,7 +99,7 @@ namespace DiceMaster3600.Model
             return new UniversityDTO[] { university1, university2 };
         }
 
-        public UniversityDTO GetUniversity(int id)
+        public UniversityDTO GetUniversityByID(int id)
         {
             return dbModel.GetUniversityDTOById(id);
         }

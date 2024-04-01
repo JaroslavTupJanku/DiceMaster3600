@@ -1,5 +1,8 @@
 ﻿using DiceMaster3600.Core.DTOs;
-using System.Data.SqlTypes;
+using DiceMaster3600.Core.Enum;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DiceMaster3600.Data.Adapter
 {
@@ -14,22 +17,38 @@ namespace DiceMaster3600.Data.Adapter
         #endregion
 
         #region Methods
-        public void DeleteUniversityById(int id)
+        public void DeleteUniversityById(int UniversityID)
         {
-            var university = repos.UniversityRepository.GetById(id)
-                ?? throw new SqlNullValueException($"University id {id} was not found");
-
-            foreach (var faculty in university.Faculties)
+            using var transaction = repos.BeginTransaction();
+            try
             {
-                repos.UserRepository.DeleteByFacultyId(faculty.Id);
-                repos.FacultyRepository.Delete(faculty);
+                var university = repos.UniversityRepository.GetById(UniversityID)
+                    ?? throw new KeyNotFoundException($"University with ID {UniversityID} was not found.");
+
+                foreach (var faculty in university.Faculties.ToList())
+                {
+                    repos.UserRepository.DeleteAllByFacultyId(faculty.Id);
+                    repos.FacultyRepository.Delete(faculty);
+                }
+
+                repos.UniversityRepository.Delete(university);
+                transaction.Commit();
             }
-
-            repos.UniversityRepository.Delete(university);
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
-        #endregion
 
-        #region Methods
+        public async Task AddUser(UserDTO userDto, UniversityType universityType, FacultyType facultyType)
+        {
+            var universityEntity = await repos.UniversityRepository.EnsureUniversityExistsAsync(universityType);
+            var facultyEntity = await repos.FacultyRepository.EnsureFacultyExistsAsync(facultyType, universityEntity.Id);
+
+            await repos.UserRepository.AddAsync(userDto, facultyEntity.Id);
+        }
+
         public UniversityDTO GetUniversityDTOById(int selectedUniversityId)
         {
             var universityDTO = repos.UniversityRepository.GetDTOById(selectedUniversityId);

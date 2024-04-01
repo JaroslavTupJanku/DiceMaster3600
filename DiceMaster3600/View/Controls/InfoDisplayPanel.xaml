@@ -4,11 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DiceMaster3600.View.Controls"
+             xmlns:conv="clr-namespace:DiceMaster3600.View.Converters"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              mc:Ignorable="d">
 
     <UserControl.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="White"/>
+        <conv:FontSizeConverter x:Key="fontSizeConverter"/>
     </UserControl.Resources>
 
     <Border BorderBrush="#FFDEDEDE" 
@@ -17,11 +19,7 @@
             CornerRadius="5" 
             Grid.ColumnSpan="3" 
             Grid.Row="3" 
-            RenderTransformOrigin="0.5,0.5"
-            BorderThickness="1">
-        <Border.Effect>
-            <DropShadowEffect BlurRadius="20" Color="#FFDEDEDE" RenderingBias="Quality" ShadowDepth="1"/>
-        </Border.Effect>
+            RenderTransformOrigin="0.5,0.5">
         <Border.RenderTransform>
             <ScaleTransform ScaleX="1.0" ScaleY="1.0"/>
         </Border.RenderTransform>
@@ -76,18 +74,20 @@
                 <TextBlock x:Name="ValueTextBox" 
                            Text="{Binding ValueText, RelativeSource={RelativeSource AncestorType={x:Type local:InfoDisplayPanel}}}"
                            VerticalAlignment="Center" 
-                           Foreground="{StaticResource MeoptaDarkBackgroundBrush}" FontSize="50"/>
+                           Foreground="{StaticResource MeoptaLogoBlackBrush}" 
+                           FontSize="50"/> <!--{Binding ValueText, RelativeSource={RelativeSource AncestorType={x:Type local:InfoDisplayPanel}}, Converter={StaticResource fontSizeConverter}, ConverterParameter=200}-->
                 <TextBlock x:Name="UnitTextBox" 
                            Text="{Binding UnitText, RelativeSource={RelativeSource AncestorType={x:Type local:InfoDisplayPanel}}}" 
                            Margin="0, 5" 
-                           Foreground="{StaticResource MeoptaDarkBackgroundBrush}" 
+                           Foreground="{StaticResource MeoptaLogoBlackBrush}" 
                            FontSize="20" VerticalAlignment="Bottom"/>
             </StackPanel>
 
             <TextBlock Grid.Column="2" Grid.ColumnSpan="2" 
                                Text="{Binding TitleText, RelativeSource={RelativeSource AncestorType={x:Type local:InfoDisplayPanel}}}" 
                                HorizontalAlignment="Right" VerticalAlignment="Top" 
-                               Margin="0,10,10,0" Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
+                               Margin="0,10,10,0" 
+                               Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
         </Grid>
     </Border>
 </UserControl>

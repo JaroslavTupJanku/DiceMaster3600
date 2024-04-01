@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DiceMaster3600.ViewModel;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +23,7 @@ namespace DiceMaster3600.View.Dialogs
     {
         public EntryForm()
         {
+            DataContext = App.AppHost!.Services.GetService<EntryFormViewModel>();
             InitializeComponent();
         }
     }

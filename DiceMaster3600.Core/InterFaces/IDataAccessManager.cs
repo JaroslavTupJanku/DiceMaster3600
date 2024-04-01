@@ -8,8 +8,9 @@ namespace DiceMaster3600.Core.InterFaces
     {
         public void DeleteUniversity(int id);
         List<UserDTO> GetTopThreePlayers();
+
         public UniversityDTO[] GetAllUniversityDTOs();
-        public UniversityDTO GetUniversity(int id);
+        public UniversityDTO GetUniversityByID(int id);
 
 
         public event EventHandler? OnDatabaseUpdated;

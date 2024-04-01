@@ -25,9 +25,12 @@ namespace DiceMaster3600
                     services.AddSingleton<RepositoryAdapter>();
                     services.AddSingleton<ISqlRepositories, SqlRepositories>();
                     services.AddSingleton<IDataAccessManager, DataAccessManager>();
+                    services.AddSingleton<IActiveUserManager, ActiveUserManager>();
 
                     // services.AddTransient<IMenuControlViewModel, HomeViewModel>();
                     services.AddTransient<MainViewModel>();
+                    services.AddTransient<LoginFormViewModel>();
+                    services.AddTransient<EntryFormViewModel>();
 
                 }).Build();
         }

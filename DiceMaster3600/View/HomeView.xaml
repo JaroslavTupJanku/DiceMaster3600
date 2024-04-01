@@ -7,31 +7,31 @@
              xmlns:controls="clr-namespace:DiceMaster3600.View.Controls"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
-             d:DataContext="{d:DesignInstance Type=vm:HomeViewModel}"
-             mc:Ignorable="d" Background="#ffffff">
+             mc:Ignorable="d" Background="{StaticResource InvoiceBackgroundColor}">
 
-    <Grid Margin="30">
-        
+    <Grid Margin="20">
+
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
         <Grid>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto" MinWidth="300"/>
-                <ColumnDefinition Width="*" MinWidth="20"/>
-                <ColumnDefinition Width="Auto" MinWidth="300"/>
-                <ColumnDefinition Width="*" MinWidth="20"/>
-                <ColumnDefinition Width="Auto" MinWidth="300"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
             <controls:InfoDisplayPanel TitleText="Best Player"
                                    Grid.Column="1"
@@ -47,24 +47,52 @@
             <controls:InfoDisplayPanel UnitText="pt"
                                    TitleText="Avarage Score"
                                    Grid.Column="5"       
-                                   ValueText="100030"
+                                   ValueText="1030"
                                    TargetGridBackground="{StaticResource MeoptaBronzeBrush}"/>
 
+            <Border Grid.Row="2" 
+                    Grid.ColumnSpan="9"
+                    Name="MyBorder"
+                    CornerRadius="5"
+                    Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Název grafu"
+                               Margin="20,20,0,10"
+                               FontWeight="Bold"
+                               FontSize="20"/>
+                    <lvc:CartesianChart Grid.Row="2" 
+                        Series="{Binding Series}"
+                        Background="White">
+                    </lvc:CartesianChart>
+                </Grid>
+            </Border>
         </Grid>
 
-        <lvc:CartesianChart Grid.Row="1"  Series="{Binding Series}"/>
-        
-        <Grid Grid.Column="1" Grid.RowSpan="2"  >
+        <Grid x:Name="MyGrid" Grid.Column="2" Grid.RowSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Border Margin="20,0,0,0"
+
+            <Border Padding="10"
                     BorderBrush="Black" 
-                    BorderThickness="1"
+                    Background="White"
                     CornerRadius="5">
                 <StackPanel>
-                    <TextBlock Text="Player list" Margin="10" FontSize="15" FontWeight="Bold"/>
+                    <TextBlock Text="Player list" 
+                               Margin="10" 
+                               FontSize="15" 
+                               FontWeight="Bold"/>
                     <TextBlock Text="This is a list of the top three players of all time." 
                                TextWrapping="Wrap"
                                HorizontalAlignment="Left"
@@ -72,17 +100,54 @@
                                Margin="10,0,10,0" 
                                Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
                     <ListBox Name="UserListBox" Grid.Column="1" 
+                     Background="White"
                      BorderThickness="0"
                      ItemTemplate="{StaticResource UserItemTemplate}" 
                      ItemsSource="{Binding Path=TopThreeList}"/>
                 </StackPanel>
-
+            </Border>
+            <Border Padding="10"
+                    Grid.Column="2"
+                    BorderBrush="Black" 
+                    Background="White"
+                    CornerRadius="5">
+                <StackPanel>
+                    <TextBlock Text="University list" 
+                               Margin="10" 
+                               FontSize="15" 
+                               FontWeight="Bold"/>
+                    <TextBlock Text="This is a list of the top three universities of all time." 
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Left"
+                               Width="180"
+                               Margin="10,0,10,0" 
+                               Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
+                    <ListBox Name="UserLidstBox" Grid.Column="1" 
+                     Background="White"
+                     BorderThickness="0"
+                     ItemTemplate="{StaticResource UserItemTemplate}" 
+                     ItemsSource="{Binding Path=TopThreeList}"/>
+                </StackPanel>
             </Border>
 
-            <lvc:PieChart Grid.Column="1" 
-                          Grid.Row="2" 
-                          Series="{Binding TestPieGraphSeries}"/>
+            <Border Grid.Row="2" Grid.ColumnSpan="3" CornerRadius="5" Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Název grafu"
+                               Margin="20,20,0,0"
+                               FontWeight="Bold"
+                               FontSize="20"/>
+                    <lvc:PieChart Background="White" 
+                              InitialRotation="-90"
+                              Grid.Row="2"
+                              Series="{Binding TestPieGraphSeries}"/>
+                </Grid>
+            </Border>
         </Grid>
 
     </Grid>
 </UserControl>
+

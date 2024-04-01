@@ -6,6 +6,9 @@
         xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
         xmlns:converters="clr-namespace:DiceMaster3600.View.Converters"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        WindowStartupLocation="CenterScreen"
+        xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
+        d:DataContext="{d:DesignInstance Type=vm:LoginFormViewModel}"
         mc:Ignorable="d"  ResizeMode="NoResize" Title="EntryForm" Width="800"  >
 
     <Window.Resources>

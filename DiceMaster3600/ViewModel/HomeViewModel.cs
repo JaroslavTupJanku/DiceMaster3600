@@ -50,11 +50,8 @@ namespace DiceMaster3600.ViewModel
         #region Methods
         public void Update()
         {
-            TopThreeList = new(datamanager!.GetTopThreePlayers().Select((user, index) => new UserWithPosition 
-            {
-                User = user,
-                Position = index + 1
-            }));
+            TopThreeList = new(datamanager!.GetTopThreePlayers().Select((user, index)
+                => new UserWithPosition (user, index + 1)));
 
             TestNevim();
         }

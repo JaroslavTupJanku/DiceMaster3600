@@ -6,7 +6,6 @@
         xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
         xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
         xmlns:h="clr-namespace:DiceMaster3600.View.Helpers"
-        xmlns:view="clr-namespace:DiceMaster3600.View"
         d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
         mc:Ignorable="d"
         WindowState="Maximized"
@@ -61,15 +60,29 @@
                 </Separator.LayoutTransform>
             </Separator>
 
-            <Button Content="Logout" 
+            <Button Grid.Column="4"
                     Foreground="WhiteSmoke"
                     Margin="5,0"
                     Width="70"
+                    Command="{Binding LogCommand}"
                     Background="Transparent"
                     BorderThickness="0"
                     VerticalContentAlignment="Center" 
-                    HorizontalContentAlignment="Center"
-                    Grid.Column="4"/>
+                    HorizontalContentAlignment="Center">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="Login"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsPlayerLogged}" Value="True">
+                                <Setter Property="Content" Value="Logout"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsPlayerLogged}" Value="False">
+                                <Setter Property="Content" Value="Login"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
 
 
