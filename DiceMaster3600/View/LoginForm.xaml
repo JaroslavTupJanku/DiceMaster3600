@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
         xmlns:control="clr-namespace:DiceMaster3600.View.Controls"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" Width="300" Height="430"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance Type=vm:LoginFormViewModel}"
@@ -20,8 +21,8 @@
         </Style>
         <Style TargetType="Button">
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Background" Value="#FF2196F3"/>
-            <Setter Property="BorderBrush" Value="#FF2196F3"/>
+            <Setter Property="Background" Value="{StaticResource MeoptaBlueBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource MeoptaBlueBrush}"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Margin" Value="0,10,0,0"/>
         </Style>
@@ -37,20 +38,26 @@
         <Rectangle Grid.RowSpan="2">
             <Rectangle.Fill>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="#AF2196F3" Offset="0.3"/>
+                    <GradientStop Color="{StaticResource MeoptaBlue}" Offset="0.3"/>
                     <GradientStop Color="#FF1976D2" Offset="0.9"/>
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
 
         <Grid Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
             <control:RoundedIcon IconKind="Home"
+                                 Margin="5,10,5,5"
+                                 Size="70"
                                  EllipseFill ="White"
                                  IconForeground ="#FF2196F3"/>
             <TextBlock Text="LOGIN" 
                        Foreground="White" 
-                       FontSize="18" 
-                       Margin="0,70,0,0" 
+                       FontSize="18"      
+                       Grid.Row="1"
                        HorizontalAlignment="Center"/>
         </Grid>
 
@@ -89,5 +96,11 @@
                         Margin="0,3,0,0"/>
             </StackPanel>
         </Border>
+        
+        <materialDesign:Snackbar 
+            x:Name="homeSnackbar" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Bottom" 
+            Margin="0,0,0,20"/>
     </Grid>
 </Window>

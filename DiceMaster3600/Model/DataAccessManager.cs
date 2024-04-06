@@ -1,4 +1,5 @@
 ﻿using DiceMaster3600.Core.DTOs;
+using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Core.InterFaces;
 using DiceMaster3600.Data.Adapter;
 using System;
@@ -87,16 +88,22 @@ namespace DiceMaster3600.Model
                 new UserDTO() {Name = "Lucie", Surname= "Svoboda", NumberOfPoints = 1426, EmailAddress="Email14@gmail.com"},
             };
 
-            var faculty1 = new FacultyDTO() { Name = Core.Enum.FacultyType.Unknown, Users = userArray1.ToList() };
-            var faculty2 = new FacultyDTO() { Name = Core.Enum.FacultyType.Unknown2, Users = userArray2.ToList() };
+            var faculty1 = new FacultyDTO() { Name = FacultyType.None, Users = userArray1.ToList() };
+            var faculty2 = new FacultyDTO() { Name = FacultyType.Unknown2, Users = userArray2.ToList() };
             var faculty3 = new FacultyDTO() { Name = Core.Enum.FacultyType.Unknown3, Users = userArray3.ToList() };
             var faculty4 = new FacultyDTO() { Name = Core.Enum.FacultyType.Unknown4, Users = userArray4.ToList() };
             var faculty5 = new FacultyDTO() { Name = Core.Enum.FacultyType.Unknown5, Users = userArray5.ToList() };
 
-            var university1 = new UniversityDTO() { Name = Core.Enum.UniversityType.Unknown, Faculties = new List<FacultyDTO>() { faculty1, faculty2 } };
+            var university1 = new UniversityDTO() { Name = Core.Enum.UniversityType.Unknown5, Faculties = new List<FacultyDTO>() { faculty1, faculty2 } };
             var university2 = new UniversityDTO() { Name = Core.Enum.UniversityType.Unknown2, Faculties = new List<FacultyDTO>() { faculty3, faculty4 } };
 
             return new UniversityDTO[] { university1, university2 };
+        }
+
+        public bool AddUser(UserDTO user, UniversityType univeristy, FacultyType faculty)
+        {
+            dbModel.AddUser(user, univeristy, faculty);
+            return true;
         }
 
         public UniversityDTO GetUniversityByID(int id)

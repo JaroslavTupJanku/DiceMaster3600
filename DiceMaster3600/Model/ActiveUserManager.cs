@@ -21,8 +21,8 @@ namespace DiceMaster3600.Model
         public bool Logout()
         {
 
-            OnUserLogged?.Invoke(this, true); 
-            throw new NotImplementedException();
+            OnUserLogged?.Invoke(this, true);
+            return true;
 
         }
         #endregion

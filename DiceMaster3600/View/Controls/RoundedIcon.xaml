@@ -8,16 +8,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50">
     <Grid>
-        <Ellipse Fill="{Binding EllipseFill, RelativeSource={RelativeSource AncestorType={x:Type local:RoundedIcon}}}"       
-                 Height="50"
-                 Width="50"
+        <Ellipse x:Name="Ellipse"           
+                 Fill="{Binding EllipseFill, RelativeSource={RelativeSource AncestorType={x:Type local:RoundedIcon}}}"       
+                 Height="{Binding Size, RelativeSource={RelativeSource AncestorType={x:Type local:RoundedIcon}}}"
+                 Width="{Binding Size, RelativeSource={RelativeSource AncestorType={x:Type local:RoundedIcon}}}"
                  VerticalAlignment="Center"
                  HorizontalAlignment="Center"/>
         <materialIcons:MaterialIcon 
+                x:Name="MaterialIcon"
                 Kind="{Binding IconKind, RelativeSource={RelativeSource AncestorType={x:Type local:RoundedIcon}}}"
                 Foreground="{Binding IconForeground, RelativeSource={RelativeSource AncestorType={x:Type local:RoundedIcon}}}"
                 VerticalAlignment="Center"
-                Height="30"
                 HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>

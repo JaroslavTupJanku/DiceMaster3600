@@ -3,17 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
         xmlns:converters="clr-namespace:DiceMaster3600.View.Converters"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:controls="clr-namespace:DiceMaster3600.View.Controls"
+        xmlns:enum="clr-namespace:DiceMaster3600.Core.Enum;assembly=DiceMaster3600.Core"
         WindowStartupLocation="CenterScreen"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
-        d:DataContext="{d:DesignInstance Type=vm:LoginFormViewModel}"
-        mc:Ignorable="d"  ResizeMode="NoResize" Title="EntryForm" Width="800"  >
+        d:DataContext="{d:DesignInstance Type=vm:EntryFormViewModel}"
+        SizeToContent="Height"
+        mc:Ignorable="d"  ResizeMode="CanResize" Title="EntryForm" Width="800"  >
 
     <Window.Resources>
-        <converters:BooleanToBrushConverter x:Key="GenderBrushConverter" TrueBrush="Black" FalseBrush="LightGray"/>
-        
+        <converters:GenderToColorBrushConverter x:Key="GenderBrushConverter"/>
+        <converters:EnumToCollectionConverter x:Key="EnumToListConverter"/>
+
+        <ObjectDataProvider x:Key="universityTypeValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enum:UniversityType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="FacultyTypeValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enum:FacultyType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
         <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
             <Setter Property="Margin" Value="0,10,0,0"/>
             <Setter Property="Foreground" Value="{StaticResource MeoptaBackgroundBrush}"/>
@@ -28,11 +43,86 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
 
-        <Style x:Key="GenderEllipseStyle" TargetType="Ellipse">
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Style x:Key="BaseComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Width" Value="380"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="{StaticResource MeoptaLogoBlackBrush}"/>
+            <Setter Property="Padding" Value="10,3"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton 
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Grid.Column="2"
+                        IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                        Padding="{TemplateBinding Padding}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Name="ToggleButtonBorder"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="20"/>
+                                                </Grid.ColumnDefinitions>
+                                                <ContentPresenter Grid.Column="0" 
+                                                          HorizontalAlignment="Left" 
+                                                          VerticalAlignment="Center"
+                                                          Margin="{TemplateBinding Padding}"/>
+                                                <Path Grid.Column="1" 
+                                              Fill="{TemplateBinding Foreground}" 
+                                              HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" 
+                                              Data="M0,0 L4,4 L8,0 Z"/>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite"
+                                      IsHitTestVisible="False"
+                                      Content="{TemplateBinding SelectionBoxItem}"
+                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                      Margin="{TemplateBinding Padding}"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Left"/>
+                            <TextBox x:Name="PART_EditableTextBox"
+                             Style="{StaticResource BaseTextBoxStyle}"
+                             Visibility="Hidden"/>
+                            <Popup Name="Popup"
+                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                           Placement="Bottom"
+                           Focusable="False"
+                           AllowsTransparency="True"
+                           IsEnabled="{TemplateBinding IsEnabled}">
+                                <Grid Name="DropDown"
+                              SnapsToDevicePixels="True"                
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border x:Name="DropDownBorder"
+                                    Background="White"
+                                    BorderThickness="1"
+                                    BorderBrush="{StaticResource MeoptaBackgroundBrush}"/>
+                                    <ScrollViewer CanContentScroll="True">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style x:Key="BaseButtonStyle" TargetType="Button">
@@ -48,7 +138,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
+                        <Border Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="4">
@@ -56,19 +147,24 @@
                                           VerticalAlignment="Center"
                                           Margin="{TemplateBinding Padding}"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.75"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
         <Style x:Key="CancelButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-            <Setter Property="Background" Value="#f6f7f9"/>
+            <Setter Property="Background" Value="{StaticResource MeoptaBackgroundBrush}"/>
             <Setter Property="Foreground" Value="Black"/>
         </Style>
 
         <Style x:Key="SaveButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="Background" Value="#60e6c4"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
         </Style>
     </Window.Resources>
 
@@ -79,24 +175,32 @@
         </Grid.ColumnDefinitions>
 
         <Grid Background="{StaticResource MeoptaBlueBrush}">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent">
+            <StackPanel VerticalAlignment="Center" 
+                        HorizontalAlignment="Center" 
+                        Background="Transparent">
                 <Grid Grid.Row="0">
-                    <Ellipse Style="{StaticResource GenderEllipseStyle}" Fill="{StaticResource MeoptaYellowBrush}" Width="120" Height="120" />
-                    <materialIcons:MaterialIcon Kind="FaceFemale" Foreground="White"  VerticalAlignment="Center" Height="80" HorizontalAlignment="Center"/>
+                    <controls:RoundedIcon Size="120"
+                        EllipseFill="{StaticResource MeoptaYellowBrush}" 
+                        IconKind="FaceFemale" 
+                        IconForeground="{StaticResource MeoptaLogoWhiteBrush}" />
                 </Grid>
-                <TextBlock Text="Lets get you set up" FontSize="25" Margin="0,20" FontWeight="Bold" Foreground="WhiteSmoke"/>
-                <TextBlock Text="it should only take a couple of minutes to registrate" TextAlignment="Center" TextWrapping="Wrap" Foreground="WhiteSmoke"/>
+                <TextBlock Text="Lets get you set up" 
+                           FontSize="25" 
+                           Margin="0,20" 
+                           FontWeight="Bold" 
+                           Foreground="WhiteSmoke"/>
+                <TextBlock Text="it should only take a couple of minutes to registrate" 
+                           TextAlignment="Center" 
+                           TextWrapping="Wrap" 
+                           Foreground="WhiteSmoke"/>
             </StackPanel>
         </Grid>
 
-
-        <Grid Margin="40" Grid.Column="1">
+        <Grid Margin="10" Grid.Column="1">
+            
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
             <Label Content="Create account." 
@@ -108,51 +212,82 @@
             <StackPanel Grid.Row="1" HorizontalAlignment="Center">
                 
                 <TextBlock Text="Name" Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0"/>
-                <TextBox  Style="{StaticResource BaseTextBoxStyle}" />
+                <TextBox  Style="{StaticResource BaseTextBoxStyle}" Text="{Binding Name}" />
                 <TextBlock Text="Surname" Style="{StaticResource BaseTextBlockStyle}" />
-                <TextBox  Style="{StaticResource BaseTextBoxStyle}"/>
+                <TextBox  Style="{StaticResource BaseTextBoxStyle}" Text="{Binding Surname}"/>
                 <TextBlock Text="Date of Birth" Style="{StaticResource BaseTextBlockStyle}" />
-                <TextBox  Style="{StaticResource BaseTextBoxStyle}"/>
+                <DatePicker SelectedDate="{Binding DateOfBirth, Mode=TwoWay}" />
                 <TextBlock Text="Gender" Style="{StaticResource BaseTextBlockStyle}" />
-                
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Grid Grid.Row="0" Margin="0,0,20,0">
-                        <Ellipse Style="{StaticResource GenderEllipseStyle}" Fill="{Binding IsMaleSelected, Converter={StaticResource GenderBrushConverter}}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseLeftButtonDown">
-                                    <i:InvokeCommandAction Command="{Binding SelectGenderCommand}" CommandParameter="Male"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Ellipse>
-                        <materialIcons:MaterialIcon Kind="GenderMale" Foreground="White" VerticalAlignment="Center" Height="20" HorizontalAlignment="Center"/>
-                    </Grid>
-                    <Grid Grid.Row="0">
-                        <Ellipse Style="{StaticResource GenderEllipseStyle}" Fill="{Binding IsFemaleSelected, Converter={StaticResource GenderBrushConverter}}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseLeftButtonDown">
-                                    <i:InvokeCommandAction Command="{Binding SelectGenderCommand}" CommandParameter="Male"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Ellipse>
-                        <materialIcons:MaterialIcon Kind="GenderFemale" Foreground="White"  VerticalAlignment="Center" Height="20" HorizontalAlignment="Center"/>
-                    </Grid>
-                </StackPanel>
+                <Grid HorizontalAlignment="Left" Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Style="{StaticResource CircularButton}" Grid.Column="0" 
+                            Name="MaleRoundeButton"
+                            Height="50"
+                            Background="Transparent" 
+                            Command="{Binding  Path=GenderSelectCommand}" CommandParameter="{x:Static enum:Gender.Male}">
+                        <controls:RoundedIcon 
+                            IconKind="GenderMale" 
+                            Size="{Binding ElementName=MaleRoundeButton, Path=ActualHeight}"
+                            EllipseFill="{Binding Path=SelectedGender, Converter={StaticResource GenderBrushConverter}, ConverterParameter={x:Static enum:Gender.Male}}" 
+                            IconForeground="White"/>
+                    </Button>
+                    <Button Name="FemaleRoundeButton"
+                            Grid.Column="2" 
+                            Style="{StaticResource CircularButton}"
+                            Background="Transparent" 
+                            Command="{Binding Path=GenderSelectCommand}" CommandParameter="{x:Static enum:Gender.Female}">
+                        <controls:RoundedIcon 
+                            Size="{Binding ElementName=MaleRoundeButton, Path=ActualHeight}"
+                            IconKind="GenderFemale" 
+                            EllipseFill="{Binding Path=SelectedGender, Converter={StaticResource GenderBrushConverter}, ConverterParameter={x:Static enum:Gender.Female}}" 
+                            IconForeground="White"/>
+                    </Button>
+                    <Button Grid.Column="4" 
+                            Name="NonGenderButton"
+                            Background="Transparent" 
+                            Style="{StaticResource CircularButton}"
+                            Command="{Binding Path=GenderSelectCommand}" CommandParameter="{x:Static enum:Gender.None}">
+                        <controls:RoundedIcon 
+                            IconKind="GenderMaleFemale" 
+                            Size="{Binding ElementName=NonGenderButton, Path=ActualHeight}"
+                            EllipseFill="{Binding Path=SelectedGender, Converter={StaticResource GenderBrushConverter}, ConverterParameter={x:Static enum:Gender.None}}" 
+                            IconForeground="White"/>
+                    </Button>
+                </Grid>
 
                 <TextBlock Text="University" Style="{StaticResource BaseTextBlockStyle}" Margin="0,30,0,0" />
-                <TextBox  Style="{StaticResource BaseTextBoxStyle}"/>
+                <ComboBox ItemsSource="{Binding Source={StaticResource universityTypeValues}, Converter={StaticResource EnumToListConverter}}"
+                          Style="{StaticResource BaseComboBoxStyle}"
+                          DisplayMemberPath="Description"
+                          SelectedValuePath="Value"
+                          SelectedValue="{Binding University}" />
                 <TextBlock Text="Faculty" Style="{StaticResource BaseTextBlockStyle}" />
-                <TextBox  Style="{StaticResource BaseTextBoxStyle}"/>
+                <ComboBox ItemsSource="{Binding Source={StaticResource FacultyTypeValues}, Converter={StaticResource EnumToListConverter}}"
+                          Style="{StaticResource BaseComboBoxStyle}"
+                          DisplayMemberPath="Description"
+                          SelectedValuePath="Value"
+                          SelectedValue="{Binding Faculty}" />
                 <TextBlock Text="Email" Style="{StaticResource BaseTextBlockStyle}"/>
                 <TextBox  Style="{StaticResource BaseTextBoxStyle}"/>
 
                 <TextBlock Text="Password" Style="{StaticResource BaseTextBlockStyle}" />
-                <PasswordBox x:Name="txtPassword" Width="300" Height="25" BorderThickness="0,0,0,1" FontSize="15"/>
+                <PasswordBox x:Name="txtPassword" Width="380" Height="25" BorderThickness="0,0,0,1" FontSize="15"/>
                 
                 <StackPanel Orientation="Horizontal" Margin="0,40,0,0" HorizontalAlignment="Center" >
-                    <Button Content="Save" Style="{StaticResource SaveButtonStyle}"></Button>
-                    <Button Content="Cancel" Style="{StaticResource CancelButtonStyle}"></Button>
+                    <Button Content="Save"
+                            Command="{Binding Path=SaveCommand}"
+                            Style="{StaticResource SaveButtonStyle}"></Button>
+                    <Button Content="Cancel" 
+                            Command="{Binding Path=CancelCommand}"
+                            Style="{StaticResource CancelButtonStyle}"></Button>
                 </StackPanel>
-                
+
             </StackPanel>
         </Grid>
     </Grid>

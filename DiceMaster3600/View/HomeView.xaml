@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
              xmlns:controls="clr-namespace:DiceMaster3600.View.Controls"
-             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             d:DataContext="{d:DesignInstance Type=vm:HomeViewModel}"
              mc:Ignorable="d" Background="{StaticResource InvoiceBackgroundColor}">
 
     <Grid Margin="20">
@@ -147,7 +148,11 @@
                 </Grid>
             </Border>
         </Grid>
-
+        <materialDesign:Snackbar 
+            x:Name="homeSnackbar" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Bottom" 
+            Margin="0,0,0,20"/>
     </Grid>
 </UserControl>
 

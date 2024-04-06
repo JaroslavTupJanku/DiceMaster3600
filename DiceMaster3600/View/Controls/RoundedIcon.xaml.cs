@@ -42,5 +42,24 @@ namespace DiceMaster3600.View.Controls
         public static readonly DependencyProperty IconForegroundProperty =
             DependencyProperty.Register("IconForeground", typeof(Brush), typeof(RoundedIcon), new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0x21, 0x96, 0xF3))));
 
+
+        public double Size
+        {
+            get => (double)GetValue(SizeProperty);
+            set => SetValue(SizeProperty, value);
+        }
+
+        public static readonly DependencyProperty SizeProperty = 
+            DependencyProperty.Register("Size", typeof(double), typeof(RoundedIcon), new PropertyMetadata(50.0, OnSizeChanged));
+
+        private static void OnSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) //0.75 by slo pres converter klidne. 
+        {
+            if (d is RoundedIcon control)
+            {
+                control.Ellipse.Width = (double)e.NewValue;
+                control.Ellipse.Height = (double)e.NewValue;
+                control.MaterialIcon.Height = 0.6 * (double)e.NewValue;
+            }
+        }
     }
 }

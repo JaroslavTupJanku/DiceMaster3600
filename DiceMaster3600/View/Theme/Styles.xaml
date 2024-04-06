@@ -39,7 +39,7 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontFamily" Value="{StaticResource MuseoFontFamily1}"/>
         </Style.Setters>
-
+        
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="#22202f"/>
