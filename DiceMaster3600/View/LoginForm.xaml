@@ -13,12 +13,6 @@
         Title="LoginForm" >
 
     <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="0,5"/>
-        </Style>
-        <Style TargetType="PasswordBox">
-            <Setter Property="Margin" Value="0,5"/>
-        </Style>
         <Style TargetType="Button">
             <Setter Property="Height" Value="30"/>
             <Setter Property="Background" Value="{StaticResource MeoptaBlueBrush}"/>
@@ -33,6 +27,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="1.3*"/>
             <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Rectangle Grid.RowSpan="2">
@@ -68,6 +63,7 @@
                 <TextBox x:Name="txtEmail" 
                          Width="200" Height="25" 
                          BorderThickness="0,0,0,1" 
+                         Margin="0,5"
                          FontSize="15" 
                          VerticalContentAlignment="Bottom" 
                          HorizontalAlignment="Left"/>
@@ -77,6 +73,7 @@
                 <PasswordBox x:Name="txtPassword" 
                              Width="200" 
                              Height="25" 
+                             Margin="0,5"
                              BorderThickness="0,0,0,1" 
                              FontSize="15"/>
                 <Button x:Name="btnLogin" 
@@ -96,11 +93,10 @@
                         Margin="0,3,0,0"/>
             </StackPanel>
         </Border>
-        
-        <materialDesign:Snackbar 
-            x:Name="homeSnackbar" 
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Bottom" 
-            Margin="0,0,0,20"/>
+
+        <materialDesign:Snackbar x:Name="MySnackbar"
+                                 Grid.Row="3"
+                                 MessageQueue="{Binding Path=MessageQueue}"
+                                 Style="{StaticResource DynamicSnackbarStyle}"/>
     </Grid>
 </Window>

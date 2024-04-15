@@ -2,24 +2,27 @@
 using DiceMaster3600.Core.DTOs;
 using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Core.InterFaces;
+using DiceMaster3600.Model.Services;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace DiceMaster3600.ViewModel
 {
-    public class EntryFormViewModel : BaseViewModel
+    public class EntryFormViewModel : CommandNotifyViewModel
     {
         #region Fields
         private string? name;
         private string? surname;
-
-        private DateTime dateOfBirth;
         private string? email;
+        private string? password;
 
-        private UniversityType university = UniversityType.None;
         private FacultyType faculty = FacultyType.None;
-
+        private UniversityType university = UniversityType.None;
         private Gender selectedGender = Gender.None;
+        private bool isSavingInProgress = false;  
+        
+        private DateTime dateOfBirth;
         private readonly IDataAccessManager dataManager;
         #endregion
 
@@ -36,6 +39,12 @@ namespace DiceMaster3600.ViewModel
             set => SetAndNotify(ref selectedGender, value);
         }
 
+        public bool IsSavingInProgress
+        {
+            get => isSavingInProgress;
+            set => SetProperty(ref isSavingInProgress, value);
+        }
+
         public string? Surname
         {
             get => surname;
@@ -46,6 +55,12 @@ namespace DiceMaster3600.ViewModel
         {
             get => email;
             set => SetAndNotify(ref email, value);
+        }
+
+        public string? Password
+        {
+            get => password;
+            set => SetAndNotify(ref password, value);
         }
 
         public DateTime DateOfBirth
@@ -72,13 +87,17 @@ namespace DiceMaster3600.ViewModel
         #endregion
 
         #region Constructors
-        public EntryFormViewModel(IDataAccessManager dataManager)
+        public EntryFormViewModel(IDataAccessManager dataManager, IMessageService messageService) : base(messageService)
         {
             this.dataManager = dataManager;
+            SubsribeNotification(NotificationContext.RegistrationFailure, (m) => EnqueueMessage(m, MessageType.Failed));
 
-            SaveCommand = new RelayCommand(
-                () => dataManager.AddUser(CreateUserDTO(), University, Faculty), 
+            SaveCommand = new RelayCommand(async
+                () => await ExecuteExampleCommand(),
                 () => CanSaveExecute());
+
+            dataManager.OnProcessingDataChanged += (isInProgress) 
+                => IsSavingInProgress = isInProgress;
 
             CancelCommand = new RelayCommand(() => RequestClose?.Invoke());
             GenderSelectCommand = new RelayCommand<Gender>((g) => SelectedGender = g);
@@ -88,25 +107,38 @@ namespace DiceMaster3600.ViewModel
         #region Methods
         private bool CanSaveExecute()
         {
-            return !string.IsNullOrWhiteSpace(Name);
-                //&& !string.IsNullOrWhiteSpace(Surname)
-                //&& !string.IsNullOrWhiteSpace(Email)
-                //&& Email.Contains('@')
-                //&& SelectedGender != Gender.None
-                //&& University != UniversityType.None
-                //&& Faculty != FacultyType.None 
-                //&& (DateTime.Now.Year - DateOfBirth.Year) >= 16;
+            return true;
+
+            return !string.IsNullOrWhiteSpace(Name)
+                && !string.IsNullOrWhiteSpace(Surname)
+                && !string.IsNullOrWhiteSpace(Email)
+                && Email.Contains('@')
+                && !string.IsNullOrWhiteSpace(Password)
+                && University != UniversityType.None
+                && Faculty != FacultyType.None
+                && (DateTime.Now.Year - DateOfBirth.Year) >= 15;
         }
 
-        private UserDTO CreateUserDTO()
+        private async Task ExecuteExampleCommand()
         {
-            return new UserDTO
+            try
             {
-                Name = Name!,
-                EmailAddress = Email!,
-                Surname = Surname!,
-                NumberOfPoints = 0
-            };
+                var user = new UserDTO(Name!, Surname!, Email!, SelectedGender);
+                await dataManager.RegisterUserAsync(user, Password, University, Faculty);
+
+                Notify(NotificationContext.RegistrationSuccess, "Registration was byla succesfull!");
+                RequestClose?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                Notify(NotificationContext.RegistrationFailure, $"Nastala chyba: {ex.Message}");
+            }
+        }
+
+        public override void Dispose()
+        {
+            UnsubsribeNotification(NotificationContext.RegistrationFailure);
+            GC.SuppressFinalize(this);
         }
 
         public override void NotifyCommandCanExecuteChanged()

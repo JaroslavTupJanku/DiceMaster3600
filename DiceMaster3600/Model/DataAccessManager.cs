@@ -5,9 +5,7 @@ using DiceMaster3600.Data.Adapter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Security.RightsManagement;
-using System.Windows;
+using System.Threading.Tasks;
 
 namespace DiceMaster3600.Model
 {
@@ -15,9 +13,22 @@ namespace DiceMaster3600.Model
     {
         #region Fields
         private readonly RepositoryAdapter dbModel;
+        private bool isProcessingData;
         #endregion
 
         #region Properties
+        public bool IsProcessingData
+        {
+            get => isProcessingData;
+            private set
+            {
+                if (isProcessingData != value)
+                {
+                    isProcessingData = value;
+                    OnProcessingDataChanged?.Invoke(value);
+                }
+            }
+        }
         #endregion
 
         #region Constructors
@@ -28,33 +39,66 @@ namespace DiceMaster3600.Model
         #endregion
 
         #region Methods
-        public List<UserDTO> GetTopThreePlayers()
+        private async Task<T> ExecuteDataOperationAsync<T>(Func<Task<T>> dataOperation)
         {
             try
             {
-                var universities = GetAllUniversityDTOs();
-                var allUsers = universities.SelectMany(u => u.Faculties).SelectMany(f => f.Users).ToList();
-                var topThreePlayers = allUsers.OrderByDescending(u => u.NumberOfPoints).Take(3).ToList();
-
-                return topThreePlayers;
+                IsProcessingData = true;
+                return await dataOperation();
             }
-            catch (Exception ex) 
+            finally
             {
-                MessageBox.Show(
-                    $"An error occurred: {ex.Message}", 
-                    "Error", 
-                    MessageBoxButton.OK, 
-                    MessageBoxImage.Error);
-                
-                return new List<UserDTO>();
+                IsProcessingData = false;
             }
         }
 
-        public void DeleteUniversity(int id)
+        private async Task ExecuteDataOperationAsync(Func<Task> dataOperation)
         {
-            dbModel.DeleteUniversityById(id);
-            OnDatabaseUpdated?.Invoke(this, EventArgs.Empty);
+            try
+            {
+                IsProcessingData = true;
+                await dataOperation();
+            }
+            finally
+            {
+                IsProcessingData = false;
+            }
         }
+
+        public async Task<UserDTO[]> GetTopThreePlayersAsync()
+        {
+            return await ExecuteDataOperationAsync(() => dbModel.GetTopThree());
+        }
+
+        public async Task DeleteUniversityAsync(int id)
+        {
+            await ExecuteDataOperationAsync(async () =>
+            {
+                await dbModel.DeleteUniversityById(id);
+                OnDatabaseUpdated?.Invoke(this, EventArgs.Empty);
+            });
+        }
+
+        public async Task<UserDTO?> GetUserByEmailAsync(string email, string plainPassword)
+        {
+            return await ExecuteDataOperationAsync(() => dbModel.GetUserByEmailAsync(email, plainPassword));
+        }
+
+        public async Task RegisterUserAsync(UserDTO user, string plainPassword, UniversityType university, FacultyType faculty)
+        {
+            await ExecuteDataOperationAsync(() => dbModel.RegisterUser(user, plainPassword, university, faculty));
+        }
+
+        public async Task GetUniversityByID(int id)
+        {
+            await ExecuteDataOperationAsync(() => dbModel.GetUniversityDTOByIdAsync(id)); 
+        }
+        #endregion
+
+        #region Events
+        public event Action<bool>? OnProcessingDataChanged;
+        public event EventHandler? OnDatabaseUpdated;
+        #endregion
 
         public UniversityDTO[] GetAllUniversityDTOs()
         {
@@ -99,22 +143,6 @@ namespace DiceMaster3600.Model
 
             return new UniversityDTO[] { university1, university2 };
         }
-
-        public bool AddUser(UserDTO user, UniversityType univeristy, FacultyType faculty)
-        {
-            dbModel.AddUser(user, univeristy, faculty);
-            return true;
-        }
-
-        public UniversityDTO GetUniversityByID(int id)
-        {
-            return dbModel.GetUniversityDTOById(id);
-        }
-        #endregion
-
-        #region Events
-        public event EventHandler? OnDatabaseUpdated;
-        #endregion
 
     }
 }

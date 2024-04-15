@@ -90,6 +90,7 @@
         <StackPanel Grid.Row="1" Background="{StaticResource TopBarBackgroundColor}">
             <RadioButton Content="Home"
                              Style="{StaticResource menuButtonStyle}"
+                             
                              Height="50"
                              Foreground="WhiteSmoke"
                              FontSize="14"/>

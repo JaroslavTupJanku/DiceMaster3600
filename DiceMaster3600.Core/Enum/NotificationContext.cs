@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DiceMaster3600.Model
+namespace DiceMaster3600.Core.Enum
 {
-    public interface INotificationService
+    public enum NotificationContext
     {
-        void ShowToast(string message);
+        RegistrationSuccess,
+        RegistrationFailure,
     }
 }

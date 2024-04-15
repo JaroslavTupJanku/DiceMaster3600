@@ -20,6 +20,10 @@
     <PackageReference Include="Material.Icons.WPF" Version="2.1.0" />
     <PackageReference Include="MaterialDesignColors" Version="3.1.0-ci589" />
     <PackageReference Include="MaterialDesignThemes" Version="5.0.1-ci589" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />

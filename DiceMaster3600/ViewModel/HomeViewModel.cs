@@ -9,6 +9,7 @@ using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace DiceMaster3600.ViewModel
@@ -46,18 +47,19 @@ namespace DiceMaster3600.ViewModel
         public HomeViewModel(IDataAccessManager manager)
         {
             datamanager = manager;
-            Update();
+            TestNevim();
+            Update().ConfigureAwait(false);
 
             ShowSuccessMessageCommand = new RelayCommand(() => snackbarMessageQueue.Enqueue(LoginSuccessMessage));
-            datamanager.OnDatabaseUpdated += (s, e) => Update();
+            datamanager.OnDatabaseUpdated += async (s, e) => await Update();
         }
         #endregion
 
         #region Methods
-        public void Update()
+        public async Task Update()
         {
-            TopThreeList = new(datamanager!.GetTopThreePlayers().Select((user, index)
-                => new UserWithPosition(user, index + 1)));
+            var topThreePlayers = await datamanager!.GetTopThreePlayersAsync();
+            TopThreeList = new(topThreePlayers.Select((user, index) => new UserWithPosition(user, index + 1)));
         }
         #endregion
 
@@ -65,7 +67,16 @@ namespace DiceMaster3600.ViewModel
         #endregion
 
 
-
+        public void TestNevim()
+        {
+            TestPieGraphSeries = new ISeries[]
+            {
+                new PieSeries<double> { Values = new double[] { 100 }, Name = "Fakulta A" },
+                new PieSeries<double> { Values = new double[] { 200 }, Name = "Fakulta B" },
+                new PieSeries<double> { Values = new double[] { 150 }, Name = "Fakulta C" },
+                new PieSeries<double> { Values = new double[] { 250 }, Name = "Fakulta D" },
+            };
+        }
 
 
 
@@ -78,15 +89,6 @@ namespace DiceMaster3600.ViewModel
             }
 };
 
-        public void TestNevim()
-        {
-            TestPieGraphSeries = new ISeries[]
-            {
-                new PieSeries<double> { Values = new double[] { 100 }, Name = "Fakulta A" },
-                new PieSeries<double> { Values = new double[] { 200 }, Name = "Fakulta B" },
-                new PieSeries<double> { Values = new double[] { 150 }, Name = "Fakulta C" },
-                new PieSeries<double> { Values = new double[] { 250 }, Name = "Fakulta D" },
-            };
-        }
+
     }
 }

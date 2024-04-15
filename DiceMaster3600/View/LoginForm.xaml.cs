@@ -24,6 +24,14 @@ namespace DiceMaster3600.View
         public LoginForm()
         {
             DataContext = App.AppHost!.Services.GetService<LoginFormViewModel>();
+            Closed += (sender, args) =>
+            {
+                if (this.DataContext is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+            };
+
             InitializeComponent();
         }
     }

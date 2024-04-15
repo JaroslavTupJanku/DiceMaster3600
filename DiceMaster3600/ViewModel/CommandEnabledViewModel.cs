@@ -1,18 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using DiceMaster3600.Model.Services;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Xml.Linq;
 
-namespace DiceMaster3600
+namespace DiceMaster3600.ViewModel
 {
-    public abstract class BaseViewModel : ObservableObject
+    public abstract class CommandNotifyViewModel : NotifyViewModel
     {
+        
+        protected CommandNotifyViewModel(IMessageService messageService) : base(messageService) {
+        }
+
         protected bool SetAndNotify<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
             if (SetProperty(ref storage, value, propertyName))

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:DiceMaster3600.View.Converters"
         xmlns:controls="clr-namespace:DiceMaster3600.View.Controls"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:enum="clr-namespace:DiceMaster3600.Core.Enum;assembly=DiceMaster3600.Core"
         WindowStartupLocation="CenterScreen"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -15,7 +16,6 @@
 
     <Window.Resources>
         <converters:GenderToColorBrushConverter x:Key="GenderBrushConverter"/>
-        <converters:EnumToCollectionConverter x:Key="EnumToListConverter"/>
 
         <ObjectDataProvider x:Key="universityTypeValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -41,88 +41,6 @@
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="VerticalContentAlignment" Value="Bottom"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
-        </Style>
-
-        <Style x:Key="BaseComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="Width" Value="380"/>
-            <Setter Property="Height" Value="25"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="{StaticResource MeoptaLogoBlackBrush}"/>
-            <Setter Property="Padding" Value="10,3"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <ToggleButton 
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        Grid.Column="2"
-                        IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                        Padding="{TemplateBinding Padding}">
-                                <ToggleButton.Template>
-                                    <ControlTemplate TargetType="ToggleButton">
-                                        <Border Name="ToggleButtonBorder"
-                                        Background="{TemplateBinding Background}"
-                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness}">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition/>
-                                                    <ColumnDefinition Width="20"/>
-                                                </Grid.ColumnDefinitions>
-                                                <ContentPresenter Grid.Column="0" 
-                                                          HorizontalAlignment="Left" 
-                                                          VerticalAlignment="Center"
-                                                          Margin="{TemplateBinding Padding}"/>
-                                                <Path Grid.Column="1" 
-                                              Fill="{TemplateBinding Foreground}" 
-                                              HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center" 
-                                              Data="M0,0 L4,4 L8,0 Z"/>
-                                            </Grid>
-                                        </Border>
-                                    </ControlTemplate>
-                                </ToggleButton.Template>
-                            </ToggleButton>
-                            <ContentPresenter Name="ContentSite"
-                                      IsHitTestVisible="False"
-                                      Content="{TemplateBinding SelectionBoxItem}"
-                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                      Margin="{TemplateBinding Padding}"
-                                      VerticalAlignment="Center"
-                                      HorizontalAlignment="Left"/>
-                            <TextBox x:Name="PART_EditableTextBox"
-                             Style="{StaticResource BaseTextBoxStyle}"
-                             Visibility="Hidden"/>
-                            <Popup Name="Popup"
-                           IsOpen="{TemplateBinding IsDropDownOpen}"
-                           Placement="Bottom"
-                           Focusable="False"
-                           AllowsTransparency="True"
-                           IsEnabled="{TemplateBinding IsEnabled}">
-                                <Grid Name="DropDown"
-                              SnapsToDevicePixels="True"                
-                              MinWidth="{TemplateBinding ActualWidth}"
-                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Border x:Name="DropDownBorder"
-                                    Background="White"
-                                    BorderThickness="1"
-                                    BorderBrush="{StaticResource MeoptaBackgroundBrush}"/>
-                                    <ScrollViewer CanContentScroll="True">
-                                        <ItemsPresenter/>
-                                    </ScrollViewer>
-                                </Grid>
-                            </Popup>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
 
         <Style x:Key="BaseButtonStyle" TargetType="Button">
@@ -174,6 +92,12 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+
         <Grid Background="{StaticResource MeoptaBlueBrush}">
             <StackPanel VerticalAlignment="Center" 
                         HorizontalAlignment="Center" 
@@ -216,7 +140,9 @@
                 <TextBlock Text="Surname" Style="{StaticResource BaseTextBlockStyle}" />
                 <TextBox  Style="{StaticResource BaseTextBoxStyle}" Text="{Binding Surname}"/>
                 <TextBlock Text="Date of Birth" Style="{StaticResource BaseTextBlockStyle}" />
-                <DatePicker SelectedDate="{Binding DateOfBirth, Mode=TwoWay}" />
+                <DatePicker SelectedDate="{Binding DateOfBirth, Mode=TwoWay}" 
+                            BorderThickness="0,0,0,1"
+                            Margin="0,10,0,0"/>
                 <TextBlock Text="Gender" Style="{StaticResource BaseTextBlockStyle}" />
                 <Grid HorizontalAlignment="Left" Margin="20">
                     <Grid.ColumnDefinitions>
@@ -262,23 +188,27 @@
                 </Grid>
 
                 <TextBlock Text="University" Style="{StaticResource BaseTextBlockStyle}" Margin="0,30,0,0" />
-                <ComboBox ItemsSource="{Binding Source={StaticResource universityTypeValues}, Converter={StaticResource EnumToListConverter}}"
+                <ComboBox ItemsSource="{Binding Source={StaticResource universityTypeValues}}"
                           Style="{StaticResource BaseComboBoxStyle}"
+                          Width="380" Height="25"
+                          BorderThickness="0,0,0,1"
                           DisplayMemberPath="Description"
                           SelectedValuePath="Value"
                           SelectedValue="{Binding University}" />
                 <TextBlock Text="Faculty" Style="{StaticResource BaseTextBlockStyle}" />
-                <ComboBox ItemsSource="{Binding Source={StaticResource FacultyTypeValues}, Converter={StaticResource EnumToListConverter}}"
+                <ComboBox ItemsSource="{Binding Source={StaticResource FacultyTypeValues}}"
                           Style="{StaticResource BaseComboBoxStyle}"
+                          Width="380" Height="25"
+                          BorderThickness="0,0,0,1"
                           DisplayMemberPath="Description"
                           SelectedValuePath="Value"
                           SelectedValue="{Binding Faculty}" />
                 <TextBlock Text="Email" Style="{StaticResource BaseTextBlockStyle}"/>
-                <TextBox  Style="{StaticResource BaseTextBoxStyle}"/>
+                <TextBox  Style="{StaticResource BaseTextBoxStyle}" Text="{Binding Path=Email}"/>
 
                 <TextBlock Text="Password" Style="{StaticResource BaseTextBlockStyle}" />
                 <PasswordBox x:Name="txtPassword" Width="380" Height="25" BorderThickness="0,0,0,1" FontSize="15"/>
-                
+
                 <StackPanel Orientation="Horizontal" Margin="0,40,0,0" HorizontalAlignment="Center" >
                     <Button Content="Save"
                             Command="{Binding Path=SaveCommand}"
@@ -287,8 +217,13 @@
                             Command="{Binding Path=CancelCommand}"
                             Style="{StaticResource CancelButtonStyle}"></Button>
                 </StackPanel>
-
             </StackPanel>
         </Grid>
+        
+        <materialDesign:Snackbar x:Name="MySnackbar"
+                                 Grid.ColumnSpan="2"
+                                 MessageQueue="{Binding Path=MessageQueue}"
+                                 Style="{StaticResource DynamicSnackbarStyle}"/>
     </Grid>
 </Window>
+

@@ -12,26 +12,26 @@ namespace DiceMaster3600.Data.Repositories
     {
         public FacultyRepository(SqlEFDataContext context) : base(context) { }
 
-        public List<FacultyDTO> GetFacultyDtoByUniversityID(int universityID)
+        public async Task<List<FacultyDTO>> GetFacultyDtoByUniversityIDAsync(int universityID)
         {
-            var faculties = context.Faculties
+            var faculties = await context.Faculties
                 .Where(f => f.UniversityId == universityID && f.DeletedDate == null)
                 .Include(f => f.Users)
-                .ToList();
+                .ToListAsync();
 
             var dtos = faculties.Select(faculty => new FacultyDTO
             {
                 Name = faculty.Name,
-                Users = faculty.Users.Select(user => new UserDTO
+                Users = faculty.Users.Select(user => new UserDTO 
                 {
                     EmailAddress = user.EmailAddress,
                     Name = user.Name,
                     Surname = user.Surname,
-                    NumberOfPoints = user.NumberOfPoints,
+                    NumberOfPoints = user.NumberOfPoints, 
                 }).ToList()
-            }).ToList();
+            });
 
-            return dtos;
+            return dtos.ToList();
         }
 
         public async Task<FacultyEntity> AddAsync(FacultyDTO facultyDTO, int universityId)
@@ -47,12 +47,12 @@ namespace DiceMaster3600.Data.Repositories
             return facultyEntity;
         }
 
-        public void DeleteFacultyByUniversityID(int universityID)
+        public async Task DeleteFacultyByUniversityID(int universityID)
         {
             var entities = context.Faculties.Where(x => x.UniversityId == universityID && x.DeletedDate == null).ToArray()
                 ?? throw new KeyNotFoundException($"University id {universityID} does not exist in the database");
 
-            Delete(entities);
+            await DeleteAsync(entities);
             context.SaveChanges();
         }
 

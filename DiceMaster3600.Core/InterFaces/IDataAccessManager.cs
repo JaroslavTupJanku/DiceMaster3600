@@ -1,20 +1,20 @@
 ﻿using DiceMaster3600.Core.DTOs;
 using DiceMaster3600.Core.Enum;
 using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DiceMaster3600.Core.InterFaces
 {
     public interface IDataAccessManager
     {
-        List<UserDTO> GetTopThreePlayers();
-        bool AddUser(UserDTO user, UniversityType univeristy, FacultyType faculty);
-
-        void DeleteUniversity(int id);
+        Task<UserDTO[]> GetTopThreePlayersAsync();
+        Task RegisterUserAsync(UserDTO user, string plainPassword, UniversityType univeristy, FacultyType faculty);
+        Task DeleteUniversityAsync(int id);
         UniversityDTO[] GetAllUniversityDTOs();
-        UniversityDTO GetUniversityByID(int id);
+        Task GetUniversityByID(int id);
+        Task<UserDTO?> GetUserByEmailAsync(string email, string plainPassword);
 
-
+        public event Action<bool>? OnProcessingDataChanged;
         public event EventHandler? OnDatabaseUpdated;
     }
 }

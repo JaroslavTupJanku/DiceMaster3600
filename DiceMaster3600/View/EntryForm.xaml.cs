@@ -1,5 +1,6 @@
 ﻿using DiceMaster3600.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Windows;
 
 namespace DiceMaster3600.View.Dialogs
@@ -11,8 +12,14 @@ namespace DiceMaster3600.View.Dialogs
     {
         public EntryForm()
         {
-            DataContext = App.AppHost!.Services.GetService<EntryFormViewModel>();
             InitializeComponent();
+
+            if (App.AppHost!.Services.GetService<EntryFormViewModel>() is EntryFormViewModel vm) 
+            {
+                DataContext = vm;
+                vm.RequestClose += () => Close();
+                Closed += (s, a) => vm.Dispose();
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using DiceMaster3600.Core.DTOs;
 using DiceMaster3600.Core.Enum;
+using DiceMaster3600.Data.Entitites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +19,7 @@ namespace DiceMaster3600.Data.Adapter
         #endregion
 
         #region Methods
-        public void DeleteUniversityById(int UniversityID)
+        public async Task DeleteUniversityById(int UniversityID)
         {
             using var transaction = repos.BeginTransaction();
             try
@@ -27,35 +29,51 @@ namespace DiceMaster3600.Data.Adapter
 
                 foreach (var faculty in university.Faculties.ToList())
                 {
-                    repos.UserRepository.DeleteAllByFacultyId(faculty.Id);
-                    repos.FacultyRepository.Delete(faculty);
+                    await repos.UserRepository.DeleteAllByFacultyIdAsync(faculty.Id);
+                    await repos.FacultyRepository.DeleteAsync(faculty);
                 }
 
-                repos.UniversityRepository.Delete(university);
-                transaction.Commit();
+                await repos.UniversityRepository.DeleteAsync(university);
+                await transaction.CommitAsync();
             }
-            catch
+            catch ( Exception ex )
             {
                 transaction.Rollback();
-                throw;
+                throw new ApplicationException($"Failed to delete university with ID {UniversityID}: {ex.Message}", ex);
             }
         }
 
-        public async Task AddUser(UserDTO userDto, UniversityType universityType, FacultyType facultyType)
+        public async Task RegisterUser(UserDTO userDto, string plainPassword, UniversityType universityType, FacultyType facultyType)
         {
             var universityEntity = await repos.UniversityRepository.EnsureUniversityExistsAsync(universityType);
             var facultyEntity = await repos.FacultyRepository.EnsureFacultyExistsAsync(facultyType, universityEntity.Id);
 
-            await repos.UserRepository.AddAsync(userDto, facultyEntity.Id);
+            await repos.UserRepository.AddAsync(userDto, plainPassword, facultyEntity.Id);
         }
 
-        public UniversityDTO GetUniversityDTOById(int selectedUniversityId)
+        public async Task<UserDTO?> GetUserByEmailAsync(string email, string plainPassword)
+        {
+            var userEntity = await repos.UserRepository.GetUserByEmailAsync(email, plainPassword);
+
+            return userEntity is UserEntity e ? new UserDTO()
+            {
+                Name = e.Name,
+                Surname = e.Surname,
+                EmailAddress = e.EmailAddress,
+                Gender = e.Gender,
+                NumberOfPoints = e.NumberOfPoints
+            } : null;
+        }
+
+        public async Task<UniversityDTO> GetUniversityDTOByIdAsync(int selectedUniversityId)
         {
             var universityDTO = repos.UniversityRepository.GetDTOById(selectedUniversityId);
-            universityDTO.Faculties = repos.FacultyRepository.GetFacultyDtoByUniversityID(selectedUniversityId);
+            universityDTO.Faculties =  await repos.FacultyRepository.GetFacultyDtoByUniversityIDAsync(selectedUniversityId);
 
             return universityDTO;
         }
+
+        public async Task<UserDTO[]> GetTopThree() => await repos.UserRepository.GetTopThreePlayersAsync();
         #endregion
 
         #region Events
