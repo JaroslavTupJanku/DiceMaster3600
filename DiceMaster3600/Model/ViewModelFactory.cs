@@ -6,16 +6,10 @@ namespace DiceMaster3600.Model
 {
     public class ViewModelFactory : IViewModelFactory
     {
-        private readonly IServiceProvider serviceProvider;
-
-        public ViewModelFactory(IServiceProvider serviceProvider)
-        {
-            this.serviceProvider = serviceProvider;
-        }
-
         public T CreateViewModel<T>() where T : class, IMenuControlViewModel
         {
-            return serviceProvider.GetRequiredService<T>();
+            return App.AppHost!.Services?.GetService<T>() 
+                ?? throw new InvalidOperationException($"ViewModel of type {typeof(T).Name} could not be created."); 
         }
     }
 }

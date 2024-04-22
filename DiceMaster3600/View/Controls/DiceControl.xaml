@@ -3,54 +3,65 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Background="White"
-             d:DesignHeight="100" d:DesignWidth="100">
-    
-    <Border BorderBrush="Black" BorderThickness="2" CornerRadius="8">
+             MouseLeftButtonUp="UserControl_MouseLeftButtonUp"
+             mc:Ignorable="d" Background="Transparent" Height="50" Width="50">
+
+    <!--Pridat convertery pro uzpusobeni sirky, vysky a margin-->
+    <UserControl.Resources>
+        <Style TargetType="Border">
+            <Setter Property="ClipToBounds" Value="True"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Background" Value="{StaticResource MeoptaLogoWhiteBrush}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True">
+                    <Setter Property="BorderBrush" Value="Red"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Ellipse">
+            <Setter Property="Fill" Value="Black"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True">
+                    <Setter Property="Fill" Value="Red"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Border BorderThickness="2" CornerRadius="8">
         <Grid>
-            <!-- Hodnota 1 -->
             <Grid x:Name="One" Visibility="Collapsed">
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
-
-            <!-- Hodnota 2 -->
             <Grid x:Name="Two" Visibility="Collapsed">
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"/>
             </Grid>
-
-            <!-- Hodnota 3 -->
             <Grid x:Name="Three" Visibility="Collapsed">
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"/>
             </Grid>
-
-            <!-- Hodnota 4 -->
             <Grid x:Name="Four" Visibility="Collapsed">
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"/>
             </Grid>
-
-            <!-- Hodnota 5 -->
             <Grid x:Name="Five" Visibility="Collapsed">
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"/>
             </Grid>
-
-            <!-- Hodnota 6 -->
             <Grid x:Name="Six" Visibility="Visible">
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
-                <Ellipse Fill="Black" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+                <Ellipse Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"/>
             </Grid>
         </Grid>
     </Border>

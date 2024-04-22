@@ -25,18 +25,20 @@ namespace DiceMaster3600.Data.Repositories
 
         public async Task<UserDTO[]> GetTopThreePlayersAsync()
         {
-            var topThreePlayers = await context.Users
-                .Where(user => user.DeletedDate == null) 
-                .OrderByDescending(user => user.NumberOfPoints).Take(3)
-                .Select(user => new UserDTO {
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    Gender = user.Gender,
-                    EmailAddress = user.EmailAddress,
-                    NumberOfPoints = user.NumberOfPoints,
-                }).ToArrayAsync();
+            var topThreeUsers = await context.Users
+                .Where(user => user.DeletedDate == null)
+                .OrderByDescending(user => user.NumberOfPoints)
+                .Take(3)
+                .ToListAsync();
 
-            return topThreePlayers;
+            return topThreeUsers.Select((user, index) => new UserDTO
+            {
+                Name = user.Name,
+                Surname = user.Surname,
+                EmailAddress = user.EmailAddress,
+                Gender = user.Gender,
+                NumberOfPoints = user.NumberOfPoints
+            }).ToArray();
         }
 
         public async Task<UserEntity?> GetUserByEmailAsync(string email, string plainPassword)

@@ -5,7 +5,8 @@
                     xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF">
 
     <conv:PositionToColorConverter x:Key="ColorConverter"/>
-    <DataTemplate x:Key="UserItemTemplate">
+    
+    <DataTemplate x:Key="UniversityItemTemplate">
         <Border Margin="5" Padding="10" BorderBrush="Gray" CornerRadius="5">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -31,17 +32,75 @@
                     <TextBlock Text="{Binding WholeName}" FontWeight="Bold"/>
                     <StackPanel Grid.Row="1" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Points: "/>
-                            <TextBlock Text="{Binding NumberOfPoints}" FontWeight="Bold"/>
+                            <TextBlock Text="Average Points: "/>
+                            <TextBlock Text="{Binding AveragePoints}" FontWeight="Bold"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="University: "/>
-                            <TextBlock Text="{Binding NumberOfPoints}" FontWeight="Bold"/>
+                            <TextBlock Text="Nb. of players: "/>
+                            <TextBlock Text="{Binding StudentCount}" FontWeight="Bold"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
             </Grid>
         </Border>
     </DataTemplate>
-    
+
+    <DataTemplate x:Key="UserItemTemplate">
+        <Border Margin="5" Padding="10" BorderBrush="Gray" CornerRadius="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" MinWidth="130"/>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Ellipse Width="50" Height="50" 
+                         Stroke="DarkBlue"
+                         Fill="{Binding Position, Converter={StaticResource ColorConverter}}"
+                         StrokeThickness="2">
+                    </Ellipse>
+                    <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Gender}" Value="Male">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <materialIcons:MaterialIcon Kind="Medal" Foreground="White" Height="20"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Gender}" Value="Female">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <materialIcons:MaterialIcon Kind="Face" Foreground="White" Height="20"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <!-- Přidat další ikony pro další Gender hodnoty pokud je třeba -->
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                </Grid>
+                <Grid Grid.Column="1" Margin="10,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding WholeName}" FontWeight="Bold"/>
+                    <StackPanel Grid.Row="1" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Points: "/>
+                            <TextBlock Text="{Binding NumberOfPoints}" FontWeight="Bold"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Percentage: "/>
+                            <TextBlock Text="{Binding RelativePoints}" FontWeight="Bold"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
 </ResourceDictionary>

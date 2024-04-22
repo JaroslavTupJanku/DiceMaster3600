@@ -43,10 +43,10 @@ namespace DiceMaster3600.ViewModel
         protected void SubsribeNotification(NotificationContext c, Action<string> callback) => messageService.Subscribe(c, callback);
         protected void UnsubsribeNotification(NotificationContext c) => messageService.Unsubscribe(c);
 
-        protected virtual void EnqueueMessage(string message, MessageType type)
+        protected virtual void Notify(string message, MessageType type)
         {
             CurrentMessageType = type;
-            messageService.EnqueueMessage(message);
+            messageService.NotifyImmediately(message);
         }
 
         public abstract void Dispose();

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DiceMaster3600.Core.DTOs;
 using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Core.InterFaces;
 using DiceMaster3600.Model;
@@ -8,6 +9,7 @@ using LiveChartsCore.SkiaSharpView;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -19,6 +21,7 @@ namespace DiceMaster3600.ViewModel
         #region Fields
         private readonly IDataAccessManager? datamanager;
         private readonly SnackbarMessageQueue snackbarMessageQueue = new(TimeSpan.FromSeconds(3));
+
         private string loginSuccessMessage = "You have successfully logged in!";
         private ISeries[]? testPieGraphSeries;
         #endregion
@@ -38,8 +41,10 @@ namespace DiceMaster3600.ViewModel
 
         public MenuControlType ControlType => MenuControlType.DashBoard;
         public SnackbarMessageQueue SnackbarMessageQueue => snackbarMessageQueue;
+        public ObservableCollection<RankedUserDTO> TopThreePlayerList { get; set; }
+        public ObservableCollection<UniversityRankingDTO> TopThreeUniversityList { get; set; }
+
         public ICommand ShowSuccessMessageCommand { get; }
-        public ObservableCollection<UserWithPosition> TopThreeList { get; set; } = new();
         #endregion
 
         #region Constructors
@@ -58,8 +63,18 @@ namespace DiceMaster3600.ViewModel
         #region Methods
         public async Task Update()
         {
-            var topThreePlayers = await datamanager!.GetTopThreePlayersAsync();
-            TopThreeList = new(topThreePlayers.Select((user, index) => new UserWithPosition(user, index + 1)));
+            try
+            {
+                var topPlayers = await datamanager!.GetTopThreePlayersAsync();
+                var topUniversities = await datamanager!.GetTopThreeUniversityAsync();
+
+                TopThreePlayerList = new ObservableCollection<RankedUserDTO>(topPlayers);
+                TopThreeUniversityList = new ObservableCollection<UniversityRankingDTO>(topUniversities);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error in Update: " + ex.Message);
+            }
         }
         #endregion
 

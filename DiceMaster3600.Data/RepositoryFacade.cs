@@ -6,16 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DiceMaster3600.Data.Adapter
+namespace DiceMaster3600.Data
 {
-    public class RepositoryAdapter
+    public class RepositoryFasade
     {
         #region Fields
         private readonly ISqlRepositories repos;
         #endregion
 
         #region Constructors
-        public RepositoryAdapter(ISqlRepositories repositories) => repos = repositories;
+        public RepositoryFasade(ISqlRepositories repositories) => repos = repositories;
         #endregion
 
         #region Methods
@@ -36,7 +36,7 @@ namespace DiceMaster3600.Data.Adapter
                 await repos.UniversityRepository.DeleteAsync(university);
                 await transaction.CommitAsync();
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
                 transaction.Rollback();
                 throw new ApplicationException($"Failed to delete university with ID {UniversityID}: {ex.Message}", ex);
@@ -68,12 +68,27 @@ namespace DiceMaster3600.Data.Adapter
         public async Task<UniversityDTO> GetUniversityDTOByIdAsync(int selectedUniversityId)
         {
             var universityDTO = repos.UniversityRepository.GetDTOById(selectedUniversityId);
-            universityDTO.Faculties =  await repos.FacultyRepository.GetFacultyDtoByUniversityIDAsync(selectedUniversityId);
+            universityDTO.Faculties = await repos.FacultyRepository.GetFacultyDtoByUniversityIDAsync(selectedUniversityId);
 
             return universityDTO;
         }
 
-        public async Task<UserDTO[]> GetTopThree() => await repos.UserRepository.GetTopThreePlayersAsync();
+        public async Task<RankedUserDTO[]> GetTopThree()
+        {
+            var users = await repos.UserRepository.GetTopThreePlayersAsync();
+            List<RankedUserDTO> rankedUsers = new();
+
+            //foreach (var user in users)
+            //{
+            //    var faculty = await repos.FacultyRepository.GetFacultyByIdAsync(user.FacultyId);
+            //    var university = await repos.UniversityRepository.GetByIdAsync(faculty.UniversityId);
+            //    rankedUsers.Add(new RankedUserDTO(user, user.Position, university.Name));
+            //}
+
+            return rankedUsers.ToArray();
+        }
+
+        public async Task<UniversityRankingDTO[]> GetTopThreeUniversity() => await repos.UniversityRepository.GetTopThreeUniversitiesAsync();
         #endregion
 
         #region Events

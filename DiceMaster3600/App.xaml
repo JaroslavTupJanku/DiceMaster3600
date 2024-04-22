@@ -21,6 +21,10 @@
                 <view:HomeView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type vm:DiceGameViewModel}">
+                <view:DiceGameView/>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

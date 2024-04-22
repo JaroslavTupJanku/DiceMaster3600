@@ -3,6 +3,7 @@ using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Data.Entitites;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DiceMaster3600.Data.Repositories
@@ -10,6 +11,27 @@ namespace DiceMaster3600.Data.Repositories
     public class UniversityRepository : Repository<UniversityEntity>
     {
         public UniversityRepository(SqlEFDataContext context) : base(context) { }
+
+        public async Task<UniversityRankingDTO[]> GetTopThreeUniversitiesAsync()
+        {
+            return await context.Universities
+                .Where(university => university.DeletedDate == null)
+                .Select(university => new {
+                    University = university,
+                    Faculties = university.Faculties
+                        .Where(faculty => faculty.DeletedDate == null)
+                        .SelectMany(faculty => faculty.Users)
+                        .Where(user => user.DeletedDate == null)
+                })
+                .Select(data => new UniversityRankingDTO {
+                    UniversityName = data.University.Name,
+                    AveragePoints = data.Faculties.Any() ? data.Faculties.Average(user => user.NumberOfPoints) : 0,
+                    StudentCount = data.Faculties.Count()
+                })
+                .OrderByDescending(dto => dto.AveragePoints)
+                .ThenByDescending(dto => dto.StudentCount)
+                .Take(3).ToArrayAsync();
+        }
 
         public UniversityDTO GetDTOById(int id)
         {

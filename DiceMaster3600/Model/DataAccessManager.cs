@@ -1,7 +1,7 @@
 ﻿using DiceMaster3600.Core.DTOs;
 using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Core.InterFaces;
-using DiceMaster3600.Data.Adapter;
+using DiceMaster3600.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace DiceMaster3600.Model
     public class DataAccessManager : IDataAccessManager
     {
         #region Fields
-        private readonly RepositoryAdapter dbModel;
+        private readonly RepositoryFasade dbModel;
         private bool isProcessingData;
         #endregion
 
@@ -32,7 +32,7 @@ namespace DiceMaster3600.Model
         #endregion
 
         #region Constructors
-        public DataAccessManager(RepositoryAdapter dbModel) //AppSettings settings
+        public DataAccessManager(RepositoryFasade dbModel)
         {
             this.dbModel = dbModel;
         }
@@ -65,11 +65,6 @@ namespace DiceMaster3600.Model
             }
         }
 
-        public async Task<UserDTO[]> GetTopThreePlayersAsync()
-        {
-            return await ExecuteDataOperationAsync(() => dbModel.GetTopThree());
-        }
-
         public async Task DeleteUniversityAsync(int id)
         {
             await ExecuteDataOperationAsync(async () =>
@@ -79,10 +74,16 @@ namespace DiceMaster3600.Model
             });
         }
 
-        public async Task<UserDTO?> GetUserByEmailAsync(string email, string plainPassword)
-        {
-            return await ExecuteDataOperationAsync(() => dbModel.GetUserByEmailAsync(email, plainPassword));
-        }
+        public async Task<RankedUserDTO[]> GetTopThreePlayersAsync() 
+            => await ExecuteDataOperationAsync(() 
+            => dbModel.GetTopThree());
+        public async Task<UniversityRankingDTO[]> GetTopThreeUniversityAsync()
+            => await ExecuteDataOperationAsync(() 
+            => dbModel.GetTopThreeUniversity());
+
+        public async Task<UserDTO?> GetUserByEmailAsync(string email, string plainPassword) 
+            => await ExecuteDataOperationAsync(() 
+            => dbModel.GetUserByEmailAsync(email, plainPassword));
 
         public async Task RegisterUserAsync(UserDTO user, string plainPassword, UniversityType university, FacultyType faculty)
         {

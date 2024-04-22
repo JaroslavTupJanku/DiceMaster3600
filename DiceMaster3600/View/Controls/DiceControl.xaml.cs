@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace DiceMaster3600.View.Controls
@@ -14,7 +15,7 @@ namespace DiceMaster3600.View.Controls
             "Value", typeof(int), typeof(DiceControl), new PropertyMetadata(0, OnValueChanged));
 
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
-            nameof(IsSelected), typeof(bool), typeof(DiceControl), new PropertyMetadata(false, OnIsSelectedChanged));
+            nameof(IsSelected), typeof(bool), typeof(DiceControl), new PropertyMetadata(false));
 
         public int Value
         {
@@ -29,14 +30,19 @@ namespace DiceMaster3600.View.Controls
         }
         #endregion
 
-
         #region Constructors
         public DiceControl()
         {
             InitializeComponent();
+            HideAllGroups();
+            Loaded += DiceControl_Loaded;
+        }
+
+        private void DiceControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            ShowGroup(this.Value); // Přidáno pro účely testování po načtení kontrolky
         }
         #endregion
-        
 
         #region Methods
         private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -47,15 +53,6 @@ namespace DiceMaster3600.View.Controls
 
                 control.HideAllGroups();
                 control.ShowGroup(newValue);
-            }
-        }
-        private static void OnIsSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is DiceControl control)
-            {
-                control.Background = (bool)e.NewValue 
-                    ? new SolidColorBrush(Color.FromRgb(255, 204, 203)) 
-                    : Brushes.Transparent;
             }
         }
 
@@ -82,8 +79,9 @@ namespace DiceMaster3600.View.Controls
             Five.Visibility = Visibility.Collapsed;
             Six.Visibility = Visibility.Collapsed;
         }
-        #endregion
 
+        private void UserControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) => IsSelected = !IsSelected;
+        #endregion
 
         #region Events
         #endregion

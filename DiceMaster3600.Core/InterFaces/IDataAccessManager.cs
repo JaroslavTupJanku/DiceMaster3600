@@ -7,7 +7,9 @@ namespace DiceMaster3600.Core.InterFaces
 {
     public interface IDataAccessManager
     {
-        Task<UserDTO[]> GetTopThreePlayersAsync();
+        Task<RankedUserDTO[]> GetTopThreePlayersAsync();
+        Task<UniversityRankingDTO[]> GetTopThreeUniversityAsync();
+
         Task RegisterUserAsync(UserDTO user, string plainPassword, UniversityType univeristy, FacultyType faculty);
         Task DeleteUniversityAsync(int id);
         UniversityDTO[] GetAllUniversityDTOs();

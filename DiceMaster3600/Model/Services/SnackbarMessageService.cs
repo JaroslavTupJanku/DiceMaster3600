@@ -1,6 +1,7 @@
 ﻿using DiceMaster3600.Core.Enum;
 using MaterialDesignThemes.Wpf;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace DiceMaster3600.Model.Services
@@ -9,7 +10,7 @@ namespace DiceMaster3600.Model.Services
     {
         #region Fields
         private readonly SnackbarMessageQueue messageQueue;
-        private readonly Dictionary<NotificationContext, Action<string>> notifications = new();
+        private readonly ConcurrentDictionary<NotificationContext, List<Action<string>>> notifications = new();
         #endregion
 
         #region Properties
@@ -24,68 +25,44 @@ namespace DiceMaster3600.Model.Services
         #endregion
 
         #region Methods
-        public void EnqueueMessage(string message)
-        {
-            messageQueue.Enqueue(message, null, null, null, false, true, TimeSpan.FromSeconds(1));
-        }
-
         public void Subscribe(NotificationContext notificationType, Action<string> callback)
         {
-            if (!notifications.ContainsKey(notificationType))
+            notifications.AddOrUpdate(notificationType, new List<Action<string>> { callback }, (key, oldValue) =>
             {
-                notifications[notificationType] = callback;
-            }
+                lock (oldValue) { oldValue.Add(callback); }
+                return oldValue;
+            });
         }
 
         public void Unsubscribe(NotificationContext notificationType)
         {
-            notifications.Remove(notificationType);
+            if (notifications.TryRemove(notificationType, out var callbacks))
+            {
+                lock (callbacks) 
+                { 
+                    callbacks.Clear(); 
+                }
+            }
         }
 
         public void TryNotify(NotificationContext notificationType, string message)
         {
-            if (notifications.TryGetValue(notificationType, out var callback))
+            if (notifications.TryGetValue(notificationType, out var callbacks))
             {
-                callback(message);
+                lock (callbacks) 
+                { 
+                    callbacks.ForEach(cb => cb(message)); 
+                }
             }
         }
 
+        public void NotifyImmediately(string message)
+        {
+            messageQueue.Enqueue(message, null, null, null, false, true, TimeSpan.FromSeconds(1));
+        }
         #endregion
 
         #region Events
         #endregion
     }
-
-
-    //public void RegisterNotification(Action<string> notificationAction, NotificationContext context)
-    //{
-    //    notifications[context] = notifications.TryGetValue(context, out var existingAction)
-    //                             ? existingAction + notificationAction
-    //                             : notificationAction;
-    //}
-
-    //public void UnregisterSuccessNotification(Action<string> notificationAction, NotificationContext context)
-    //{
-    //    if (notifications.TryGetValue(context, out var existingAction))
-    //    {
-    //        var newAction = existingAction - notificationAction;
-    //        if (newAction == null || newAction.GetInvocationList().Length == 0)
-    //        {
-    //            notifications.Remove(context);
-    //            return;
-    //        }
-    //        else
-    //        {
-    //            notifications[context] = newAction;
-    //        }
-    //    }
-    //}
-
-    //public void Notify(NotificationContext context, string message)
-    //{
-    //    if (notifications.TryGetValue(context, out var action))
-    //    {
-    //        action(message);
-    //    }
-    //}
 }

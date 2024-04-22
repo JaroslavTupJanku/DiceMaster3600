@@ -12,7 +12,7 @@ namespace DiceMaster3600.Core.DTOs
 
         public UserDTO() { }
 
-        public UserDTO(string name, string surname, string email, Gender gender = Gender.None, int nbPoints = 0)
+        public UserDTO(string name, string surname, string email, Gender gender, int nbPoints = 0)
         {
             Name = name;
             Surname = surname;

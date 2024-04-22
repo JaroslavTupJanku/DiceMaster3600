@@ -36,12 +36,12 @@
 
             <controls:InfoDisplayPanel TitleText="Best Player"
                                    Grid.Column="1"
-                                   ValueText="{Binding Path=TopThreeList[0].WholeName}"
+                                   ValueText="{Binding Path=TopThreePlayerList[0].WholeName}"
                                    TargetGridBackground="{StaticResource MeoptaYellowBrush}"/>
 
             <controls:InfoDisplayPanel UnitText="Pt" 
                                    TitleText="Best Score"
-                                   ValueText="{Binding TopThreeList[0].NumberOfPoints}" 
+                                   ValueText="{Binding TopThreePlayerList[0].NumberOfPoints}" 
                                    Grid.Column="3" 
                                    TargetGridBackground="{StaticResource MeoptaBlueBrush}"/>
 
@@ -101,12 +101,13 @@
                                Margin="10,0,10,0" 
                                Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
                     <ListBox Name="UserListBox" Grid.Column="1" 
-                     Background="White"
-                     BorderThickness="0"
-                     ItemTemplate="{StaticResource UserItemTemplate}" 
-                     ItemsSource="{Binding Path=TopThreeList}"/>
+                               Background="White"
+                               BorderThickness="0"
+                               ItemTemplate="{StaticResource UserItemTemplate}" 
+                               ItemsSource="{Binding Path=TopThreePlayerList}"/>
                 </StackPanel>
             </Border>
+            
             <Border Padding="10"
                     Grid.Column="2"
                     BorderBrush="Black" 
@@ -126,8 +127,8 @@
                     <ListBox Name="UserLidstBox" Grid.Column="1" 
                      Background="White"
                      BorderThickness="0"
-                     ItemTemplate="{StaticResource UserItemTemplate}" 
-                     ItemsSource="{Binding Path=TopThreeList}"/>
+                     ItemTemplate="{StaticResource UniversityItemTemplate}" 
+                     ItemsSource="{Binding Path=TopThreeUniversityList}"/>
                 </StackPanel>
             </Border>
 

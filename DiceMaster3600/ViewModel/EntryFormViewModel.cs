@@ -90,7 +90,7 @@ namespace DiceMaster3600.ViewModel
         public EntryFormViewModel(IDataAccessManager dataManager, IMessageService messageService) : base(messageService)
         {
             this.dataManager = dataManager;
-            SubsribeNotification(NotificationContext.RegistrationFailure, (m) => EnqueueMessage(m, MessageType.Failed));
+            SubsribeNotification(NotificationContext.RegistrationFailure, (m) => Notify(m, MessageType.Failed));
 
             SaveCommand = new RelayCommand(async
                 () => await ExecuteExampleCommand(),

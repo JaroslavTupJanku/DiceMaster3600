@@ -27,9 +27,10 @@
                         <Grid VerticalAlignment="Stretch"
                               HorizontalAlignment="Stretch"
                               Background="{TemplateBinding Background}">
-
                             <TextBlock Text="{TemplateBinding Property=Content}" 
-                                       Margin="20,0,20,0"
+                                       Margin="20" Width="auto" Height="auto"
+                                       Foreground="{StaticResource MeoptaLogoWhiteBrush}"
+                                       FontSize="14"
                                        FontFamily="{StaticResource MuseoFontFamily1}"
                                        VerticalAlignment="Center"/>
                         </Grid>

@@ -28,7 +28,7 @@ namespace DiceMaster3600.ViewModel
             RegisterCMD = new RelayCommand(() => new EntryForm().ShowDialog());
 
             SubsribeNotification(NotificationContext.RegistrationSuccess, 
-                (m) => EnqueueMessage(m, MessageType.Success));
+                (m) => Notify(m, MessageType.Success));
 
             this.datamanager = datamanager;
         }
