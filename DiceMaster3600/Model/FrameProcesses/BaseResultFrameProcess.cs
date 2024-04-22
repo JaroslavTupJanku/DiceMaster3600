@@ -8,7 +8,18 @@ namespace DiceMaster3600.Model.FrameProcesses
 {
     public abstract class BaseResultFrameProcess<T> : IResultFrameProcess<T>
     {
-        public T? Result { get; private set; }
+        private T result;
+
+        public T Result 
+        { 
+            get => result; 
+            private set
+            {
+                result = value;
+                OnResultChanged?.Invoke();
+            }
+                
+        }
 
         protected abstract T ProcessFrame(FrameSet frameSet);
 
@@ -17,5 +28,7 @@ namespace DiceMaster3600.Model.FrameProcesses
             Result = await Task.Run(() => ProcessFrame(frameSet));
             return frameSet;
         }
+
+        public event Action? OnResultChanged;
     }
 }

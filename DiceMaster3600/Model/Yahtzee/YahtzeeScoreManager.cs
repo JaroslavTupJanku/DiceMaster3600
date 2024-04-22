@@ -89,7 +89,7 @@ namespace DiceMaster3600.Model.Yahtzee
 
         public void AssignScoreToCategory(ScoreTypes selectedType)
         {
-            if (Scores![selectedType].IsEnabled && !Scores[selectedType].HasBeenScored)
+            if (Scores![selectedType].IsSelected && !Scores[selectedType].HasBeenScored)
             {
                 var scoreValue = scoreCalculators![selectedType](currentDiceValues);
                 Scores[selectedType].UpdateScore(scoreValue);
@@ -97,7 +97,7 @@ namespace DiceMaster3600.Model.Yahtzee
             }
         }
 
-        public int GetCurrentTotalScore() => Scores!.Values.Where(s => s.HasBeenScored).Sum(s => s.Score ?? 0);
+        public int GetCurrentTotalScore() => Scores!.Values.Where(s => s.HasBeenScored).Sum(s => s.Score);
         public void GenerateDiceRolls() => UpdatePossibleScores(Enumerable.Range(0, 5).Select(x => random.Next(1, 7)).ToArray());
         #endregion
 

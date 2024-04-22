@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace DiceMaster3600.Model.FrameProcesses
 {
-    public class DiceRecognitionProcess : BaseResultFrameProcess<List<DiceResult>>  //Napsat, ze by to bylo lepsi retezit. 
+    public class DiceRecognitionProcess : BaseResultFrameProcess<List<CameraDiceResult>>  //Napsat, ze by to bylo lepsi retezit. 
     {
 
         private readonly float backgroundDepthThreshold;
@@ -28,9 +28,9 @@ namespace DiceMaster3600.Model.FrameProcesses
             this.intenzityThresHold = dotContourAreaThreshold;
         }
 
-        protected override List<DiceResult> ProcessFrame(FrameSet frameSet)
+        protected override List<CameraDiceResult> ProcessFrame(FrameSet frameSet)
         {
-            var results = new List<DiceResult>();
+            var results = new List<CameraDiceResult>();
             var colorFrame = frameSet.ColorFrame;
             var depthFrame = frameSet.DepthFrame;
 
@@ -46,7 +46,7 @@ namespace DiceMaster3600.Model.FrameProcesses
                 var dotCount = CountDots(colorImage, region);
                 var diceDepth = GetAverageDepth(depthFrame, region);
 
-                results.Add(new DiceResult(region, dotCount, diceDepth));
+                results.Add(new CameraDiceResult(region, dotCount, diceDepth));
             }
             return results;
         }

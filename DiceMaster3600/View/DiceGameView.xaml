@@ -4,14 +4,37 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:DiceMaster3600.View.Controls"
+             xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
+             d:DataContext="{d:DesignInstance Type=vm:DiceGameViewModel}"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style x:Key="InfoCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+
+        <Style x:Key="IconButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="Background" Value="{StaticResource MeoptaLogoWhiteBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource MeoptaLightBlueBrush}"/>
+        </Style>
+    </UserControl.Resources>
     
     <Grid Background="Transparent" Margin="20">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
@@ -20,21 +43,117 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <Border BorderBrush="{StaticResource MeoptaLogoBlackBrush}"
-                BorderThickness="1"
-                CornerRadius="2">
+        <Border BorderThickness="1"
+                Background="{StaticResource MeoptaLogoWhiteBrush}"
+                CornerRadius="5">
             <Image x:Name="MyImage" />
         </Border>
 
-        <StackPanel Grid.Column="2">
-            <controls:DiceControl Margin="0,0,0,10" Width="50" Height="50"/>
-            <controls:DiceControl Margin="0,0,0,10" Width="50" Height="50"/>
-            <controls:DiceControl Margin="0,0,0,10" Width="50" Height="50"/>
-            <controls:DiceControl Margin="0,0,0,10" Width="50" Height="50"/>
-            <controls:DiceControl Margin="0,0,0,10" Value="5" Width="50" Height="50"/>
-        </StackPanel>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Border Style="{StaticResource InfoCardStyle}" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Number of dices in the game" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
+                    <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal"  HorizontalAlignment="Center">
+                        <TextBlock  Text="{Binding DiceInGameNumber}" FontWeight="Bold" FontSize="40" Foreground="Black" TextAlignment="Center"/>
+                        <TextBlock  Text=" dices" FontSize="20" Foreground="Black" VerticalAlignment="Bottom"/>
+                    </StackPanel>
 
-        <controls:YahtzeeTable Grid.Column="4"/>
-        <ListBox Grid.Row="2" Grid.ColumnSpan="5"></ListBox>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource InfoCardStyle}" Grid.Row="1" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Number of remaining rolls" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
+                    <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal"   HorizontalAlignment="Center">
+                        <TextBlock Grid.Row="2" Text="{Binding DiceRollsNumber}" FontWeight="Bold" FontSize="40"  Foreground="Black"  TextAlignment="Center"/>
+                        <TextBlock  Text=" rolls" FontSize="20" Foreground="Black" VerticalAlignment="Bottom"/>
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource InfoCardStyle}" Grid.Row="2">
+                <StackPanel Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <controls:DiceControl Margin="0,0,0,20" Width="60" Height="60" Value="{Binding Dices[0].Score}" />
+                    <controls:DiceControl Margin="0,0,0,20" Width="60" Height="60" Value="{Binding Dices[1].Score}" />
+                    <controls:DiceControl Margin="0,0,0,20" Width="60" Height="60" Value="{Binding Dices[2].Score}" />
+                    <controls:DiceControl Margin="0,0,0,20" Width="60" Height="60" Value="{Binding Dices[3].Score}" />
+                    <controls:DiceControl Margin="0,0,0,0"  Width="60" Height="60" Value="{Binding Dices[4].Score}" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Border Grid.Column="4" Style="{StaticResource InfoCardStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Gamecard" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource MeoptaLogoBlackBrush}" FontSize="30"/>
+                <controls:YahtzeeTable Grid.Row="2" />
+            </Grid>
+
+        </Border>
+
+        <Border Grid.Row="2" Grid.ColumnSpan="5" CornerRadius="5" Background="{StaticResource MeoptaLogoWhiteBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border CornerRadius="5,0,0,5" Background="{StaticResource MeoptaBackgroundBrush}" ClipToBounds="True" Padding="3">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Button Style="{StaticResource IconButtonStyle}" Margin="5" 
+                                Command="{Binding ClearNotificationsCommand}"
+                                ToolTip="Clear notifications panel">
+                            <materialIcons:MaterialIcon Kind="FileDocumentDelete" Background="{StaticResource MeoptaLogoWhiteBrush}"  Foreground="{StaticResource MeoptaLightBlueBrush}"/>
+                        </Button>
+                        <Button Style="{StaticResource IconButtonStyle}" Grid.Row="1">
+                            <materialIcons:MaterialIcon Kind="FileDocumentDelete" Background="{StaticResource MeoptaLogoWhiteBrush}"  Foreground="{StaticResource MeoptaLightBlueBrush}" />
+                        </Button>
+                        <Button Style="{StaticResource IconButtonStyle}" Grid.Row="2">
+                            <materialIcons:MaterialIcon Kind="FileDocumentDelete" Background="{StaticResource MeoptaLogoWhiteBrush}"  Foreground="{StaticResource MeoptaLightBlueBrush}" />
+                        </Button>
+                        <Button Style="{StaticResource IconButtonStyle}" Margin="5,0,5,5" Grid.Row="3">
+                            <materialIcons:MaterialIcon Kind="FileDocumentDelete" Background="{StaticResource MeoptaLogoWhiteBrush}"  Foreground="{StaticResource MeoptaLightBlueBrush}" />
+                        </Button>
+                    </Grid>
+                </Border>
+                <ItemsControl Grid.Column="1" ItemTemplate="{StaticResource NotificationTemplate}" ItemsSource="{Binding Notifications}"/>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

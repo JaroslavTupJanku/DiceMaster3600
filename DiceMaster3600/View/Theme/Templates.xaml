@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:conv="clr-namespace:DiceMaster3600.View.Converters"
+                    xmlns:enums="clr-namespace:DiceMaster3600.Core.Enum;assembly=DiceMaster3600.Core"
                     xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF">
 
     <conv:PositionToColorConverter x:Key="ColorConverter"/>
@@ -76,7 +77,6 @@
                                             </Setter.Value>
                                         </Setter>
                                     </DataTrigger>
-                                    <!-- Přidat další ikony pro další Gender hodnoty pokud je třeba -->
                                 </Style.Triggers>
                             </Style>
                         </ContentControl.Style>
@@ -100,6 +100,46 @@
                     </StackPanel>
                 </Grid>
             </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="NotificationTemplate">
+        <Border CornerRadius="5" Margin="5">
+            <Border.Resources>
+                <conv:GameNotificationTypeToColorConverter x:Key="NotificationColorConverter"
+                                InformationBrush="{StaticResource InformationColor}"
+                                SuccessBrush="{StaticResource SuccessColor}"
+                                ErrorBrush="{StaticResource ErrorColor}"
+                                WarningBrush="{StaticResource WarningColor}"/>
+            </Border.Resources>
+            <StackPanel Orientation="Horizontal" 
+                        VerticalAlignment="Center">
+                <materialIcons:MaterialIcon Width="20" Height="20" Margin="0,0,10,0">
+                    <materialIcons:MaterialIcon.Style>
+                        <Style TargetType="materialIcons:MaterialIcon">
+                            <Setter Property="Foreground"
+                                    Value="{Binding Type, Converter={StaticResource NotificationColorConverter}}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type}" Value="{x:Static enums:GameNotificationType.Information}">
+                                    <Setter Property="Kind" Value="InformationCircleOutline"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}" Value="{x:Static enums:GameNotificationType.Success}">
+                                    <Setter Property="Kind" Value="CheckCircleOutline"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}" Value="{x:Static enums:GameNotificationType.Error}">
+                                    <Setter Property="Kind" Value="AlertCircleCheckOutline"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}" Value="{x:Static enums:GameNotificationType.Warning}">
+                                    <Setter Property="Kind" Value="WarningCircleOutline"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialIcons:MaterialIcon.Style>
+                </materialIcons:MaterialIcon>
+                <TextBlock Text="{Binding Text}" 
+                           VerticalAlignment="Center"
+                           Foreground="{Binding Type, Converter={StaticResource NotificationColorConverter}}"/>
+            </StackPanel>
         </Border>
     </DataTemplate>
 

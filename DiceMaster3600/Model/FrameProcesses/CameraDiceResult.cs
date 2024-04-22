@@ -1,15 +1,15 @@
 ﻿using System.Windows;
 using System.Windows.Shapes;
 
-namespace DiceMaster3600.Model
+namespace DiceMaster3600.Model.FrameProcesses
 {
-    public class DiceResult
+    public class CameraDiceResult
     {
         public Int32Rect? Position { get; }
-        public int DotCount { get;  }
+        public int DotCount { get; }
         public float Depth { get; }
 
-        public DiceResult(Int32Rect? position, int dotCount, float depth)
+        public CameraDiceResult(Int32Rect? position, int dotCount, float depth)
         {
             Position = position;
             DotCount = dotCount;

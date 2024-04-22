@@ -46,7 +46,7 @@
             <Style.Triggers>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding IsEnabled}" Value="True"/>
+                        <Condition Binding="{Binding IsSelected}" Value="True"/>
                         <Condition Binding="{Binding HasBeenScored}" Value="False"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Background" Value="LightGreen"/>

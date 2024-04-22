@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace DiceMaster3600.View.Controls
 {
@@ -35,19 +34,14 @@ namespace DiceMaster3600.View.Controls
         {
             InitializeComponent();
             HideAllGroups();
-            Loaded += DiceControl_Loaded;
         }
 
-        private void DiceControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            ShowGroup(this.Value); // Přidáno pro účely testování po načtení kontrolky
-        }
         #endregion
 
         #region Methods
         private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is DiceControl control)
+            if (d is DiceControl control && !control.IsSelected)
             {
                 int newValue = (int)e.NewValue;
 
