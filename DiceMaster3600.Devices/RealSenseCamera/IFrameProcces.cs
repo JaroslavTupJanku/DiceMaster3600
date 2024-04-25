@@ -1,10 +1,13 @@
 ﻿using Intel.RealSense;
+using System;
 using System.Threading.Tasks;
 
 namespace DiceMaster3600.Devices.RealSenseCamera
 {
     public interface IFrameProcces
     {
-        Task<FrameSet> ProcessFrameAsync(FrameSet frame);
+        Task ProcessFrameAsync(FrameSet frame);
+
+        event Action OnResultChanged;
     }
 }

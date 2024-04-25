@@ -5,14 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:DiceMaster3600.ViewModel.Control"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-             d:DataContext="{d:DesignInstance Type=vm:YahtzeeViewModel}"
+             xmlns:enums="clr-namespace:DiceMaster3600.Core.Enum;assembly=DiceMaster3600.Core"
+             xmlns:control="clr-namespace:DiceMaster3600.View.Controls"
+             d:DataContext="{d:DesignInstance Type=vm:YahtzeeViewModel}"           
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <GridLength x:Key="FirstColumnWidth">120</GridLength>
-        <GridLength x:Key="SecondColumnWidth">120</GridLength>
-        <GridLength x:Key="ThirdColumnWidth">80</GridLength>
-        
+        <GridLength x:Key="StandardColumnWidth">120</GridLength>
+
         <Style x:Key="HeaderStyle" TargetType="Label">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -21,42 +21,19 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Background" Value="{StaticResource MeoptaLightBlueBrush}"/>
         </Style>
-        
-        <Style x:Key="CellStyle" TargetType="Label">
+
+        <Style x:Key="TotalLabelStyle" TargetType="Label">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{StaticResource MeoptaBackgroundBrush}"/>
             <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
-        <Style x:Key="CellResultStyle" BasedOn="{StaticResource CellStyle}" TargetType="Label">
-            <Setter Property="Foreground" Value="Green"/>
-        </Style>
-        <Style x:Key="TotalLabelStyle" BasedOn="{StaticResource HeaderStyle}" TargetType="Label">
-            <Setter Property="Background" Value="{StaticResource MeoptaBackgroundBrush}"/>
-        </Style>
-        
+
         <Style TargetType="Border">
             <Setter Property="BorderBrush" Value="{StaticResource MeoptaLogoBlackBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="2"/>
-        </Style>
-
-        <Style TargetType="Border" x:Key="InteractiveRowStyle">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding IsSelected}" Value="True"/>
-                        <Condition Binding="{Binding HasBeenScored}" Value="False"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Background" Value="LightGreen"/>
-                    <Setter Property="IsEnabled" Value="True"/>
-                </MultiDataTrigger>
-                <DataTrigger Binding="{Binding HasBeenScored}" Value="True">
-                    <Setter Property="Background" Value="LightGray"/>
-                    <Setter Property="IsEnabled" Value="False"/>
-                </DataTrigger>
-            </Style.Triggers>
         </Style>
 
         <Style x:Key="ArrowRightBoldBoxStyle" TargetType="materialIcons:MaterialIcon">
@@ -65,6 +42,14 @@
             <Setter Property="Height" Value="29"/>
             <Setter Property="BorderBrush" Value="{StaticResource MeoptaLogoBlackBrush}"/>
             <Setter Property="Background" Value="{StaticResource MeoptaBackgroundBrush}"/>
+        </Style>
+
+        <Style TargetType="control:YahtzeeInteractiveRow">
+            <Setter Property="Grid.ColumnSpan" Value="3"/>
+            <Setter Property="FirstColumnWidth" Value="120"/>
+            <Setter Property="SecondColumnWidth" Value="120"/>
+            <Setter Property="ThirdColumnWidth" Value="80"/>
+            <Setter Property="SelectCategoryCommand" Value="{Binding SelectCategoryCommand}"/>
         </Style>
     </UserControl.Resources>
 
@@ -91,126 +76,60 @@
                 </Grid.RowDefinitions>
                 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                    <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                    <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
+                    <ColumnDefinition Width="{StaticResource StandardColumnWidth}"/>
+                    <ColumnDefinition Width="{StaticResource StandardColumnWidth}"/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Row="0" Name="Header1" Grid.Column="0" Content="UPPER SECTION" Style="{StaticResource HeaderStyle}" />
                 <Label Grid.Row="0" Name="Header2" Grid.Column="1" Content="HOW TO SCORE" Style="{StaticResource HeaderStyle}" />
                 <Label Grid.Row="0" Name="Header3" Grid.Column="2" Content="GAME #1" Style="{StaticResource HeaderStyle}"/>
 
-                <Border Grid.Row="1" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}" DataContext="{Binding Scores[Aces]}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="{Binding ScoreType}"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Aces" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="Count Only Aces" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="1" Grid.ColumnSpan="3"
+                                               CommandParameter="{x:Static enums:ScoreTypes.Aces}"
+                                               ScoreName="Aces"
+                                               IsEnabled="{Binding Scores[Aces].IsSelected, FallbackValue=False}"
+                                               HowToScore="Count Only Aces"
+                                               Score="{Binding Scores[Aces].Score, FallbackValue=0}"/>
 
-                <Border Grid.Row="2" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Twos" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="Count Only Twos" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[Twos].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="2" Grid.ColumnSpan="3"
+                                               CommandParameter="{x:Static enums:ScoreTypes.Twos}"
+                                               ScoreName="Twos"
+                                               IsEnabled="{Binding Scores[Twos].IsSelected, FallbackValue=False}"
+                                               HowToScore="Count Only Twos"
+                                               Score="{Binding Scores[Twos].Score, FallbackValue=0}"/>
 
-                <Border Grid.Row="3" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Threes" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="Count Only Threes" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[Threes].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="3" Grid.ColumnSpan="3"
+                                   CommandParameter="{x:Static enums:ScoreTypes.Threes}"
+                                   ScoreName="Threes"
+                                   IsEnabled="{Binding Scores[Threes].IsSelected, FallbackValue=False}"
+                                   HowToScore="Count Only Threes"
+                                   Score="{Binding Scores[Threes].Score, FallbackValue=0}"/>
 
-                <Border Grid.Row="4" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Fours" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="Count Only Fours" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[Fours].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="4" Grid.ColumnSpan="3"
+                                   CommandParameter="{x:Static enums:ScoreTypes.Fours}"
+                                   ScoreName="Fours"
+                                   IsEnabled="{Binding Scores[Fours].IsSelected, FallbackValue=False}"
+                                   HowToScore="Count Only Fours"
+                                   Score="{Binding Scores[Fours].Score, FallbackValue=0}"/>
                 
-                <Border Grid.Row="5" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Fives" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="Count Only Fives" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[Fives].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="5" Grid.ColumnSpan="3"
+                                   CommandParameter="{x:Static enums:ScoreTypes.Fives}"
+                                   ScoreName="Fives"
+                                   IsEnabled="{Binding Scores[Fives].IsSelected, FallbackValue=False}"
+                                   HowToScore="Count Only Fives"
+                                   Score="{Binding Scores[Fives].Score, FallbackValue=0}"/>
 
-                <Border Grid.Row="6" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Sixes" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="Count Only Sixes" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[Sixes].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="6" Grid.ColumnSpan="3"
+                                   CommandParameter="{x:Static enums:ScoreTypes.Sixes}"
+                                   ScoreName="Sixes"
+                                   IsEnabled="{Binding Scores[Sixes].IsSelected, FallbackValue=False}"
+                                   HowToScore="Count Only Sixes"
+                                   Score="{Binding Scores[Sixes].Score, FallbackValue=0}"/>
 
                 <Label Grid.Row="7" Grid.Column="0" Content="TOTAL SCORE" Style="{StaticResource TotalLabelStyle}"/>
                 <materialIcons:MaterialIcon Grid.Row="7" Grid.Column="1" Style="{StaticResource ArrowRightBoldBoxStyle}"/>
-                <Label Grid.Row="7" Grid.Column="2" Style="{StaticResource TotalLabelStyle}"/>
+                <Label Grid.Row="7" Grid.Column="2" Style="{StaticResource TotalLabelStyle}" Content="{Binding UpperSectionScore}"/>
 
                 <Label Grid.Row="8" Grid.Column="0" Style="{StaticResource TotalLabelStyle}" Padding="10"/>
                 <TextBlock Grid.Row="8" TextAlignment="Center" VerticalAlignment="Center">
@@ -218,9 +137,9 @@
                     <LineBreak/>
                     <Run Text="if total score ≤ 63" FontSize="9"/>
                 </TextBlock>
-
                 <Label Grid.Row="8" Grid.Column="1" Content="35 points" Style="{StaticResource TotalLabelStyle}"/>
-                <Label Grid.Row="8" Grid.Column="2" Style="{StaticResource TotalLabelStyle}"/>
+                <Label Grid.Row="8" Grid.Column="2" Style="{StaticResource TotalLabelStyle}" Content="{Binding ExtraBonus, FallbackValue= - }"/>
+                
             </Grid>
         </Border>
 
@@ -242,140 +161,63 @@
                 </Grid.RowDefinitions>
                 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                    <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                    <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
+                    <ColumnDefinition Width="{StaticResource StandardColumnWidth}"/>
+                    <ColumnDefinition Width="{StaticResource StandardColumnWidth}"/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Row="0" Grid.Column="0" Content="UPPER SECTION" Style="{StaticResource HeaderStyle}" />
                 <Label Grid.Row="0" Grid.Column="1" Content="HOW TO SCORE" Style="{StaticResource HeaderStyle}" />
                 <Label Grid.Row="0" Grid.Column="2" Content="GAME #1" Style="{StaticResource HeaderStyle}"/>
 
-                <Border Grid.Row="1" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Three of a kind" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="Total of all 5 dices" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[ThreeOfAKind].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
-                
-                <Border Grid.Row="2" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Four of a kind" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="Total of all 5 dices" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[FourOfAKind].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="1" Grid.ColumnSpan="3"
+                                   CommandParameter="{x:Static enums:ScoreTypes.ThreeOfAKind}"
+                                   ScoreName="Three of a kind"
+                                   IsEnabled="{Binding Scores[ThreeOfAKind].IsSelected, FallbackValue=False}"
+                                   HowToScore="Total of all 5 dices"
+                                   Score="{Binding Scores[ThreeOfAKind].Score, FallbackValue=0}"/>
 
-                <Border Grid.Row="3" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Full house" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="25 points" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[FullHouse].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="2" Grid.ColumnSpan="3"
+                                   CommandParameter="{x:Static enums:ScoreTypes.FourOfAKind}"
+                                   ScoreName="Four of a kind"
+                                   IsEnabled="{Binding Scores[FourOfAKind].IsSelected, FallbackValue=False}"
+                                   HowToScore="Total of all 5 dices"
+                                   Score="{Binding Scores[FourOfAKind].Score, FallbackValue=0}"/>
 
-                <Border Grid.Row="4" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Small Straight" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="30 points" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[SmallStraight].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="3" Grid.ColumnSpan="3"
+                                   CommandParameter="{x:Static enums:ScoreTypes.FullHouse}"
+                                   ScoreName="Full house"
+                                   IsEnabled="{Binding Scores[FullHouse].IsSelected, FallbackValue=False}"
+                                   HowToScore="25 points"
+                                   Score="{Binding Scores[FullHouse].Score, FallbackValue=0}"/>
 
-                <Border Grid.Row="5" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Large Straight" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="40 points" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[LargeStraight].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="4" Grid.ColumnSpan="3"
+                                   CommandParameter="{x:Static enums:ScoreTypes.SmallStraight}"
+                                   ScoreName="Small Straight"
+                                   IsEnabled="{Binding Scores[SmallStraight].IsSelected, FallbackValue=False}"
+                                   HowToScore="30 points"
+                                   Score="{Binding Scores[SmallStraight].Score, FallbackValue=0}"/>
 
-                <Border Grid.Row="6" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Highest Score" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="50 points" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[HighestScore].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="5" Grid.ColumnSpan="3"
+                                   CommandParameter="{x:Static enums:ScoreTypes.LargeStraight}"
+                                   ScoreName="Large Straight"
+                                   IsEnabled="{Binding Scores[LargeStraight].IsSelected, FallbackValue=False}"
+                                   HowToScore="40 points"
+                                   Score="{Binding Scores[LargeStraight].Score, FallbackValue=0}"/>
 
-                <Border Grid.Row="7" Grid.ColumnSpan="3" Style="{StaticResource InteractiveRowStyle}">
-                    <Border.InputBindings>
-                        <MouseBinding MouseAction="LeftClick"
-                              Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                              CommandParameter="Aces"/>
-                    </Border.InputBindings>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource FirstColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource SecondColumnWidth}"/>
-                            <ColumnDefinition Width="{StaticResource ThirdColumnWidth}"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Chance" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="1" Content="Total of all 5 dices" Style="{StaticResource CellStyle}" />
-                        <Label Grid.Column="2" Content="{Binding Scores[Chance].Score, FallbackValue=0}" Style="{StaticResource CellResultStyle}" Background="{StaticResource MeoptaLogoWhiteBrush}" />
-                    </Grid>
-                </Border>
+                <control:YahtzeeInteractiveRow Grid.Row="6" Grid.ColumnSpan="3"
+                                   CommandParameter="{x:Static enums:ScoreTypes.HighestScore}"
+                                   ScoreName="Highest Score"
+                                   IsEnabled="{Binding Scores[HighestScore].IsSelected, FallbackValue=False}"
+                                   HowToScore="50 points"
+                                   Score="{Binding Scores[HighestScore].Score, FallbackValue=0}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="7" Grid.ColumnSpan="3"
+                                   CommandParameter="{x:Static enums:ScoreTypes.Chance}"
+                                   ScoreName="Chance"
+                                   IsEnabled="{Binding Scores[Chance].IsSelected, FallbackValue=False}"
+                                   HowToScore="Total of all 5 dices"
+                                   Score="{Binding Scores[Chance].Score, FallbackValue=0}"/>
 
                 <Label Grid.Row="8" Grid.Column="0" Style="{StaticResource TotalLabelStyle}" Padding="10"/>
                 <TextBlock Grid.Row="8" TextAlignment="Center" VerticalAlignment="Center">
@@ -384,7 +226,7 @@
                     <Run Text="lower section" FontSize="9"/>
                 </TextBlock>
                 <materialIcons:MaterialIcon Grid.Row="8" Grid.Column="1" Style="{StaticResource ArrowRightBoldBoxStyle}"/>
-                <Label Grid.Row="8" Grid.Column="2" Style="{StaticResource TotalLabelStyle}"/>
+                <Label Grid.Row="8" Grid.Column="2" Style="{StaticResource TotalLabelStyle}" Content="{Binding LowerSectionScore}"/>
 
                 <Label Grid.Row="9" Grid.Column="0" Style="{StaticResource TotalLabelStyle}" Padding="10"/>
                 <TextBlock Grid.Row="9" TextAlignment="Center" VerticalAlignment="Center">
@@ -393,11 +235,11 @@
                     <Run Text="Upper section" FontSize="9"/>
                 </TextBlock>
                 <materialIcons:MaterialIcon Grid.Row="9" Grid.Column="1" Style="{StaticResource ArrowRightBoldBoxStyle}"/>
-                <Label Grid.Row="9" Grid.Column="2" Style="{StaticResource TotalLabelStyle}"/>
+                <Label Grid.Row="9" Grid.Column="2" Style="{StaticResource TotalLabelStyle}" Content="{Binding TotalScoreUpperSection}"/>
 
                 <Label Grid.Row="10" Content="TOTAL SCORE" Grid.Column="0" Style="{StaticResource TotalLabelStyle}" />
                 <materialIcons:MaterialIcon Grid.Row="10" Grid.Column="1" Style="{StaticResource ArrowRightBoldBoxStyle}"/>
-                <Label Grid.Row="10" Grid.Column="2" Style="{StaticResource TotalLabelStyle}"/>
+                <Label Grid.Row="10" Grid.Column="2" Style="{StaticResource TotalLabelStyle}" Content="{Binding TotalScore}"/>
             </Grid>
         </Border>
     </Grid>

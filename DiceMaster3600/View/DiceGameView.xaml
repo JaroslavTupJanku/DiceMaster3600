@@ -25,6 +25,32 @@
             <Setter Property="Background" Value="{StaticResource MeoptaLogoWhiteBrush}"/>
             <Setter Property="Foreground" Value="{StaticResource MeoptaLightBlueBrush}"/>
         </Style>
+
+        <Style x:Key="CustomToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Background" Value="#FFDAA520"/>
+            <!-- Zlatý background -->
+            <Setter Property="Foreground" Value="White"/>
+            <!-- Bílý text -->
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Background" Value="#FF8B0000"/>
+                                <!-- Tmavě červená -->
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     
     <Grid Background="Transparent" Margin="20">
@@ -34,7 +60,7 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
@@ -48,6 +74,11 @@
                 CornerRadius="5">
             <Image x:Name="MyImage" />
         </Border>
+
+        <ToggleButton Style="{StaticResource CustomToggleButtonStyle}"
+                  Content="Toggle Me"
+                  IsChecked="{Binding Path=YourBooleanProperty}"
+                  Command="{Binding YourCommand}"/>
 
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>

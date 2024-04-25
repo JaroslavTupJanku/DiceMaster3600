@@ -3,7 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
              xmlns:view="clr-namespace:DiceMaster3600.View"
+             xmlns:control="clr-namespace:DiceMaster3600.View.Controls"
+             xmlns:controls="clr-namespace:DiceMaster3600.ViewModel.Control"
              StartupUri="MainWindow.xaml">
+    
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

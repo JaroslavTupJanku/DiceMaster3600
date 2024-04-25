@@ -3,6 +3,7 @@ using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Model;
 using DiceMaster3600.Model.Services;
 using DiceMaster3600.View;
+using DiceMaster3600.ViewModel.Control;
 using System;
 using System.Windows.Input;
 
@@ -66,7 +67,7 @@ namespace DiceMaster3600.ViewModel
                 {
                     MenuControlType.DashBoard => factory.CreateViewModel<HomeViewModel>(),
                     MenuControlType.GamePanel => factory.CreateViewModel<DiceGameViewModel>(),
-                    MenuControlType.AdminPanel => factory.CreateViewModel<DiceGameViewModel>(),
+                    MenuControlType.AdminPanel => throw new NotImplementedException(),
                     MenuControlType.About => throw new NotImplementedException(),
                     _ => throw new NotImplementedException()
                 };

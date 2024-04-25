@@ -1,5 +1,7 @@
-﻿using DiceMaster3600.Core.InterFaces;
+﻿using DiceMaster3600.Core;
+using DiceMaster3600.Core.InterFaces;
 using DiceMaster3600.Data;
+using DiceMaster3600.Devices.RealSenseCamera;
 using DiceMaster3600.Model;
 using DiceMaster3600.Model.Services;
 using DiceMaster3600.Model.Yahtzee;
@@ -22,6 +24,7 @@ namespace DiceMaster3600
 
         public App()
         {
+            AppLogger.ConfigureLogger();
             AppHost = Host.CreateDefaultBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -35,6 +38,11 @@ namespace DiceMaster3600
                     services.AddSingleton<IViewModelFactory, ViewModelFactory>();
                     services.AddSingleton<IMessageService, SnackbarMessageService>();
                     services.AddSingleton<YahtzeeScoreManager>();
+                    services.AddSingleton<IRealSenseCamera, RealSenseCamera>();
+
+                    services.AddSingleton<ProcessProvider>();
+                    services.AddSingleton<IProcessProvider>(sp => sp.GetRequiredService<ProcessProvider>());
+                    services.AddSingleton<IProcessManager>(sp => sp.GetRequiredService<ProcessProvider>());
 
                     services.AddTransient<HomeViewModel>();
                     services.AddTransient<DiceGameViewModel>();

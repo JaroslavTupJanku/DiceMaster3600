@@ -6,61 +6,59 @@ using Intel.RealSense;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace DiceMaster3600.Model.FrameProcesses
 {
-    public class DiceRecognitionProcess : BaseResultFrameProcess<List<CameraDiceResult>>  //Napsat, ze by to bylo lepsi retezit. 
+    public class DiceRecognitionProcess : BaseResultFrameProcess<List<CameraDiceResult>>
     {
+        private static readonly int MinimumContourWidth = 20;
+        private static readonly int MinimumContourHeight = 20;
+        private static readonly int DotThresholdArea = 10;
+        private static readonly int ThresholdBinaryInvUpper = 255;
+        private static readonly int ThresholdBinaryInvLower = 120;
 
         private readonly float backgroundDepthThreshold;
         private readonly double minArea;
         private readonly double minAspectRatio;
         private readonly double maxAspectRatio;
-        private readonly double intenzityThresHold;
+        private readonly double intensityThreshold;
 
-        public DiceRecognitionProcess(float backgroundDepthThreshold, double minArea, double minAspectRatio, double maxAspectRatio, double dotContourAreaThreshold)
+        public DiceRecognitionProcess(float backgroundDepthThreshold, double intensityThreshold, double minArea, double minAspectRatio, double maxAspectRatio)
         {
             this.backgroundDepthThreshold = backgroundDepthThreshold;
+            this.intensityThreshold = intensityThreshold;
+
             this.minArea = minArea;
             this.minAspectRatio = minAspectRatio;
             this.maxAspectRatio = maxAspectRatio;
-            this.intenzityThresHold = dotContourAreaThreshold;
         }
 
         protected override List<CameraDiceResult> ProcessFrame(FrameSet frameSet)
         {
             var results = new List<CameraDiceResult>();
-            var colorFrame = frameSet.ColorFrame;
-            var depthFrame = frameSet.DepthFrame;
+            var colorImage = ConvertToColorImage(frameSet.ColorFrame);
+            var depthImage = ConvertDepthFrameToImage(frameSet.DepthFrame);
 
-            WriteableBitmap colorBitmap = BitMapConverter.ConvertToWriteableBitmap(colorFrame);
-            Image<Bgr, byte> colorImage = BitMapConverter.ConvertWriteableBitmapToImage<Bgr, byte>(colorBitmap);
-            Image<Gray, byte> depthImage = BitMapConverter.ConvertDepthFrameToImage(depthFrame);
-
-
-            var diceRegions = DetectDiceByDepth(depthImage, backgroundDepthThreshold);
-
+            var diceRegions = DetectDiceByDepth(depthImage);
             foreach (var region in diceRegions)
             {
                 var dotCount = CountDots(colorImage, region);
-                var diceDepth = GetAverageDepth(depthFrame, region);
-
+                var diceDepth = GetAverageDepth(frameSet.DepthFrame, region);
                 results.Add(new CameraDiceResult(region, dotCount, diceDepth));
             }
             return results;
         }
 
-        private List<Int32Rect> DetectDiceByDepth(Image<Gray, byte> depthImage, float backgroundDepthThreshold)
+        private List<Int32Rect> DetectDiceByDepth(Image<Gray, byte> depthImage)
         {
-            using Mat mask = new Mat();
+            using Mat mask = new();
             CvInvoke.Threshold(depthImage, mask, backgroundDepthThreshold, 255, ThresholdType.Binary);
             return DetectRegions(mask);
         }
 
         private List<Int32Rect> DetectDiceByColor(Image<Bgr, byte> colorImage, Bgr targetColor, double intenzityThresHold)
         {
-            using Mat mask = new Mat();
+            using Mat mask = new();
             CvInvoke.InRange(colorImage,
                 new ScalarArray(GetLowerScalar(targetColor, intenzityThresHold)),
                 new ScalarArray(GetUpperScalar(targetColor, intenzityThresHold)),
@@ -69,43 +67,46 @@ namespace DiceMaster3600.Model.FrameProcesses
             return DetectRegions(mask);
         }
 
+
         private List<Int32Rect> DetectRegions(Mat mask)
         {
-            List<Int32Rect> regions = new List<Int32Rect>();
-            VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
-            Mat hierarchy = new Mat();
+            List<Int32Rect> regions = new();
+            using var contours = new VectorOfVectorOfPoint();
+            using var hierarchy = new Mat();
 
             CvInvoke.FindContours(mask, contours, hierarchy, RetrType.List, ChainApproxMethod.ChainApproxSimple);
-
             for (int i = 0; i < contours.Size; i++)
             {
-                using VectorOfPoint contour = contours[i];
+                using var contour = contours[i];
                 Rectangle rect = CvInvoke.BoundingRectangle(contour);
                 double area = CvInvoke.ContourArea(contour);
                 double aspectRatio = (double)rect.Width / rect.Height;
 
-                if (rect.Width > 20 && rect.Height > 20 && area > minArea && aspectRatio >= minAspectRatio && aspectRatio <= maxAspectRatio)
+                if (rect.Width > MinimumContourWidth && rect.Height > MinimumContourHeight && area > minArea && aspectRatio >= minAspectRatio && aspectRatio <= maxAspectRatio)
                 {
                     regions.Add(new Int32Rect(rect.X, rect.Y, rect.Width, rect.Height));
                 }
             }
+
             return regions;
         }
 
         private int CountDots(Image<Bgr, byte> colorImage, Int32Rect region)
         {
-            VectorOfVectorOfPoint contours = new();
             int dotCount = 0;
-            Mat hierarchy = new();
+            using VectorOfVectorOfPoint contours = new();
+            using Mat hierarchy = new();
 
-            Image<Gray, byte> croppedImage = colorImage.Copy(new Rectangle(region.X, region.Y, region.Width, region.Height))
-                                                       .Convert<Gray, byte>().ThresholdBinaryInv(new Gray(120), new Gray(255));
+            using Image<Gray, byte> croppedImage = colorImage
+                .Copy(new Rectangle(region.X, region.Y, region.Width, region.Height))
+                .Convert<Gray, byte>()
+                .ThresholdBinaryInv(new Gray(ThresholdBinaryInvLower), new Gray(ThresholdBinaryInvUpper));
 
             CvInvoke.FindContours(croppedImage, contours, hierarchy, RetrType.List, ChainApproxMethod.ChainApproxSimple);
+
             for (int i = 0; i < contours.Size; i++)
             {
-                if (CvInvoke.ContourArea(contours[i]) > 10)
-                {
+                if (CvInvoke.ContourArea(contours[i]) > DotThresholdArea) {
                     dotCount++;
                 }
             }
@@ -131,6 +132,9 @@ namespace DiceMaster3600.Model.FrameProcesses
             }
             return count > 0 ? (float)totalDepth / count : 0;
         }
+
+        private Image<Bgr, byte> ConvertToColorImage(VideoFrame colorFrame) => BitMapConverter.ConvertToImage<Bgr, byte>(colorFrame);
+        private Image<Gray, byte> ConvertDepthFrameToImage(VideoFrame depthFrame) => BitMapConverter.ConvertDepthFrameToImage(depthFrame);
 
         private MCvScalar GetLowerScalar(Bgr target, double ct) => new(target.Blue - ct, target.Green - ct, target.Red - ct);
         private MCvScalar GetUpperScalar(Bgr target, double ct) => new(target.Blue + ct, target.Green + ct, target.Red + ct);

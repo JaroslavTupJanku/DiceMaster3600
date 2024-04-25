@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 
 namespace DiceMaster3600.Devices.RealSenseCamera
 {

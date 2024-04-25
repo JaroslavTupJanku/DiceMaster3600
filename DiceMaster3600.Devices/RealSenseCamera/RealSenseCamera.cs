@@ -1,4 +1,4 @@
-﻿using DiceMaster3600.Core.InterFaces;
+﻿using DiceMaster3600.Core;
 using Intel.RealSense;
 using System;
 using System.Collections.Generic;
@@ -7,13 +7,19 @@ using System.Threading.Tasks;
 
 namespace DiceMaster3600.Devices.RealSenseCamera
 {
-    public class RealSenseCamera : IDevice
+    public class RealSenseCamera : IRealSenseCamera, IAsyncDisposable
     {
         private readonly Pipeline pipeline = new();
-        private readonly object lockObject = new object();
         private readonly List<IFrameProcces> frameprocesses = new();
+        private readonly SemaphoreSlim processingSemaphore = new SemaphoreSlim(1, 1);
+        private readonly CameraConfigurator configurator;
 
         private CancellationTokenSource cancellationTokenSource;
+
+        public RealSenseCamera()
+        {
+            configurator = new CameraConfigurator(pipeline);
+        }
 
         public async Task ConnectAsync()
         {
@@ -22,38 +28,87 @@ namespace DiceMaster3600.Devices.RealSenseCamera
             config.EnableStream(Stream.Depth, 640, 480, Format.Z16, 30);
             config.EnableStream(Stream.Color, 640, 480, Format.Bgr8, 30);
 
-            pipeline.Start(config);
-            await Task.Run(() => ProcessFrames(cancellationTokenSource.Token), cancellationTokenSource.Token);
-        }
-
-        private async Task ProcessFrames(CancellationToken token)
-        {
-            while (!token.IsCancellationRequested)
+            try
             {
-                using var frames = pipeline.WaitForFrames();
-                foreach (var p in frameprocesses)
-                {
-                    await p.ProcessFrameAsync(frames);
-                }
-
-                OnNewFrame?.Invoke(this, frames);
+                await Task.Run(() => pipeline.Start(config));
+                _ = ProcessFramesAsync(cancellationTokenSource.Token);
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Error($"Error starting the RealSense pipeline: {ex.Message}");
             }
         }
 
-        public void Disconnect()
+        private async Task ProcessFramesAsync(CancellationToken token)
         {
-            if (cancellationTokenSource != null)
+            try
             {
-                cancellationTokenSource.Cancel();
-                cancellationTokenSource.Dispose();
+                while (!token.IsCancellationRequested)
+                {
+                    using var frames = pipeline.WaitForFrames();
+                    OnNewFrame?.Invoke(this, frames);
+
+                    if (await processingSemaphore.WaitAsync(0, token))
+                    {
+                        try
+                        {
+                            await ProcessFrameAsync(frames);
+                        }
+                        finally
+                        {
+                            processingSemaphore.Release();
+                        }
+                    }
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                AppLogger.Information($"{DateTime.Now} : Processing frames has been canceled in");
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Error($"Error in processing frames: {ex.Message}");
+            }
+        }
+
+        private async Task ProcessFrameAsync(FrameSet frames)
+        {
+            try
+            {
+                foreach (var process in frameprocesses)
+                {
+                    await process.ProcessFrameAsync(frames);
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Error($"Error processing frame asynchronously: {ex.Message}");
+            }
+        }
+
+        public async Task DisconnectAsync()
+        {
+            try
+            {
+                cancellationTokenSource?.Cancel();
+                await processingSemaphore.WaitAsync();
+                pipeline.Stop();
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Error($"Error disconnecting RealSense Camera: {ex.Message}");
+            }
+            finally
+            {
+                processingSemaphore.Release();
+                cancellationTokenSource?.Dispose();
                 cancellationTokenSource = null;
             }
-            pipeline.Stop();
         }
 
         public void RegisterFrameProcessor(IFrameProcces processor)
         {
-            lock (lockObject)
+            lock (frameprocesses)
             {
                 frameprocesses.Add(processor);
             }
@@ -61,10 +116,16 @@ namespace DiceMaster3600.Devices.RealSenseCamera
 
         public void UnregisterFrameProcessor(IFrameProcces processor)
         {
-            lock (lockObject)
+            lock (frameprocesses)
             {
                 frameprocesses.Remove(processor);
             }
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            await DisconnectAsync();
+            processingSemaphore.Dispose();
         }
 
         public event EventHandler<FrameSet> OnNewFrame;

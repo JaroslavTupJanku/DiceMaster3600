@@ -97,6 +97,8 @@ namespace DiceMaster3600.Model.Yahtzee
             }
         }
 
+        public int GetUpperSum() => Scores!.Where(pair => pair.Key >= ScoreTypes.Aces && pair.Key <= ScoreTypes.Sixes).Sum(pair => pair.Value.Score);
+        public int GetLowerSum() => Scores!.Where(pair => pair.Key < ScoreTypes.Aces || pair.Key > ScoreTypes.Sixes).Sum(pair => pair.Value.Score);
         public int GetCurrentTotalScore() => Scores!.Values.Where(s => s.HasBeenScored).Sum(s => s.Score);
         public void GenerateDiceRolls() => UpdatePossibleScores(Enumerable.Range(0, 5).Select(x => random.Next(1, 7)).ToArray());
         #endregion

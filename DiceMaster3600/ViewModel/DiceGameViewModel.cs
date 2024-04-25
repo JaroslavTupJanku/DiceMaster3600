@@ -1,12 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DiceMaster3600.Core.Enum;
+using DiceMaster3600.Devices.RealSenseCamera;
 using DiceMaster3600.Model;
 using DiceMaster3600.Model.FrameProcesses;
 using DiceMaster3600.Model.Yahtzee;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.Intrinsics.X86;
 using System.Windows.Input;
 
 namespace DiceMaster3600.ViewModel
@@ -16,7 +17,9 @@ namespace DiceMaster3600.ViewModel
 
         #region Fields
         private readonly YahtzeeScoreManager scoreManager;
-        private readonly DiceRecognitionProcess process;
+        private readonly IRealSenseCamera camera;
+        private readonly IProcessProvider processProvider;
+        private readonly IFrameProcces process;
 
         private int diceInGameCounter;
         private int diceRollsCounter;
@@ -31,6 +34,7 @@ namespace DiceMaster3600.ViewModel
             get => diceRollsNumber;
             set => SetProperty(ref diceRollsNumber, value);
         }
+
         public string DiceInGameNumber
         {
             get => diceInGameNumber;
@@ -41,27 +45,28 @@ namespace DiceMaster3600.ViewModel
         public ObservableCollection<DiceModel> Dices { get; private set; } = new();
         public MenuControlType ControlType => MenuControlType.GamePanel;
 
-        public ICommand RollCommand { get; private set; }
-        public ICommand ResetCommand { get; private set; }
+        public ICommand? RollCommand { get; private set; }
+        public ICommand? ResetCommand { get; private set; }
 
-        public ICommand ClearNotificationsCommand { get; private set; }
-        public ICommand ClearErrorCommand { get; private set; }
-        public ICommand ClearWarningCommand { get; private set; }
+        public ICommand? ClearNotificationsCommand { get; private set; }
+        public ICommand? ClearErrorCommand { get; private set; }
+        public ICommand? ClearWarningCommand { get; private set; }
         #endregion
 
         #region Constructors
-        public DiceGameViewModel(YahtzeeScoreManager scoreManager)
+        public DiceGameViewModel(YahtzeeScoreManager scoreManager, IRealSenseCamera camera, IProcessProvider processProvider)
         {
             ResetGame();
-            process = new DiceRecognitionProcess(5, 4, 3, 5, 4); //provider
+
+            this.camera = camera;
+            this.processProvider = processProvider;
             this.scoreManager = scoreManager;
 
             ResetCommand = new RelayCommand(ResetGame);
             RollCommand = new RelayCommand<ScoreTypes>((type) => Roll(type));
-
             ClearNotificationsCommand = new RelayCommand(() => Notifications.Clear());
 
-            process.OnResultChanged += () => Update();
+            //processProvider.SimulationDiceRecognitionProcess!.OnResultChanged += () => Update();
         }
         #endregion
 
@@ -88,22 +93,27 @@ namespace DiceMaster3600.ViewModel
 
         private void Update()
         {
-            var results = process.Result!.ToArray();
-            diceInGameCounter = 0;
-
-            foreach (var (dice, result) in Dices.Zip(results, (d, r) => (d, r)))
+            if (process is IResultFrameProcess<List<CameraDiceResult>> resultProcessor)
             {
-                if (!dice.IsSelected)
+                var results = resultProcessor.Result!.ToArray();
+                diceInGameCounter = 0;
+
+                foreach (var (dice, result) in Dices.Zip(results, (d, r) => (d, r)))
                 {
-                    dice.Score = result.DotCount;
-                    diceInGameCounter++;
+                    if (!dice.IsSelected)
+                    {
+                        dice.Score = result.DotCount;
+                        diceInGameCounter++;
+                    }
                 }
+
+                DiceInGameNumber = $"{diceInGameCounter} / 5";
+                DiceRollsNumber = $"{++diceRollsCounter} / 3";
+                scoreManager.UpdatePossibleScores(Dices.Select(dice => dice.Score).ToArray());
+                AddNotification("Update successful", GameNotificationType.Success);
             }
 
-            DiceInGameNumber = $"{diceInGameCounter} / 5";
-            DiceRollsNumber = $"{++diceRollsCounter} / 3";
-            scoreManager.UpdatePossibleScores(Dices.Select(dice => dice.Score).ToArray());
-            AddNotification("Update successful", GameNotificationType.Success);
+
         }
 
         private void AddNotification(string text, GameNotificationType type) => Notifications.Add(new NotificationModel(text, type));
