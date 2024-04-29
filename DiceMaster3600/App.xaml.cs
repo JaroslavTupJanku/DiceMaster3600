@@ -11,7 +11,9 @@ using Intel.RealSense;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Windows;
+using System.Windows.Media.Media3D;
 
 namespace DiceMaster3600
 {
@@ -25,6 +27,8 @@ namespace DiceMaster3600
         public App()
         {
             AppLogger.ConfigureLogger();
+            Exit += App_Exit;
+
             AppHost = Host.CreateDefaultBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -52,6 +56,12 @@ namespace DiceMaster3600
                     services.AddTransient<YahtzeeViewModel>();
 
                 }).Build();
+        }
+
+        private void App_Exit(object sender, ExitEventArgs e)
+        {
+            var camera = App.AppHost!.Services.GetService<IRealSenseCamera>();
+            camera?.DisconnectAsync();
         }
     }
 }

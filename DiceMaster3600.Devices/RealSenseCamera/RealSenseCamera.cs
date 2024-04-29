@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 
 namespace DiceMaster3600.Devices.RealSenseCamera
 {
+
     public class RealSenseCamera : IRealSenseCamera, IAsyncDisposable
     {
         private readonly Pipeline pipeline = new();
         private readonly List<IFrameProcces> frameprocesses = new();
         private readonly SemaphoreSlim processingSemaphore = new SemaphoreSlim(1, 1);
-        private readonly CameraConfigurator configurator;
 
+        private readonly CameraConfigurator configurator;
         private CancellationTokenSource cancellationTokenSource;
+
+        public bool IsConnected { get; private set; }
 
         public RealSenseCamera()
         {
@@ -28,13 +31,17 @@ namespace DiceMaster3600.Devices.RealSenseCamera
             config.EnableStream(Stream.Depth, 640, 480, Format.Z16, 30);
             config.EnableStream(Stream.Color, 640, 480, Format.Bgr8, 30);
 
+            if (IsConnected == true) return;
+
             try
             {
                 await Task.Run(() => pipeline.Start(config));
-                _ = ProcessFramesAsync(cancellationTokenSource.Token);
+                IsConnected = true;
+                _ = Task.Run(() => ProcessFramesAsync(cancellationTokenSource.Token));
             }
             catch (Exception ex)
             {
+                IsConnected = false;
                 AppLogger.Error($"Error starting the RealSense pipeline: {ex.Message}");
             }
         }
@@ -45,19 +52,25 @@ namespace DiceMaster3600.Devices.RealSenseCamera
             {
                 while (!token.IsCancellationRequested)
                 {
-                    using var frames = pipeline.WaitForFrames();
-                    OnNewFrame?.Invoke(this, frames);
+                    var frameset = pipeline.WaitForFrames();
+                    frameset.Keep();
+
+                    OnNewFrame?.Invoke(this, frameset);
 
                     if (await processingSemaphore.WaitAsync(0, token))
                     {
-                        try
+                        _ = Task.Run(async () =>
                         {
-                            await ProcessFrameAsync(frames);
-                        }
-                        finally
-                        {
-                            processingSemaphore.Release();
-                        }
+                            try
+                            {
+                                await ProcessFrameAsync(frameset);
+                            }
+                            finally
+                            {
+                                frameset.Dispose(); 
+                                processingSemaphore.Release();
+                            }
+                        }, token);
                     }
                 }
             }
@@ -93,9 +106,11 @@ namespace DiceMaster3600.Devices.RealSenseCamera
                 cancellationTokenSource?.Cancel();
                 await processingSemaphore.WaitAsync();
                 pipeline.Stop();
+                IsConnected = false;
             }
             catch (Exception ex)
             {
+                IsConnected = true;
                 AppLogger.Error($"Error disconnecting RealSense Camera: {ex.Message}");
             }
             finally

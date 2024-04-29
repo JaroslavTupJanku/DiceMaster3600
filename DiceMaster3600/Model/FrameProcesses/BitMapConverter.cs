@@ -1,10 +1,8 @@
-﻿using Emgu.CV;
+﻿using DiceMaster3600.Core;
+using Emgu.CV;
 using Emgu.CV.Structure;
 using Intel.RealSense;
 using System;
-using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -12,6 +10,14 @@ namespace DiceMaster3600.Model.FrameProcesses
 {
     public static class BitMapConverter
     {
+        public static BitmapSource ConvertToBitMatSource(VideoFrame frame)
+        {
+            return BitmapSource.Create( frame.Width, frame.Height, 96, 96,
+                PixelFormats.Bgr24, null,
+                frame.Data, frame.Stride * frame.Height, 
+                frame.Stride);
+        }
+
         public static Image<Gray, byte> ConvertDepthFrameToImage(VideoFrame depthFrame)
         {
             try
@@ -21,7 +27,8 @@ namespace DiceMaster3600.Model.FrameProcesses
                 byte[] depthData = new byte[width * height];
                 depthFrame.CopyTo(depthData);
 
-                Image<Gray, byte> image = new(width, height) {
+                Image<Gray, byte> image = new(width, height)
+                {
                     Bytes = depthData
                 };
 
@@ -29,12 +36,13 @@ namespace DiceMaster3600.Model.FrameProcesses
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Failed to convert depth frame to image.", ex);
+                AppLogger.Error($"Failed to convert depth frame to image : {ex}");
+                throw new InvalidOperationException($"Failed to convert depth frame to image: {ex}");
             }
         }
 
-        public static Image<TColor, TDepth> ConvertToImage<TColor, TDepth>(VideoFrame frame) 
-            where TColor : struct, IColor 
+        public static Image<TColor, TDepth> ConvertToImage<TColor, TDepth>(VideoFrame frame)
+            where TColor : struct, IColor
             where TDepth : new()
         {
             try
@@ -52,7 +60,8 @@ namespace DiceMaster3600.Model.FrameProcesses
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Failed to convert depth frame to image.", ex);
+                AppLogger.Error($"Failed to convert depth frame to image : {ex}");
+                throw new InvalidOperationException($"Failed to convert depth frame to image: {ex}");
             }
         }
     }

@@ -5,10 +5,15 @@ using DiceMaster3600.Devices.RealSenseCamera;
 using DiceMaster3600.Model;
 using DiceMaster3600.Model.FrameProcesses;
 using DiceMaster3600.Model.Yahtzee;
+using Intel.RealSense;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace DiceMaster3600.ViewModel
 {
@@ -21,14 +26,24 @@ namespace DiceMaster3600.ViewModel
         private readonly IProcessProvider processProvider;
         private readonly IFrameProcces process;
 
+        private BitmapSource imageSource;
         private int diceInGameCounter;
         private int diceRollsCounter;
+        private bool isCameraConnected;
+        private bool isConnecting;
 
+        private EventHandler<FrameSet>? frameReceivedHandler;
         private string diceRollsNumber = string.Empty;
         private string diceInGameNumber = string.Empty;
         #endregion
 
         #region Properties
+        public bool IsConnecting
+        {
+            get => isConnecting;
+            set => SetProperty(ref isConnecting, value);
+        }
+
         public string DiceRollsNumber
         {
             get => diceRollsNumber;
@@ -41,6 +56,18 @@ namespace DiceMaster3600.ViewModel
             set => SetProperty(ref diceInGameNumber, value);
         }
 
+        public BitmapSource ImageSource
+        {
+            get => imageSource;
+            set => SetProperty(ref imageSource, value);
+        }
+
+        public bool IsCameraConnected
+        {
+            get => isCameraConnected;
+            set => SetProperty(ref isCameraConnected, value);
+        }
+
         public ObservableCollection<NotificationModel> Notifications { get; private set; } = new();
         public ObservableCollection<DiceModel> Dices { get; private set; } = new();
         public MenuControlType ControlType => MenuControlType.GamePanel;
@@ -51,6 +78,7 @@ namespace DiceMaster3600.ViewModel
         public ICommand? ClearNotificationsCommand { get; private set; }
         public ICommand? ClearErrorCommand { get; private set; }
         public ICommand? ClearWarningCommand { get; private set; }
+        public ICommand StartStreamCommand { get; private set; }
         #endregion
 
         #region Constructors
@@ -65,12 +93,66 @@ namespace DiceMaster3600.ViewModel
             ResetCommand = new RelayCommand(ResetGame);
             RollCommand = new RelayCommand<ScoreTypes>((type) => Roll(type));
             ClearNotificationsCommand = new RelayCommand(() => Notifications.Clear());
+            StartStreamCommand = new AsyncRelayCommand<bool>((isCheck) => ToggleStream(isCheck));
 
             //processProvider.SimulationDiceRecognitionProcess!.OnResultChanged += () => Update();
         }
+
         #endregion
 
         #region Methods
+
+        private async Task ToggleStream(bool isCheck)
+        {
+            try
+            {
+                IsCameraConnected = isCheck;
+                await Task.WhenAll(
+                    isCheck ? StartCameraStream() : Task.CompletedTask,
+                    !isCheck ? DisconnectCameraAsync() : Task.CompletedTask);
+            }
+            catch (Exception ex)
+            {
+                AddNotification($"Error in streaming: {ex.Message}", GameNotificationType.Error);
+            }
+
+        }
+
+        private async Task StartCameraStream()
+        {
+            IsConnecting = true;
+            await camera.ConnectAsync();
+            frameReceivedHandler = (s, frameSet) =>
+            {
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    try
+                    {
+                        ImageSource = BitMapConverter.ConvertToBitMatSource(frameSet.ColorFrame);
+                    }
+                    finally
+                    {
+                        frameSet.Dispose();
+                    }
+                }));
+            };
+
+            camera.OnNewFrame += frameReceivedHandler;
+            IsConnecting = false;
+            AddNotification("Camera is Connected.", GameNotificationType.Information);
+        }
+
+        public async Task DisconnectCameraAsync()
+        {
+            await camera.DisconnectAsync();
+            if (frameReceivedHandler != null)
+            {
+                camera.OnNewFrame -= frameReceivedHandler;
+                frameReceivedHandler = null;
+                AddNotification("Camera is Disconnect.", GameNotificationType.Information);
+            }
+        }
+
         private void ResetGame()
         {
             diceInGameCounter = 5;
@@ -112,8 +194,6 @@ namespace DiceMaster3600.ViewModel
                 scoreManager.UpdatePossibleScores(Dices.Select(dice => dice.Score).ToArray());
                 AddNotification("Update successful", GameNotificationType.Success);
             }
-
-
         }
 
         private void AddNotification(string text, GameNotificationType type) => Notifications.Add(new NotificationModel(text, type));
