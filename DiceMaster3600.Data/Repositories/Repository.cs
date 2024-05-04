@@ -12,7 +12,6 @@ namespace DiceMaster3600.Data.Repositories
         protected readonly SqlEFDataContext context;
         public Repository(SqlEFDataContext context) => this.context = context;
 
-
         public async Task InsertAsync(TEntity entity)
         {
             await context.Set<TEntity>().AddAsync(entity);

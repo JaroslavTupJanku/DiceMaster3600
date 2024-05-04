@@ -1,25 +1,23 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using DiceMaster3600.Model.Services;
+﻿using DiceMaster3600.Model.Services;
 using System.Runtime.CompilerServices;
 
 namespace DiceMaster3600.ViewModel
 {
-    public abstract class CommandNotifyViewModel : NotifyViewModel
+    public abstract class ReactiveViewModel : NotifyViewModel
     {
-        
-        protected CommandNotifyViewModel(IMessageService messageService) : base(messageService) {
+        protected ReactiveViewModel(IMessageService messageService) : base(messageService){
         }
 
-        protected bool SetAndNotify<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
+        protected bool SetTrigger<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
             if (SetProperty(ref storage, value, propertyName))
             {
-                NotifyCommandCanExecuteChanged();
+                RefreshCommand();
                 return true;
             }
             return false;
         }
 
-        abstract public void NotifyCommandCanExecuteChanged();
+        abstract public void RefreshCommand();
     }
 }

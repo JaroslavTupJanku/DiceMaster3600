@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace DiceMaster3600.View.Controls
 {
@@ -34,11 +35,22 @@ namespace DiceMaster3600.View.Controls
         {
             InitializeComponent();
             HideAllGroups();
+
+            Loaded += (s, e) => StartRotation();
+            IsEnabledChanged += (s, e) => {
+                if (IsEnabled) StartRotation();
+            };
         }
 
         #endregion
 
         #region Methods
+        private void StartRotation()
+        {
+            Storyboard? storyboard = FindResource("RotateAnimation") as Storyboard;
+            storyboard?.Begin(this);
+        }
+
         private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is DiceControl control && !control.IsSelected)
@@ -74,7 +86,12 @@ namespace DiceMaster3600.View.Controls
             Six.Visibility = Visibility.Collapsed;
         }
 
-        private void UserControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) => IsSelected = !IsSelected;
+        private void UserControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            IsSelected = !IsSelected;
+            if (IsSelected) StartRotation();
+        }
+
         #endregion
 
         #region Events

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using DiceMaster3600.Core;
 using DiceMaster3600.Core.DTOs;
 using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Core.InterFaces;
@@ -9,7 +10,7 @@ using System.Windows.Input;
 
 namespace DiceMaster3600.ViewModel
 {
-    public class EntryFormViewModel : CommandNotifyViewModel
+    public class EntryFormViewModel : ReactiveViewModel
     {
         #region Fields
         private string? name;
@@ -20,8 +21,8 @@ namespace DiceMaster3600.ViewModel
         private FacultyType faculty = FacultyType.None;
         private UniversityType university = UniversityType.None;
         private Gender selectedGender = Gender.None;
-        private bool isSavingInProgress = false;  
-        
+        private bool isSavingInProgress = false;
+        // Ostatní privátní fieldy
         private DateTime dateOfBirth;
         private readonly IDataAccessManager dataManager;
         #endregion
@@ -30,13 +31,13 @@ namespace DiceMaster3600.ViewModel
         public string? Name
         {
             get => name;
-            set => SetAndNotify(ref name, value);
+            set => SetTrigger(ref name, value);
         }
 
         public Gender SelectedGender
         {
             get => selectedGender;
-            set => SetAndNotify(ref selectedGender, value);
+            set => SetTrigger(ref selectedGender, value);
         }
 
         public bool IsSavingInProgress
@@ -48,37 +49,39 @@ namespace DiceMaster3600.ViewModel
         public string? Surname
         {
             get => surname;
-            set => SetAndNotify(ref surname, value);
+            set => SetTrigger(ref surname, value);
         }
 
         public string? Email
         {
             get => email;
-            set => SetAndNotify(ref email, value);
+            set => SetTrigger(ref email, value);
         }
 
-        public string? Password
-        {
-            get => password;
-            set => SetAndNotify(ref password, value);
-        }
+    public string? Password
+    {
+        get => password;
+        set => SetTrigger(ref password, value);
+    }
 
-        public DateTime DateOfBirth
-        {
-            get => dateOfBirth;
-            set => SetProperty(ref dateOfBirth, value);
-        }
+    public DateTime DateOfBirth
+    {
+        get => dateOfBirth;
+        set => SetProperty(ref dateOfBirth, value);
+    }
+
+    //Ostatní vlastnosti
 
         public UniversityType University
         {
             get => university;
-            set => SetAndNotify(ref university, value);
+            set => SetTrigger(ref university, value);
         }
 
         public FacultyType Faculty
         {
             get => faculty;
-            set => SetAndNotify(ref faculty, value);
+            set => SetTrigger(ref faculty, value);
         }
 
         public ICommand SaveCommand { get; }
@@ -90,13 +93,13 @@ namespace DiceMaster3600.ViewModel
         public EntryFormViewModel(IDataAccessManager dataManager, IMessageService messageService) : base(messageService)
         {
             this.dataManager = dataManager;
-            SubsribeNotification(NotificationContext.RegistrationFailure, (m) => Notify(m, MessageType.Failed));
+            SubsribeNotification(NotificationContext.RegistrationFailure, m => Notify(m, MessageType.Failed));
 
             SaveCommand = new RelayCommand(async
                 () => await ExecuteExampleCommand(),
                 () => CanSaveExecute());
 
-            dataManager.OnProcessingDataChanged += (isInProgress) 
+            dataManager.OnProcessingStatusChanged += (isInProgress) 
                 => IsSavingInProgress = isInProgress;
 
             CancelCommand = new RelayCommand(() => RequestClose?.Invoke());
@@ -107,8 +110,6 @@ namespace DiceMaster3600.ViewModel
         #region Methods
         private bool CanSaveExecute()
         {
-            return true;
-
             return !string.IsNullOrWhiteSpace(Name)
                 && !string.IsNullOrWhiteSpace(Surname)
                 && !string.IsNullOrWhiteSpace(Email)
@@ -132,16 +133,14 @@ namespace DiceMaster3600.ViewModel
             catch (Exception ex)
             {
                 Notify(NotificationContext.RegistrationFailure, $"Nastala chyba: {ex.Message}");
+                AppLogger.Error(ex.Message);
             }
         }
 
         public override void Dispose()
-        {
-            UnsubsribeNotification(NotificationContext.RegistrationFailure);
-            GC.SuppressFinalize(this);
-        }
+            => UnsubsribeNotification(NotificationContext.RegistrationFailure);      
 
-        public override void NotifyCommandCanExecuteChanged()
+        public override void RefreshCommand()
         {
             (SaveCommand as RelayCommand)?.NotifyCanExecuteChanged();
         }

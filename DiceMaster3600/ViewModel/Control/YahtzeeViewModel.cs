@@ -11,7 +11,7 @@ namespace DiceMaster3600.ViewModel.Control
     public class YahtzeeViewModel : ObservableObject
     {
         #region Fields
-        private readonly YahtzeeScoreManager scoreManager;
+        private readonly IYahtzeeScoreManager scoreManager;
 
         private int upperSectionScore;
         private int lowerSectionScore;
@@ -65,7 +65,7 @@ namespace DiceMaster3600.ViewModel.Control
         #endregion
 
         #region Constructors
-        public YahtzeeViewModel(YahtzeeScoreManager scoreManager)
+        public YahtzeeViewModel(IYahtzeeScoreManager scoreManager)
         {
             this.scoreManager = scoreManager;
 

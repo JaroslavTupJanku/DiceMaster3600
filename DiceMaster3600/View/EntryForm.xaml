@@ -16,7 +16,7 @@
 
     <Window.Resources>
         <converters:GenderToColorBrushConverter x:Key="GenderBrushConverter"/>
-
+       
         <ObjectDataProvider x:Key="universityTypeValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="enum:UniversityType"/>
@@ -52,7 +52,6 @@
             <Setter Property="Height" Value="40"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -97,44 +96,41 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-
         <Grid Background="{StaticResource MeoptaBlueBrush}">
             <StackPanel VerticalAlignment="Center" 
                         HorizontalAlignment="Center" 
                         Background="Transparent">
-                <Grid Grid.Row="0">
-                    <controls:RoundedIcon Size="120"
-                        EllipseFill="{StaticResource MeoptaYellowBrush}" 
-                        IconKind="FaceFemale" 
-                        IconForeground="{StaticResource MeoptaLogoWhiteBrush}" />
-                </Grid>
+                <controls:RoundedIcon Size="120"
+                    EllipseFill="{StaticResource MeoptaYellowBrush}" 
+                    IconForeground="{StaticResource MeoptaLogoWhiteBrush}" 
+                    IconKind="FaceFemale">
+                </controls:RoundedIcon>
                 <TextBlock Text="Lets get you set up" 
                            FontSize="25" 
                            Margin="0,20" 
                            FontWeight="Bold" 
-                           Foreground="WhiteSmoke"/>
+                           Foreground="WhiteSmoke">
+                </TextBlock>
                 <TextBlock Text="it should only take a couple of minutes to registrate" 
                            TextAlignment="Center" 
                            TextWrapping="Wrap" 
-                           Foreground="WhiteSmoke"/>
+                           Foreground="WhiteSmoke">
+                </TextBlock>
             </StackPanel>
         </Grid>
 
         <Grid Margin="10" Grid.Column="1">
-            
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            
             <Label Content="Create account." 
                    FontSize="16" 
                    FontWeight="Bold" 
                    Foreground="Black" 
-                   HorizontalAlignment="Left"/>
-
+                   HorizontalAlignment="Left">
+            </Label>
             <StackPanel Grid.Row="1" HorizontalAlignment="Center">
-                
                 <TextBlock Text="Name" Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0"/>
                 <TextBox  Style="{StaticResource BaseTextBoxStyle}" Text="{Binding Name}" />
                 <TextBlock Text="Surname" Style="{StaticResource BaseTextBlockStyle}" />
@@ -186,7 +182,6 @@
                             IconForeground="White"/>
                     </Button>
                 </Grid>
-
                 <TextBlock Text="University" Style="{StaticResource BaseTextBlockStyle}" Margin="0,30,0,0" />
                 <ComboBox ItemsSource="{Binding Source={StaticResource universityTypeValues}}"
                           Style="{StaticResource BaseComboBoxStyle}"
@@ -205,10 +200,12 @@
                           SelectedValue="{Binding Faculty}" />
                 <TextBlock Text="Email" Style="{StaticResource BaseTextBlockStyle}"/>
                 <TextBox  Style="{StaticResource BaseTextBoxStyle}" Text="{Binding Path=Email}"/>
-
                 <TextBlock Text="Password" Style="{StaticResource BaseTextBlockStyle}" />
-                <PasswordBox x:Name="txtPassword" Width="380" Height="25" BorderThickness="0,0,0,1" FontSize="15"/>
-
+                <controls:PasswordToggleControl x:Name="txtPassword"/>
+                <CheckBox Content="I agree to the processing of personal data"
+                          IsChecked="{Binding IsConsentGiven, Mode=TwoWay}"
+                          Margin="0,20,0,0"
+                          HorizontalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" Margin="0,40,0,0" HorizontalAlignment="Center" >
                     <Button Content="Save"
                             Command="{Binding Path=SaveCommand}"

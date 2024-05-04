@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              MouseLeftButtonUp="UserControl_MouseLeftButtonUp"
+             RenderTransformOrigin="0.5,0.5"
              mc:Ignorable="d" Background="Transparent" Height="50" Width="50">
 
     <!--Pridat convertery pro uzpusobeni sirky, vysky a margin-->
@@ -26,7 +27,18 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Storyboard x:Key="RotateAnimation">
+            <DoubleAnimation
+            Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+            From="0" To="180" Duration="0:0:0001" 
+            RepeatBehavior="1x" />
+        </Storyboard>
     </UserControl.Resources>
+
+    <UserControl.RenderTransform>
+        <RotateTransform Angle="0"/>
+    </UserControl.RenderTransform>
+
 
     <Border BorderThickness="2" CornerRadius="8">
         <Grid>

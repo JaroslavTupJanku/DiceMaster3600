@@ -7,7 +7,7 @@
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              xmlns:enums="clr-namespace:DiceMaster3600.Core.Enum;assembly=DiceMaster3600.Core"
              xmlns:control="clr-namespace:DiceMaster3600.View.Controls"
-             d:DataContext="{d:DesignInstance Type=vm:YahtzeeViewModel}"           
+             d:DataContext="{d:DesignInstance Type=vm:YahtzeeViewModel, IsDesignTimeCreatable=True}"           
              mc:Ignorable="d">
 
     <UserControl.Resources>

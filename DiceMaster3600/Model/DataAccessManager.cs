@@ -13,19 +13,19 @@ namespace DiceMaster3600.Model
     {
         #region Fields
         private readonly RepositoryFasade dbModel;
-        private bool isProcessingData;
+        private bool isworking;
         #endregion
 
         #region Properties
-        public bool IsProcessingData
+        public bool IsWorking
         {
-            get => isProcessingData;
+            get => isworking;
             private set
             {
-                if (isProcessingData != value)
+                if (isworking != value)
                 {
-                    isProcessingData = value;
-                    OnProcessingDataChanged?.Invoke(value);
+                    isworking = value;
+                    OnProcessingStatusChanged?.Invoke(value);
                 }
             }
         }
@@ -43,12 +43,12 @@ namespace DiceMaster3600.Model
         {
             try
             {
-                IsProcessingData = true;
+                IsWorking = true;
                 return await dataOperation();
             }
             finally
             {
-                IsProcessingData = false;
+                IsWorking = false;
             }
         }
 
@@ -56,12 +56,12 @@ namespace DiceMaster3600.Model
         {
             try
             {
-                IsProcessingData = true;
+                IsWorking = true;
                 await dataOperation();
             }
             finally
             {
-                IsProcessingData = false;
+                IsWorking = false;
             }
         }
 
@@ -77,6 +77,7 @@ namespace DiceMaster3600.Model
         public async Task<RankedUserDTO[]> GetTopThreePlayersAsync() 
             => await ExecuteDataOperationAsync(() 
             => dbModel.GetTopThree());
+
         public async Task<UniversityRankingDTO[]> GetTopThreeUniversityAsync()
             => await ExecuteDataOperationAsync(() 
             => dbModel.GetTopThreeUniversity());
@@ -97,7 +98,7 @@ namespace DiceMaster3600.Model
         #endregion
 
         #region Events
-        public event Action<bool>? OnProcessingDataChanged;
+        public event Action<bool>? OnProcessingStatusChanged;
         public event EventHandler? OnDatabaseUpdated;
         #endregion
 

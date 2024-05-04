@@ -3,7 +3,7 @@ using DiceMaster3600.Model.FrameProcesses;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DiceMaster3600.Model
+namespace DiceMaster3600.Model.Services
 {
     public class ProcessProvider : IProcessProvider, IProcessManager
     {

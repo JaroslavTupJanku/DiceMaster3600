@@ -75,7 +75,7 @@
                            Text="{Binding ValueText, RelativeSource={RelativeSource AncestorType={x:Type local:InfoDisplayPanel}}}"
                            VerticalAlignment="Center" 
                            Foreground="{StaticResource MeoptaLogoBlackBrush}" 
-                           FontSize="50"/> <!--{Binding ValueText, RelativeSource={RelativeSource AncestorType={x:Type local:InfoDisplayPanel}}, Converter={StaticResource fontSizeConverter}, ConverterParameter=200}-->
+                           FontSize="50"/>
                 <TextBlock x:Name="UnitTextBox" 
                            Text="{Binding UnitText, RelativeSource={RelativeSource AncestorType={x:Type local:InfoDisplayPanel}}}" 
                            Margin="0, 5" 

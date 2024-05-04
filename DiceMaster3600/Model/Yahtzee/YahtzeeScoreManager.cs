@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace DiceMaster3600.Model.Yahtzee
 {
-    public class YahtzeeScoreManager
+    public class YahtzeeScoreManager : IYahtzeeScoreManager
     {
         #region Fields
         readonly Random random = new();

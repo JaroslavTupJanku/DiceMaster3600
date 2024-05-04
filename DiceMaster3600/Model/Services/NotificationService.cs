@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace DiceMaster3600.Model.Services
 {
-    public class SnackbarMessageService : IMessageService
+    public class NotificationService : IMessageService
     {
         #region Fields
         private readonly SnackbarMessageQueue messageQueue;
@@ -18,7 +18,7 @@ namespace DiceMaster3600.Model.Services
         #endregion
 
         #region Constructors
-        public SnackbarMessageService(SnackbarMessageQueue messageQueue)
+        public NotificationService(SnackbarMessageQueue messageQueue)
         {
             this.messageQueue = messageQueue;
         }
@@ -29,7 +29,13 @@ namespace DiceMaster3600.Model.Services
         {
             notifications.AddOrUpdate(notificationType, new List<Action<string>> { callback }, (key, oldValue) =>
             {
-                lock (oldValue) { oldValue.Add(callback); }
+                lock (oldValue)
+                {
+                    if (!oldValue.Contains(callback)) 
+                    {
+                        oldValue.Add(callback);
+                    }
+                }
                 return oldValue;
             });
         }

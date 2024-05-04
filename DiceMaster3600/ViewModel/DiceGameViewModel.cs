@@ -4,6 +4,7 @@ using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Devices.RealSenseCamera;
 using DiceMaster3600.Model;
 using DiceMaster3600.Model.FrameProcesses;
+using DiceMaster3600.Model.Services;
 using DiceMaster3600.Model.Yahtzee;
 using Intel.RealSense;
 using System;
@@ -21,7 +22,7 @@ namespace DiceMaster3600.ViewModel
     {
 
         #region Fields
-        private readonly YahtzeeScoreManager scoreManager;
+        private readonly IYahtzeeScoreManager scoreManager;
         private readonly IRealSenseCamera camera;
         private readonly IProcessProvider processProvider;
         private readonly IFrameProcces process;
@@ -82,7 +83,7 @@ namespace DiceMaster3600.ViewModel
         #endregion
 
         #region Constructors
-        public DiceGameViewModel(YahtzeeScoreManager scoreManager, IRealSenseCamera camera, IProcessProvider processProvider)
+        public DiceGameViewModel(IYahtzeeScoreManager scoreManager, IRealSenseCamera camera, IProcessProvider processProvider)
         {
             ResetGame();
 

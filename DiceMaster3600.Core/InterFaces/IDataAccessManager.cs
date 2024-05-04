@@ -16,7 +16,7 @@ namespace DiceMaster3600.Core.InterFaces
         Task GetUniversityByID(int id);
         Task<UserDTO?> GetUserByEmailAsync(string email, string plainPassword);
 
-        public event Action<bool>? OnProcessingDataChanged;
+        public event Action<bool>? OnProcessingStatusChanged;
         public event EventHandler? OnDatabaseUpdated;
     }
 }

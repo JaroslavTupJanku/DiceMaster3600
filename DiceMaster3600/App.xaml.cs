@@ -40,9 +40,9 @@ namespace DiceMaster3600
 
                     services.AddSingleton<SnackbarMessageQueue>();
                     services.AddSingleton<IViewModelFactory, ViewModelFactory>();
-                    services.AddSingleton<IMessageService, SnackbarMessageService>();
-                    services.AddSingleton<YahtzeeScoreManager>();
+                    services.AddSingleton<IMessageService, NotificationService>();
                     services.AddSingleton<IRealSenseCamera, RealSenseCamera>();
+                    services.AddSingleton<IYahtzeeScoreManager, YahtzeeScoreManager>();
 
                     services.AddSingleton<ProcessProvider>();
                     services.AddSingleton<IProcessProvider>(sp => sp.GetRequiredService<ProcessProvider>());
@@ -51,7 +51,8 @@ namespace DiceMaster3600
                     services.AddTransient<HomeViewModel>();
                     services.AddTransient<DiceGameViewModel>();
                     services.AddTransient<MainViewModel>();
-                    services.AddTransient<LoginFormViewModel>(); //vysvetlit, proc je to dobre pro unsubscirbe. 
+                    services.AddTransient<PasswordToggleControlViewModel>();
+                    services.AddTransient<LoginFormViewModel>(); 
                     services.AddTransient<EntryFormViewModel>();
                     services.AddTransient<YahtzeeViewModel>();
 

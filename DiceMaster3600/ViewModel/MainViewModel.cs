@@ -3,7 +3,6 @@ using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Model;
 using DiceMaster3600.Model.Services;
 using DiceMaster3600.View;
-using DiceMaster3600.ViewModel.Control;
 using System;
 using System.Windows.Input;
 

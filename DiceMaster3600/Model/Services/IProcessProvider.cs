@@ -2,7 +2,7 @@
 using DiceMaster3600.Model.FrameProcesses;
 using System.Collections.Generic;
 
-namespace DiceMaster3600.Model
+namespace DiceMaster3600.Model.Services
 {
     public interface IProcessProvider
     {

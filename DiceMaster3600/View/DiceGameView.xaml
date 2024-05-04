@@ -169,7 +169,7 @@
                 </Grid>
             </Border>
 
-            <Border Style="{StaticResource InfoCardStyle}" Grid.Row="2">
+            <Border Style="{StaticResource InfoCardStyle}" Grid.Row="2" IsEnabled="{Binding IsCameraConnected}">
                 <StackPanel Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <controls:DiceControl Margin="0,0,0,20" Width="60" Height="60" Value="{Binding Dices[0].Score}" />
                     <controls:DiceControl Margin="0,0,0,20" Width="60" Height="60" Value="{Binding Dices[1].Score}" />
@@ -189,7 +189,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Gamecard" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource MeoptaLogoBlackBrush}" FontSize="30"/>
-                <controls:YahtzeeTable Grid.Row="2" />
+                <!--<controls:YahtzeeTable Grid.Row="2" IsEnabled="{Binding IsCameraConnected}" />-->
             </Grid>
         </Border>
 
