@@ -102,36 +102,37 @@ namespace DiceMaster3600.Model
         public event EventHandler? OnDatabaseUpdated;
         #endregion
 
+
         public UniversityDTO[] GetAllUniversityDTOs()
         {
             var userArray1 = new UserDTO[] {
-                new UserDTO() {Name = "Hana", Surname= "Černý", NumberOfPoints = 2675, EmailAddress="Email0@gmail.com"},
-                new UserDTO() {Name = "Pavel", Surname= "Horák", NumberOfPoints = 2802, EmailAddress="Email8@gmail.com"},
-                new UserDTO() {Name = "Pavel", Surname= "Dvořák", NumberOfPoints = 550, EmailAddress="Email3@gmail.com"},
+                new UserDTO() {Name = "Hana", Surname= "Černý", NumberOfPoints = 129, Gender=Gender.None},
+                new UserDTO() {Name = "Pavel", Surname= "Horák", NumberOfPoints = 208, Gender=Gender.Male},
+                new UserDTO() {Name = "Pavel", Surname= "Dvořák", NumberOfPoints = 38, Gender=Gender.Male},
             };
 
-            var userArray2 = new UserDTO[] {
-                new UserDTO() {Name = "Pavel", Surname= "Kučera", NumberOfPoints = 1804, EmailAddress="Email13@gmail.com"},
-                new UserDTO() {Name = "Jan", Surname= "Kučera", NumberOfPoints = 79, EmailAddress="Email4@gmail.com"},
-                new UserDTO() {Name = "Jan", Surname= "Kučera", NumberOfPoints = 1204, EmailAddress="Email11@gmail.com"},
+           var userArray2 = new UserDTO[] {
+                new UserDTO() {Name = "Pavel", Surname= "Kučera", NumberOfPoints = 91, Gender=Gender.Male},
+                new UserDTO() {Name = "Jan", Surname= "Kučera", NumberOfPoints = 14, Gender=Gender.Male},
+                new UserDTO() {Name = "Jan", Surname= "Kučera", NumberOfPoints = 86, Gender=Gender.Male},
             };
 
             var userArray3 = new UserDTO[] {
-                new UserDTO() {Name = "Jan", Surname= "Novotný", NumberOfPoints = 1853, EmailAddress="Email7@gmail.com"},
-                new UserDTO() {Name = "Marie", Surname= "Dvořák", NumberOfPoints = 265, EmailAddress="Email1@gmail.com"},
-                new UserDTO() {Name = "Anna", Surname= "Krhutová", NumberOfPoints = 1960, EmailAddress="Email5@gmail.com"},
+                new UserDTO() {Name = "Jan", Surname= "Novotný", NumberOfPoints = 101, Gender=Gender.Male},
+                new UserDTO() {Name = "Marie", Surname= "Dvořák", NumberOfPoints = 20, Gender=Gender.None},
+                new UserDTO() {Name = "Anna", Surname= "Krhutová", NumberOfPoints = 109, Gender=Gender.Female},
             };
 
             var userArray4 = new UserDTO[] {
-                new UserDTO() {Name = "Martin", Surname= "Svoboda", NumberOfPoints = 3021, EmailAddress="Email2@gmail.com"},
-                new UserDTO() {Name = "Petr", Surname= "Novotný", NumberOfPoints = 4249, EmailAddress="Email12@gmail.com"},
-                new UserDTO() {Name = "Marie", Surname= "Novotný", NumberOfPoints = 1102, EmailAddress="Email10@gmail.com"},
+                new UserDTO() {Name = "Martin", Surname= "Svoboda", NumberOfPoints = 229, Gender=Gender.Male},
+                new UserDTO() {Name = "Petr", Surname= "Novotný", NumberOfPoints = 278, Gender=Gender.Male},
+                new UserDTO() {Name = "Marie", Surname= "Novotný", NumberOfPoints = 102, Gender=Gender.Female},
             };
 
             var userArray5 = new UserDTO[] {
-                new UserDTO() {Name = "Lucie", Surname= "Procházka", NumberOfPoints = 2842, EmailAddress="Email9@gmail.com"},
-                new UserDTO() {Name = "Marie", Surname= "Novotný", NumberOfPoints = 2165, EmailAddress="Email6@gmail.com"},
-                new UserDTO() {Name = "Lucie", Surname= "Svoboda", NumberOfPoints = 1426, EmailAddress="Email14@gmail.com"},
+                new UserDTO() {Name = "Lucie", Surname= "Procházka", NumberOfPoints = 197, Gender=Gender.Female},
+                new UserDTO() {Name = "Marie", Surname= "Novotný", NumberOfPoints = 155, Gender=Gender.Male},
+                new UserDTO() {Name = "Lucie", Surname= "Svoboda", NumberOfPoints = 111, Gender=Gender.Male},
             };
 
             var faculty1 = new FacultyDTO() { Name = FacultyType.None, Users = userArray1.ToList() };

@@ -7,6 +7,7 @@ namespace DiceMaster3600.Core.DTOs
         public UniversityType UniversityName { get; set; }
         public double AveragePoints { get; set; }
         public int StudentCount { get; set; }
+        public int Position { get; set; }
 
     }
 }

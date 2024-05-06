@@ -109,7 +109,7 @@
                 Background="{StaticResource MeoptaLogoWhiteBrush}"
                 CornerRadius="5">
             <Grid>
-                <Image x:Name="MyImage" Source="{Binding ImageSource}" />
+                <Image x:Name="MyImage" Source="{Binding ImageSource}" Stretch="Uniform" />
                 <ProgressBar x:Name="LoadingIndicator"
                      Grid.Row="1"
                      VerticalAlignment="Bottom"
@@ -189,7 +189,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Gamecard" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource MeoptaLogoBlackBrush}" FontSize="30"/>
-                <!--<controls:YahtzeeTable Grid.Row="2" IsEnabled="{Binding IsCameraConnected}" />-->
+                <controls:YahtzeeTable Grid.Row="2" IsEnabled="{Binding IsCameraConnected}" />
             </Grid>
         </Border>
 

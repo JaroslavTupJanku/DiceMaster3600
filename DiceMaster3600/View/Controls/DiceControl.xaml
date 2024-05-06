@@ -30,7 +30,7 @@
         <Storyboard x:Key="RotateAnimation">
             <DoubleAnimation
             Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
-            From="0" To="180" Duration="0:0:0001" 
+            From="0" To="360" Duration="0:0:0001" 
             RepeatBehavior="1x" />
         </Storyboard>
     </UserControl.Resources>

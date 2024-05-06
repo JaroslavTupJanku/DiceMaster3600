@@ -21,7 +21,7 @@ namespace DiceMaster3600.Core.DTOs
             WholeName = $"{user.Name} {user.Surname}";
             NumberOfPoints = user.NumberOfPoints;
             Position = position;
-            RelativePoints = $"{user.NumberOfPoints / 3600 * 100}%";
+            RelativePoints = $"{Math.Round(user.NumberOfPoints / (double)375 * 100), 2}%";
             Gender = user.Gender; 
         }
 

@@ -24,12 +24,18 @@ namespace DiceMaster3600.Model.FrameProcesses
             {
                 int width = depthFrame.Width;
                 int height = depthFrame.Height;
-                byte[] depthData = new byte[width * height];
+                ushort[] depthData = new ushort[width * height];
                 depthFrame.CopyTo(depthData);
+
+                byte[] imageData = new byte[width * height];
+                for (int i = 0; i < depthData.Length; i++)
+                {
+                    imageData[i] = (byte)(depthData[i] / 256);
+                }
 
                 Image<Gray, byte> image = new(width, height)
                 {
-                    Bytes = depthData
+                    Bytes = imageData
                 };
 
                 return image;

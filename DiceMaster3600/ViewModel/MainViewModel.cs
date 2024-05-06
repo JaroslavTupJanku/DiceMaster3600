@@ -37,10 +37,14 @@ namespace DiceMaster3600.ViewModel
         #endregion
 
         #region Constructors
-        public MainViewModel(IActiveUserManager activeUser, IViewModelFactory factory, IMessageService messageService) : base(messageService)
+        public MainViewModel(IActiveUserManager activeUser, 
+            IViewModelFactory factory, 
+            IMessageService messageService, 
+            IProcessManager provider) : base(messageService)
         {
             this.activeUser = activeUser;
             this.factory = factory;
+            provider.RegisterAllProcesses();
 
             CurrentView = factory.CreateViewModel<HomeViewModel>() ?? throw new InvalidOperationException("HomeViewModel cannot be created.");
             MenuCommad = new RelayCommand<MenuControlType>((type) => OnChangeView(type));

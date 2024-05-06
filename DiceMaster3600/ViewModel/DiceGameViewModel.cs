@@ -129,6 +129,7 @@ namespace DiceMaster3600.ViewModel
                 {
                     try
                     {
+                        
                         ImageSource = BitMapConverter.ConvertToBitMatSource(frameSet.ColorFrame);
                     }
                     finally

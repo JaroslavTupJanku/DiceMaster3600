@@ -26,12 +26,14 @@ namespace DiceMaster3600.Devices.RealSenseCamera
 
         public async Task ConnectAsync()
         {
+            if (IsConnected) {
+                return;
+            }
+
             var config = new Config();
             cancellationTokenSource = new CancellationTokenSource();
             config.EnableStream(Stream.Depth, 640, 480, Format.Z16, 30);
             config.EnableStream(Stream.Color, 640, 480, Format.Bgr8, 30);
-
-            if (IsConnected == true) return;
 
             try
             {
@@ -55,8 +57,6 @@ namespace DiceMaster3600.Devices.RealSenseCamera
                     var frameset = pipeline.WaitForFrames();
                     frameset.Keep();
 
-                    OnNewFrame?.Invoke(this, frameset);
-
                     if (await processingSemaphore.WaitAsync(0, token))
                     {
                         _ = Task.Run(async () =>
@@ -64,10 +64,11 @@ namespace DiceMaster3600.Devices.RealSenseCamera
                             try
                             {
                                 await ProcessFrameAsync(frameset);
+                                OnNewFrame?.Invoke(this, frameset);
                             }
                             finally
                             {
-                                frameset.Dispose(); 
+                                frameset.Dispose();
                                 processingSemaphore.Release();
                             }
                         }, token);
@@ -101,6 +102,10 @@ namespace DiceMaster3600.Devices.RealSenseCamera
 
         public async Task DisconnectAsync()
         {
+            if (!IsConnected) {
+                return;
+            }
+
             try
             {
                 cancellationTokenSource?.Cancel();
@@ -110,7 +115,6 @@ namespace DiceMaster3600.Devices.RealSenseCamera
             }
             catch (Exception ex)
             {
-                IsConnected = true;
                 AppLogger.Error($"Error disconnecting RealSense Camera: {ex.Message}");
             }
             finally

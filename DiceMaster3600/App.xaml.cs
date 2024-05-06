@@ -39,6 +39,7 @@ namespace DiceMaster3600
                     services.AddSingleton<IActiveUserManager, ActiveUserManager>();
 
                     services.AddSingleton<SnackbarMessageQueue>();
+                    services.AddSingleton<GraphGenerator>();
                     services.AddSingleton<IViewModelFactory, ViewModelFactory>();
                     services.AddSingleton<IMessageService, NotificationService>();
                     services.AddSingleton<IRealSenseCamera, RealSenseCamera>();

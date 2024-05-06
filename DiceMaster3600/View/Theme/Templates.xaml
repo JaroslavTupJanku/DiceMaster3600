@@ -66,14 +66,14 @@
                                     <DataTrigger Binding="{Binding Gender}" Value="Male">
                                         <Setter Property="Content">
                                             <Setter.Value>
-                                                <materialIcons:MaterialIcon Kind="Medal" Foreground="White" Height="20"/>
+                                                <materialIcons:MaterialIcon Kind="GenderMale" Foreground="White" Height="20"/>
                                             </Setter.Value>
                                         </Setter>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding Gender}" Value="Female">
                                         <Setter Property="Content">
                                             <Setter.Value>
-                                                <materialIcons:MaterialIcon Kind="Face" Foreground="White" Height="20"/>
+                                                <materialIcons:MaterialIcon Kind="GenderFemale" Foreground="White" Height="20"/>
                                             </Setter.Value>
                                         </Setter>
                                     </DataTrigger>

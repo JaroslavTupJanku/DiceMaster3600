@@ -10,7 +10,7 @@ namespace DiceMaster3600.Model.Services
         private readonly List<IFrameProcces> processes = new();
         private readonly IRealSenseCamera camera;
 
-        public IResultFrameProcess<List<CameraDiceResult>>? DiceRecognitionProcess { get; private set; }
+        public IResultFrameProcess<int[]>? DiceRecognitionProcess { get; private set; }
         public IResultFrameProcess<List<CameraDiceResult>>? SimulationDiceRecognitionProcess { get; private set; }
 
         public ProcessProvider(IRealSenseCamera camera)
@@ -21,10 +21,10 @@ namespace DiceMaster3600.Model.Services
 
         public void InitializeProcesses()
         {
-            SimulationDiceRecognitionProcess = new DiceRecognitionProcessSimulator();
-            //DiceRecognitionProcces = new DiceRecognitionProcess();
+            //SimulationDiceRecognitionProcess = new DiceRecognitionProcessSimulator();
+            DiceRecognitionProcess = new DiceRecognitionProcess(50, 50, 20, 20, 20);
 
-            processes.Add(SimulationDiceRecognitionProcess);
+            processes.Add(DiceRecognitionProcess);
             RegisterAllProcesses();
         }
 

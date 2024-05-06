@@ -34,21 +34,23 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <controls:InfoDisplayPanel TitleText="Best Player"
+            <controls:InfoDisplayPanel TitleText="Games played"
                                    Grid.Column="1"
-                                   ValueText="{Binding Path=TopThreePlayerList[0].WholeName}"
+                                   ValueText="2"
+                                   UnitText="games"
                                    TargetGridBackground="{StaticResource MeoptaYellowBrush}"/>
 
             <controls:InfoDisplayPanel UnitText="Pt" 
                                    TitleText="Best Score"
-                                   ValueText="{Binding TopThreePlayerList[0].NumberOfPoints}" 
+                                   ValueText="278/375"
                                    Grid.Column="3" 
                                    TargetGridBackground="{StaticResource MeoptaBlueBrush}"/>
+            <!--ValueText="{Binding TopThreePlayerList[0].NumberOfPoints}"-->
 
-            <controls:InfoDisplayPanel UnitText="pt"
+            <controls:InfoDisplayPanel UnitText="points"
                                    TitleText="Avarage Score"
                                    Grid.Column="5"       
-                                   ValueText="1030"
+                                   ValueText="115"
                                    TargetGridBackground="{StaticResource MeoptaBronzeBrush}"/>
 
             <Border Grid.Row="2" 
@@ -59,15 +61,21 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Název grafu"
-                               Margin="20,20,0,10"
+                    <TextBlock Text="Probability distribution"
+                               Margin="20,20,0,0"
                                FontWeight="Bold"
                                FontSize="20"/>
-                    <lvc:CartesianChart Grid.Row="2" 
-                        Series="{Binding Series}"
-                        Background="White">
+                    <TextBlock Text="According to the results of the game."
+                               Grid.Row="1"
+                               Margin="20,0,0,10"
+                               FontSize="15"/>
+                    <lvc:CartesianChart  Grid.Row="2" 
+                                         Series="{Binding SeriesCollection}" 
+                                         XAxes="{Binding XAxes}"
+                                         Background="White">
                     </lvc:CartesianChart>
                 </Grid>
             </Border>
@@ -136,12 +144,17 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Název grafu"
+                    <TextBlock Text="Results by Faculty"
                                Margin="20,20,0,0"
                                FontWeight="Bold"
                                FontSize="20"/>
+                    <TextBlock Text="(In percentage)"
+                               Margin="20,0,0,0"
+                               Grid.Row="1"
+                               FontSize="15"/>
                     <lvc:PieChart Background="White" 
                               InitialRotation="-90"
                               Grid.Row="2"
