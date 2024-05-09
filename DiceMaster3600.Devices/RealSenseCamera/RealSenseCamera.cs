@@ -1,9 +1,12 @@
 ﻿using DiceMaster3600.Core;
+using DiceMaster3600.Core.InterFaces;
 using Intel.RealSense;
+using Microsoft.Windows.Themes;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace DiceMaster3600.Devices.RealSenseCamera
 {
@@ -11,7 +14,7 @@ namespace DiceMaster3600.Devices.RealSenseCamera
     public class RealSenseCamera : IRealSenseCamera, IAsyncDisposable
     {
         private readonly Pipeline pipeline = new();
-        private readonly List<IFrameProcces> frameprocesses = new();
+        private readonly List<IFrameProcess> frameprocesses = new();
         private readonly SemaphoreSlim processingSemaphore = new SemaphoreSlim(1, 1);
 
         private readonly CameraConfigurator configurator;
@@ -64,7 +67,6 @@ namespace DiceMaster3600.Devices.RealSenseCamera
                             try
                             {
                                 await ProcessFrameAsync(frameset);
-                                OnNewFrame?.Invoke(this, frameset);
                             }
                             finally
                             {
@@ -91,7 +93,8 @@ namespace DiceMaster3600.Devices.RealSenseCamera
             {
                 foreach (var process in frameprocesses)
                 {
-                    await process.ProcessFrameAsync(frames);
+                    var processedFrame = await process.ProcessFrameAsync(frames);
+                    OnNewFrame?.Invoke(this, processedFrame);
                 }
             }
             catch (Exception ex)
@@ -125,7 +128,7 @@ namespace DiceMaster3600.Devices.RealSenseCamera
             }
         }
 
-        public void RegisterFrameProcessor(IFrameProcces processor)
+        public void RegisterFrameProcessor(IFrameProcess processor)
         {
             lock (frameprocesses)
             {
@@ -133,7 +136,7 @@ namespace DiceMaster3600.Devices.RealSenseCamera
             }
         }
 
-        public void UnregisterFrameProcessor(IFrameProcces processor)
+        public void UnregisterFrameProcessor(IFrameProcess processor)
         {
             lock (frameprocesses)
             {
@@ -147,6 +150,6 @@ namespace DiceMaster3600.Devices.RealSenseCamera
             processingSemaphore.Dispose();
         }
 
-        public event EventHandler<FrameSet> OnNewFrame;
+        public event EventHandler<BitmapSource> OnNewFrame;
     }
 }

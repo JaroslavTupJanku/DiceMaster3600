@@ -1,17 +1,17 @@
-﻿using DiceMaster3600.Devices.RealSenseCamera;
+﻿using DiceMaster3600.Core.InterFaces;
+using DiceMaster3600.Devices.RealSenseCamera;
 using DiceMaster3600.Model.FrameProcesses;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace DiceMaster3600.Model.Services
 {
     public class ProcessProvider : IProcessProvider, IProcessManager
     {
-        private readonly List<IFrameProcces> processes = new();
+        private readonly List<IFrameProcess> processes = new();
         private readonly IRealSenseCamera camera;
 
-        public IResultFrameProcess<int[]>? DiceRecognitionProcess { get; private set; }
-        public IResultFrameProcess<List<CameraDiceResult>>? SimulationDiceRecognitionProcess { get; private set; }
+        public IFrameResultProcess<int[]>? DiceRecognitionProcess { get; private set; }
+        public IFrameResultProcess<List<CameraDiceResult>>? SimulationDiceRecognitionProcess { get; private set; }
 
         public ProcessProvider(IRealSenseCamera camera)
         {
@@ -22,7 +22,7 @@ namespace DiceMaster3600.Model.Services
         public void InitializeProcesses()
         {
             //SimulationDiceRecognitionProcess = new DiceRecognitionProcessSimulator();
-            DiceRecognitionProcess = new DiceRecognitionProcess(50, 50, 20, 20, 20);
+            DiceRecognitionProcess = new DiceRecognitionProcess(120, 40, 0.8, 1.2);
 
             processes.Add(DiceRecognitionProcess);
             RegisterAllProcesses();
@@ -31,7 +31,7 @@ namespace DiceMaster3600.Model.Services
         public void RegisterAllProcesses() => processes.ForEach(p => camera.RegisterFrameProcessor(p));
         public void UnregisterAllProcesses() => processes.ForEach(p => camera.UnregisterFrameProcessor(p));
 
-        public void RegisterProcess(IFrameProcces process) => camera.RegisterFrameProcessor(process);
-        public void UnregisterProcess(IFrameProcces process) => camera.UnregisterFrameProcessor(process);
+        public void RegisterProcess(IFrameProcess process) => camera.RegisterFrameProcessor(process);
+        public void UnregisterProcess(IFrameProcess process) => camera.UnregisterFrameProcessor(process);
     }
 }

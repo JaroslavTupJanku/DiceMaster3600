@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Model.Yahtzee;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace DiceMaster3600.ViewModel.Control
@@ -33,7 +33,7 @@ namespace DiceMaster3600.ViewModel.Control
                     ExtraBonus = 35;
                     TotalScoreUpperSection = value + 35;
                 }
-            }              
+            }
         }
 
         public int LowerSectionScore
@@ -60,21 +60,29 @@ namespace DiceMaster3600.ViewModel.Control
             set => SetProperty(ref extraBonus, value);
         }
 
-        public Dictionary<ScoreTypes, YahtzeeScoreModel> Scores;
+        public ObservableCollection<YahtzeeScoreModel> Scores;
         public ICommand SelectCategoryCommand { get; private set; }
         #endregion
 
         #region Constructors
         public YahtzeeViewModel(IYahtzeeScoreManager scoreManager)
         {
+            InitiateCollection();
             this.scoreManager = scoreManager;
 
-            Scores = scoreManager?.Scores ?? throw new Exception("fdas");
+            scoreManager.on
             SelectCategoryCommand = new RelayCommand<ScoreTypes>((st) => SelectCategory(st));
         }
         #endregion
 
         #region Methods
+        private void InitiateCollection()
+        {
+            foreach (ScoreTypes scoreType in Enum.GetValues(typeof(ScoreTypes)))
+            {
+                Scores?.Add(new YahtzeeScoreModel(scoreType));
+            }
+        }
 
         private void SelectCategory(ScoreTypes st)
         {

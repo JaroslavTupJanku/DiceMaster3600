@@ -1,8 +1,10 @@
-﻿using Intel.RealSense;
+﻿using Emgu.CV.Structure;
+using Intel.RealSense;
+using System.Windows.Media.Imaging;
 
 namespace DiceMaster3600.Model.FrameProcesses
 {
-    public class AverageDepthProcess : BaseResultFrameProcess<float>
+    public class AverageDepthProcess : BaseFrameProcess<float>
     {
         private readonly int startX, startY, width, height;
 
@@ -14,7 +16,7 @@ namespace DiceMaster3600.Model.FrameProcesses
             this.height = height;
         }
 
-        protected override float ProcessFrame(FrameSet frameSet)
+        protected override BitmapSource ProcessFrame(FrameSet frameSet)
         {
             float totalDepth = 0;
             int count = 0;
@@ -31,8 +33,10 @@ namespace DiceMaster3600.Model.FrameProcesses
                     }
                 }
             }
-
-            return count > 0 ? totalDepth / count : 0;
+            
+            Result = count > 0 ? totalDepth / count : 0;
+            var image = BitMapConverter.ConvertToImage<Gray, ushort>(frameSet.DepthFrame);
+            return BitMapConverter.ToBitmapSource(image);
         }
 
     }

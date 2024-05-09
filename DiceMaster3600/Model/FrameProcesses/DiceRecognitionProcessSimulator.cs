@@ -3,14 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace DiceMaster3600.Model.FrameProcesses
 {
-    public class DiceRecognitionProcessSimulator : BaseResultFrameProcess<List<CameraDiceResult>>
+    public class DiceRecognitionProcessSimulator : BaseFrameProcess<List<CameraDiceResult>>
     {
-        protected override List<CameraDiceResult> ProcessFrame(FrameSet frameSet)
+        protected override BitmapSource ProcessFrame(FrameSet frameSet)
         {
-            var results = new List<CameraDiceResult>();
+            Result = new List<CameraDiceResult>();
             var random = new Random();
 
             int numberOfDices = random.Next(1, 6);
@@ -20,11 +21,11 @@ namespace DiceMaster3600.Model.FrameProcesses
                 var dotCount = random.Next(1, 7);
                 var depth = (float)(random.NextDouble() * 100);
 
-                results.Add(new CameraDiceResult(position, dotCount, depth));
+                Result.Add(new CameraDiceResult(position, dotCount, depth));
             }
 
             Thread.Sleep(1000);
-            return results;
+            return null!;
         }
     }
 }

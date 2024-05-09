@@ -14,7 +14,6 @@ namespace DiceMaster3600.Model.Yahtzee
         #endregion
 
         #region Properties
-        public Dictionary<ScoreTypes, YahtzeeScoreModel>? Scores { get; private set; }
         #endregion
 
         #region Constructors
@@ -27,7 +26,6 @@ namespace DiceMaster3600.Model.Yahtzee
         #region Methods
         private void Initiate()
         {
-            Scores = new Dictionary<ScoreTypes, YahtzeeScoreModel>();
             scoreCalculators = new Dictionary<ScoreTypes, Func<int[], int>>()
             {
                 { ScoreTypes.Aces, dice => dice.Count(n => n == 1) * 1 },
@@ -44,11 +42,6 @@ namespace DiceMaster3600.Model.Yahtzee
                 { ScoreTypes.HighestScore, dice => dice.GroupBy(n => n).Any(g => g.Count() == 5) ? 50 : 0 },
                 { ScoreTypes.FullHouse, FullHouse }
             };
-
-            foreach (ScoreTypes scoreType in Enum.GetValues(typeof(ScoreTypes)))
-            {
-                Scores.Add(scoreType, new YahtzeeScoreModel(scoreType, false, 0));
-            }
         }
 
         private int FullHouse(int[] dice)
@@ -77,34 +70,32 @@ namespace DiceMaster3600.Model.Yahtzee
         public void UpdatePossibleScores(int[] dice)
         {
             currentDiceValues = dice;
-            foreach (var scoreType in Scores!.Keys)
+            foreach (var calculator in scoreCalculators!)
             {
-                if (!Scores[scoreType].HasBeenScored)
-                {
-                    var possibleScore = scoreCalculators![scoreType](currentDiceValues);
-                    Scores[scoreType].Enable(possibleScore > 0);
-                }
+                var possibleScore = calculator.Value?.Invoke(dice);
+                ScoreChanged?.Invoke((possibleScore, calculator.Key));
             }
         }
 
-        public void AssignScoreToCategory(ScoreTypes selectedType)
-        {
-            if (Scores![selectedType].IsSelected && !Scores[selectedType].HasBeenScored)
-            {
-                var scoreValue = scoreCalculators![selectedType](currentDiceValues);
-                Scores[selectedType].UpdateScore(scoreValue);
-                ScoreChanged?.Invoke();
-            }
-        }
+        //public void AssignScoreToCategory(ScoreTypes selectedType)
+        //{
+        //    var model = YahtzeeModels?.FirstOrDefault(x=> x.ScoreType == selectedType);
+        //    if ( model != null && model.IsSelected && !model.HasBeenScored)
+        //    {
+        //        var scoreValue = scoreCalculators![selectedType](currentDiceValues);
+        //        model.UpdateScore(scoreValue);
+        //        ScoreChanged?.Invoke();
+        //    }
+        //}
 
-        public int GetUpperSum() => Scores!.Where(pair => pair.Key >= ScoreTypes.Aces && pair.Key <= ScoreTypes.Sixes).Sum(pair => pair.Value.Score);
-        public int GetLowerSum() => Scores!.Where(pair => pair.Key < ScoreTypes.Aces || pair.Key > ScoreTypes.Sixes).Sum(pair => pair.Value.Score);
-        public int GetCurrentTotalScore() => Scores!.Values.Where(s => s.HasBeenScored).Sum(s => s.Score);
+        //public int GetUpperSum() => YahtzeeModels!.Where(model => model.ScoreType >= ScoreTypes.Aces && model.ScoreType <= ScoreTypes.Sixes).Sum(x => x.Score);
+        //public int GetLowerSum() => YahtzeeModels!.Where(model => model.ScoreType < ScoreTypes.Aces || model.ScoreType > ScoreTypes.Sixes).Sum(x => x.Score);
+       // public int GetCurrentTotalScore() => YahtzeeModels!.Where(s => s.HasBeenScored).Sum(s => s.Score);
         public void GenerateDiceRolls() => UpdatePossibleScores(Enumerable.Range(0, 5).Select(x => random.Next(1, 7)).ToArray());
         #endregion
 
         #region Events
-        public event Action? ScoreChanged;
+        public event Action<(int?, ScoreTypes)>? ScoreChanged;
         #endregion
 
     }

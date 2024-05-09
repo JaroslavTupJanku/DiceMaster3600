@@ -3,12 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Devices.RealSenseCamera;
 using DiceMaster3600.Model;
-using DiceMaster3600.Model.FrameProcesses;
 using DiceMaster3600.Model.Services;
 using DiceMaster3600.Model.Yahtzee;
-using Intel.RealSense;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,15 +22,15 @@ namespace DiceMaster3600.ViewModel
         private readonly IYahtzeeScoreManager scoreManager;
         private readonly IRealSenseCamera camera;
         private readonly IProcessProvider processProvider;
-        private readonly IFrameProcces process;
+        private int diceCounter = 5;
 
-        private BitmapSource imageSource;
+        private BitmapSource? imageSource;
         private int diceInGameCounter;
         private int diceRollsCounter;
-        private bool isCameraConnected;
+        private bool correctCountDetected;
         private bool isConnecting;
 
-        private EventHandler<FrameSet>? frameReceivedHandler;
+        private EventHandler<BitmapSource>? frameReceivedHandler;
         private string diceRollsNumber = string.Empty;
         private string diceInGameNumber = string.Empty;
         #endregion
@@ -63,10 +60,10 @@ namespace DiceMaster3600.ViewModel
             set => SetProperty(ref imageSource, value);
         }
 
-        public bool IsCameraConnected
+        public bool CorrectCountDetected
         {
-            get => isCameraConnected;
-            set => SetProperty(ref isCameraConnected, value);
+            get => correctCountDetected;
+            set => SetProperty(ref correctCountDetected, value);
         }
 
         public ObservableCollection<NotificationModel> Notifications { get; private set; } = new();
@@ -80,6 +77,7 @@ namespace DiceMaster3600.ViewModel
         public ICommand? ClearErrorCommand { get; private set; }
         public ICommand? ClearWarningCommand { get; private set; }
         public ICommand StartStreamCommand { get; private set; }
+
         #endregion
 
         #region Constructors
@@ -91,14 +89,13 @@ namespace DiceMaster3600.ViewModel
             this.processProvider = processProvider;
             this.scoreManager = scoreManager;
 
+            RollCommand = new RelayCommand(Roll);
             ResetCommand = new RelayCommand(ResetGame);
-            RollCommand = new RelayCommand<ScoreTypes>((type) => Roll(type));
             ClearNotificationsCommand = new RelayCommand(() => Notifications.Clear());
             StartStreamCommand = new AsyncRelayCommand<bool>((isCheck) => ToggleStream(isCheck));
 
-            //processProvider.SimulationDiceRecognitionProcess!.OnResultChanged += () => Update();
+            processProvider.DiceRecognitionProcess!.OnResultChanged += () => Update();
         }
-
         #endregion
 
         #region Methods
@@ -107,7 +104,6 @@ namespace DiceMaster3600.ViewModel
         {
             try
             {
-                IsCameraConnected = isCheck;
                 await Task.WhenAll(
                     isCheck ? StartCameraStream() : Task.CompletedTask,
                     !isCheck ? DisconnectCameraAsync() : Task.CompletedTask);
@@ -123,25 +119,16 @@ namespace DiceMaster3600.ViewModel
         {
             IsConnecting = true;
             await camera.ConnectAsync();
-            frameReceivedHandler = (s, frameSet) =>
+            frameReceivedHandler = (s, bitmap) =>
             {
-                Application.Current.Dispatcher.Invoke(new Action(() =>
-                {
-                    try
-                    {
-                        
-                        ImageSource = BitMapConverter.ConvertToBitMatSource(frameSet.ColorFrame);
-                    }
-                    finally
-                    {
-                        frameSet.Dispose();
-                    }
-                }));
+                Application.Current.Dispatcher.Invoke(new Action(() => { ImageSource = bitmap; }));
             };
 
             camera.OnNewFrame += frameReceivedHandler;
             IsConnecting = false;
             AddNotification("Camera is Connected.", GameNotificationType.Information);
+            AddNotification("The game of Yahtzee begins!", GameNotificationType.Success);
+            AddNotification("Take 5 dice and roll", GameNotificationType.Information);
         }
 
         public async Task DisconnectCameraAsync()
@@ -159,42 +146,49 @@ namespace DiceMaster3600.ViewModel
         {
             diceInGameCounter = 5;
             diceRollsCounter = 0;
+            diceCounter = 0;
 
             diceRollsNumber = "0/3";
             diceInGameNumber = "5/5";
 
             Notifications.Clear();
-            Dices = new ObservableCollection<DiceModel>(Enumerable.Repeat(new DiceModel(), 5));
+            Dices = new ObservableCollection<DiceModel>(Enumerable.Range(0, 5).Select(_ => new DiceModel()));
             AddNotification("Reset has been successful", GameNotificationType.Success);
         }
 
 
-        private void Roll(ScoreTypes type)
+        private void Roll()
         {
-            scoreManager.AssignScoreToCategory(type!);
+            diceInGameCounter = Dices.Count(x => !x.IsSelected);
+            DiceInGameNumber = $"{diceInGameCounter} / 5";
+            DiceRollsNumber = $"{diceRollsCounter++} / 3";
+
+            scoreManager.UpdatePossibleScores(Dices.Select(dice => dice.Score).ToArray());
+            //scoreManager.AssignScoreToCategory(type!);
+
+            CorrectCountDetected = false;
+            AddNotification("Update successful", GameNotificationType.Success);
             AddNotification($"Use {diceInGameCounter} dice for the next roll", GameNotificationType.Information);
         }
 
         private void Update()
         {
-            if (process is IResultFrameProcess<List<CameraDiceResult>> resultProcessor)
+            var res = processProvider.DiceRecognitionProcess?.Result;
+            if (diceInGameCounter == res?.Length && res.All(s => s > 0))
             {
-                var results = resultProcessor.Result!.ToArray();
-                diceInGameCounter = 0;
-
-                foreach (var (dice, result) in Dices.Zip(results, (d, r) => (d, r)))
+                CorrectCountDetected = true;
+                foreach (var (dice, result) in Dices.Zip(res, (d, r) => (d, r)))
                 {
                     if (!dice.IsSelected)
                     {
-                        dice.Score = result.DotCount;
-                        diceInGameCounter++;
+                        dice.Score = result;
                     }
                 }
-
-                DiceInGameNumber = $"{diceInGameCounter} / 5";
-                DiceRollsNumber = $"{++diceRollsCounter} / 3";
                 scoreManager.UpdatePossibleScores(Dices.Select(dice => dice.Score).ToArray());
-                AddNotification("Update successful", GameNotificationType.Success);
+            }
+            else
+            {
+                CorrectCountDetected = false;
             }
         }
 

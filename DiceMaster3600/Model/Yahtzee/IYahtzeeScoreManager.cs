@@ -9,6 +9,5 @@ namespace DiceMaster3600.Model.Yahtzee
         int GetUpperSum();
         int GetLowerSum();
         void UpdatePossibleScores(int[] dice);
-        Dictionary<ScoreTypes, YahtzeeScoreModel> Scores { get; }
     }
 }

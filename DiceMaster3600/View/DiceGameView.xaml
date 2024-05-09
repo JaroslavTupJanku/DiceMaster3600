@@ -7,6 +7,7 @@
              xmlns:conv="clr-namespace:DiceMaster3600.View.Converters"
              xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
              d:DataContext="{d:DesignInstance Type=vm:DiceGameViewModel}"
+             xmlns:helpers="clr-namespace:DiceMaster3600.View.VisualHelpers"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              mc:Ignorable="d">
 
@@ -81,7 +82,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -93,6 +94,10 @@
         </Grid.ColumnDefinitions>
 
         <Grid Height="100">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <Border CornerRadius="5" Background="{StaticResource MeoptaLogoWhiteBrush}"
                     Padding="10" 
                     Margin="0,0,0,20" >
@@ -101,6 +106,10 @@
                               Command="{Binding StartStreamCommand}"
                               CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
                               Background="{StaticResource MeoptaBackgroundBrush}"/>
+            </Border>
+            <Border Grid.Column="1" CornerRadius="0,5,5,0" 
+                    Background="White" 
+                    Width="20" Margin="0,0,0,20">
             </Border>
         </Grid>
 
@@ -143,7 +152,7 @@
                     <TextBlock Text="Number of dices in the game" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
                     <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal"  HorizontalAlignment="Center">
                         <TextBlock  Text="{Binding DiceInGameNumber}" FontWeight="Bold" FontSize="40" Foreground="Black" TextAlignment="Center"/>
-                        <TextBlock  Text=" dices" FontSize="20" Foreground="Black" VerticalAlignment="Bottom"/>
+                        <TextBlock  Text=" dices" FontSize="30" Foreground="Black" VerticalAlignment="Bottom"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -157,31 +166,63 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="220"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Number of remaining rolls" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
                     <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal"   HorizontalAlignment="Center">
                         <TextBlock Grid.Row="2" Text="{Binding DiceRollsNumber}" FontWeight="Bold" FontSize="40"  Foreground="Black"  TextAlignment="Center"/>
-                        <TextBlock  Text=" rolls" FontSize="20" Foreground="Black" VerticalAlignment="Bottom"/>
+                        <TextBlock  Text=" rolls" FontSize="30" Foreground="Black" VerticalAlignment="Bottom"/>
                     </StackPanel>
 
                 </Grid>
             </Border>
 
-            <Border Style="{StaticResource InfoCardStyle}" Grid.Row="2" IsEnabled="{Binding IsCameraConnected}">
-                <StackPanel Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <controls:DiceControl Margin="0,0,0,20" Width="60" Height="60" Value="{Binding Dices[0].Score}" />
-                    <controls:DiceControl Margin="0,0,0,20" Width="60" Height="60" Value="{Binding Dices[1].Score}" />
-                    <controls:DiceControl Margin="0,0,0,20" Width="60" Height="60" Value="{Binding Dices[2].Score}" />
-                    <controls:DiceControl Margin="0,0,0,20" Width="60" Height="60" Value="{Binding Dices[3].Score}" />
-                    <controls:DiceControl Margin="0,0,0,0"  Width="60" Height="60" Value="{Binding Dices[4].Score}" />
-                </StackPanel>
-            </Border>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Border Style="{StaticResource InfoCardStyle}" IsEnabled="{Binding CorrectCountDetected}">
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <controls:DiceControl Margin="10,0,10,20" Width="72" Height="72" Value="{Binding Dices[0].Score}"
+                                              IsSelected="{Binding Dices[0].IsSelected, Mode=OneWayToSource}"  />
+                        <controls:DiceControl Margin="0,0,0,20" Width="72" Height="72" Value="{Binding Dices[1].Score}" 
+                                              IsSelected="{Binding Dices[1].IsSelected, Mode=OneWayToSource}"  />
+                        <controls:DiceControl Margin="0,0,0,20" Width="72" Height="72" Value="{Binding Dices[2].Score}" 
+                                              IsSelected="{Binding Dices[2].IsSelected, Mode=OneWayToSource}" />
+                        <controls:DiceControl Margin="0,0,0,20" Width="72" Height="72" Value="{Binding Dices[3].Score}" 
+                                              IsSelected="{Binding Dices[3].IsSelected, Mode=OneWayToSource}" />
+                        <controls:DiceControl Margin="0,0,0,0"  Width="72" Height="72" Value="{Binding Dices[4].Score}" 
+                                              IsSelected="{Binding Dices[4].IsSelected, Mode=OneWayToSource}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource InfoCardStyle}" Grid.Column="2" IsEnabled="{Binding CorrectCountDetected}">
+                    <StackPanel Grid.Column="2">
+                        <Button Style="{StaticResource DiceButtonMenu}"
+                                Background="{StaticResource MeoptaLightBlueBrush}" Width="90" Height="60" Margin="0,0,0,20"
+                                Command="{Binding RollCommand}"
+                                helpers:IconProperties.IconKind="DiceMultiple"
+                                Content="Next&#x0a;Roll">
+                        </Button>
+                        <Button Style="{StaticResource DiceButtonMenu}" 
+                                Background="{StaticResource MeoptaYellowBrush}" Width="90" Height="60" Margin="0,0,0,20"
+                                helpers:IconProperties.IconKind="Pencil"
+                                Content="Write&#x0a;score">
+                        </Button>
+                        <Button Style="{StaticResource DiceButtonMenu}" 
+                                Background="Red" Width="90" Height="60"
+                                helpers:IconProperties.IconKind="No"
+                                Content="Pass" >
+                        </Button>
+                    </StackPanel>
+                    
+                </Border>
+            </Grid>
         </Grid>
 
-        <Border Grid.Column="4" Grid.RowSpan="2"
-                Style="{StaticResource InfoCardStyle}">
+        <Border Grid.Column="4" Grid.RowSpan="2" Style="{StaticResource InfoCardStyle}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -189,7 +230,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Gamecard" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource MeoptaLogoBlackBrush}" FontSize="30"/>
-                <controls:YahtzeeTable Grid.Row="2" IsEnabled="{Binding IsCameraConnected}" />
+                <controls:YahtzeeTable Grid.Row="2" IsEnabled="{Binding CorrectCountDetected}" />
             </Grid>
         </Border>
 
@@ -223,7 +264,9 @@
                         </Button>
                     </Grid>
                 </Border>
-                <ItemsControl Grid.Column="1" ItemTemplate="{StaticResource NotificationTemplate}" ItemsSource="{Binding Notifications}"/>
+                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemTemplate="{StaticResource NotificationTemplate}" ItemsSource="{Binding Notifications}" />
+                </ScrollViewer>
             </Grid>
         </Border>
         

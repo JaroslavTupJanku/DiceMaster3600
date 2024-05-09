@@ -6,7 +6,7 @@ namespace DiceMaster3600.Model.Services
 {
     public interface IProcessProvider
     {
-        IResultFrameProcess<int[]>? DiceRecognitionProcess { get; }
-        IResultFrameProcess<List<CameraDiceResult>>? SimulationDiceRecognitionProcess { get; }
+        IFrameResultProcess<int[]>? DiceRecognitionProcess { get; }
+        IFrameResultProcess<List<CameraDiceResult>>? SimulationDiceRecognitionProcess { get; }
     }
 }

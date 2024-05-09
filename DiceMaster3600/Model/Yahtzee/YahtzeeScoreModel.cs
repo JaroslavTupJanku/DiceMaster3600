@@ -15,20 +15,14 @@ namespace DiceMaster3600.Model.Yahtzee
         #endregion
 
         #region Constructors
-        public YahtzeeScoreModel(ScoreTypes scoreTypes, bool isEnabled, int score)
+        public YahtzeeScoreModel(ScoreTypes scoreTypes)
         {
             ScoreType = scoreTypes;
-            IsSelected = isEnabled;
-            Score = score;
             HasBeenScored = false;
         }
         #endregion
 
         #region Methods
-        public void Enable(bool isEnabled)
-        {
-            IsSelected = isEnabled;
-        }
 
         public void UpdateScore(int score)
         {
