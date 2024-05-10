@@ -4,6 +4,7 @@ using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Model.Yahtzee;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace DiceMaster3600.ViewModel.Control
@@ -11,8 +12,6 @@ namespace DiceMaster3600.ViewModel.Control
     public class YahtzeeViewModel : ObservableObject
     {
         #region Fields
-        private readonly IYahtzeeScoreManager scoreManager;
-
         private int upperSectionScore;
         private int lowerSectionScore;
         private int extraBonus;
@@ -28,7 +27,7 @@ namespace DiceMaster3600.ViewModel.Control
             set
             {
                 SetProperty(ref upperSectionScore, value);
-                if (value <= 35)
+                if (value >= 63)
                 {
                     ExtraBonus = 35;
                     TotalScoreUpperSection = value + 35;
@@ -60,18 +59,26 @@ namespace DiceMaster3600.ViewModel.Control
             set => SetProperty(ref extraBonus, value);
         }
 
-        public ObservableCollection<YahtzeeScoreModel> Scores;
-        public ICommand SelectCategoryCommand { get; private set; }
+        public ObservableCollection<YahtzeeScoreModel> YahtzeeModels { get; } = new();
+        public ICommand ScoreCommand { get; private set; }
         #endregion
 
         #region Constructors
-        public YahtzeeViewModel(IYahtzeeScoreManager scoreManager)
+        public YahtzeeViewModel(IYahtzeeScoreCounter scoreManager)
         {
             InitiateCollection();
-            this.scoreManager = scoreManager;
+            scoreManager.ScoreChanged += ScoreManager_ScoreChanged1; ;
+            ScoreCommand = new RelayCommand<ScoreTypes>((st) => SelectCategory(st));
+        }
 
-            scoreManager.on
-            SelectCategoryCommand = new RelayCommand<ScoreTypes>((st) => SelectCategory(st));
+        private void ScoreManager_ScoreChanged1(int? score, ScoreTypes type)
+        {
+            var model = YahtzeeModels.FirstOrDefault(x => x.ScoreType == type);
+            if (model != null && !model.HasBeenScored && score.HasValue)
+            {
+                model.Score = score.Value;
+                model.IsSelected = true;
+            }
         }
         #endregion
 
@@ -80,20 +87,28 @@ namespace DiceMaster3600.ViewModel.Control
         {
             foreach (ScoreTypes scoreType in Enum.GetValues(typeof(ScoreTypes)))
             {
-                Scores?.Add(new YahtzeeScoreModel(scoreType));
+                YahtzeeModels?.Add(new YahtzeeScoreModel(scoreType));
             }
         }
 
         private void SelectCategory(ScoreTypes st)
         {
-            if (st is ScoreTypes scoreType)
+            var model = YahtzeeModels.FirstOrDefault((x) => x.ScoreType == st);
+            if (model != null && !model.HasBeenScored)
             {
-                scoreManager.AssignScoreToCategory(scoreType);
-                UpperSectionScore = scoreManager.GetUpperSum();
-                LowerSectionScore = scoreManager.GetLowerSum();
+                model.HasBeenScored = true;
+                UpperSectionScore = GetUpperSum();
+                LowerSectionScore = GetLowerSum();
                 TotalScore = UpperSectionScore + LowerSectionScore;
             }
         }
+
+
+        public int GetUpperSum() => YahtzeeModels!.Where(x => x.ScoreType >= ScoreTypes.Aces && x.ScoreType <= ScoreTypes.Sixes && x.HasBeenScored)
+                                                  .Sum(x => x.Score);
+        public int GetLowerSum() => YahtzeeModels!.Where(x => x.ScoreType < ScoreTypes.Aces || x.ScoreType > ScoreTypes.Sixes && x.HasBeenScored)
+                                                  .Sum(x => x.Score);
+        public int GetCurrentTotalScore() => YahtzeeModels!.Where(s => s.HasBeenScored).Sum(s => s.Score);
         #endregion
 
         #region Events

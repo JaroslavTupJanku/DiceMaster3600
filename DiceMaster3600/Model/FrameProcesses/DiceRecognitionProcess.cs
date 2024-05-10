@@ -48,6 +48,9 @@ namespace DiceMaster3600.Model.FrameProcesses
                 double averageDepth = CalculateAverageDepth(dot, depthImage);
                 string depthText = $"{Math.Round(averageDepth, 2)}mm";
                 CvInvoke.PutText(colorImage, depthText, new Point(dot.X, dot.Y - 10), FontFace.HersheySimplex, 0.5, new Bgr(Color.Yellow).MCvScalar);
+
+                var normalizedDepthImage = new Image<Gray, byte>(depthImage.Size);
+                CvInvoke.Normalize(depthImage, normalizedDepthImage, 0, 255, NormType.MinMax);
             }
 
             Result = DetectDots(colorImage, dots).ToArray();

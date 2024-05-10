@@ -76,15 +76,7 @@ namespace DiceMaster3600.Data
         public async Task<RankedUserDTO[]> GetTopThree()
         {
             var users = await repos.UserRepository.GetTopThreePlayersAsync();
-            List<RankedUserDTO> rankedUsers = new();
-
-            //foreach (var user in users)
-            //{
-            //    var faculty = await repos.FacultyRepository.GetFacultyByIdAsync(user.FacultyId);
-            //    var university = await repos.UniversityRepository.GetByIdAsync(faculty.UniversityId);
-            //    rankedUsers.Add(new RankedUserDTO(user, user.Position, university.Name));
-            //}
-
+            var rankedUsers = users.Select((user, i )=> new RankedUserDTO(user, i + 1));
             return rankedUsers.ToArray();
         }
 

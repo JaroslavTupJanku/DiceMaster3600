@@ -1,17 +1,21 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using DiceMaster3600.Core.Enum;
+﻿using DiceMaster3600.Core.Enum;
 
 namespace DiceMaster3600.Model.Yahtzee
 {
-    //Model pak not ObservableObject
     public class YahtzeeScoreModel : DiceModel
     {
         #region Fields
+        private bool hasBeenScored;
         #endregion
 
         #region Properties
         public ScoreTypes ScoreType { get; }
-        public bool HasBeenScored { get; private set; }
+
+        public bool HasBeenScored
+        {
+            get { return hasBeenScored; }
+            set { SetProperty(ref hasBeenScored, value); }
+        }
         #endregion
 
         #region Constructors
@@ -19,18 +23,11 @@ namespace DiceMaster3600.Model.Yahtzee
         {
             ScoreType = scoreTypes;
             HasBeenScored = false;
+            Score = 0;
         }
         #endregion
 
         #region Methods
-
-        public void UpdateScore(int score)
-        {
-            Score = score;
-            HasBeenScored = true;
-            IsSelected = false;
-        }
-
         #endregion
 
         #region Events

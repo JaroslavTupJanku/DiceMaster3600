@@ -23,6 +23,15 @@ namespace DiceMaster3600.View.Controls
             set { SetValue(SelectCategoryCommandProperty, value); }
         }
 
+        public static readonly DependencyProperty HasBeenScoredProperty =
+            DependencyProperty.Register("HasBeenScored", typeof(bool), typeof(YahtzeeInteractiveRow), new PropertyMetadata(false));
+
+        public bool HasBeenScored
+        {
+            get { return (bool)GetValue(HasBeenScoredProperty); }
+            set { SetValue(HasBeenScoredProperty, value); }
+        }
+
 
         public static readonly DependencyProperty CommandParameterProperty =
             DependencyProperty.Register("CommandParameter", typeof(object), typeof(YahtzeeInteractiveRow), new PropertyMetadata(null));
@@ -53,11 +62,11 @@ namespace DiceMaster3600.View.Controls
         }
 
         public static readonly DependencyProperty ScoreProperty =
-            DependencyProperty.Register("Score", typeof(string), typeof(YahtzeeInteractiveRow), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("Score", typeof(int), typeof(YahtzeeInteractiveRow), new PropertyMetadata(0));
 
-        public string Score
+        public int Score
         {
-            get { return (string)GetValue(ScoreProperty); }
+            get { return (int)GetValue(ScoreProperty); }
             set { SetValue(ScoreProperty, value); }
         }
 

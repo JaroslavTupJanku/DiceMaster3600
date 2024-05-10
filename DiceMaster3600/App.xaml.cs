@@ -43,7 +43,7 @@ namespace DiceMaster3600
                     services.AddSingleton<IViewModelFactory, ViewModelFactory>();
                     services.AddSingleton<IMessageService, NotificationService>();
                     services.AddSingleton<IRealSenseCamera, RealSenseCamera>();
-                    services.AddSingleton<IYahtzeeScoreManager, YahtzeeScoreManager>();
+                    services.AddSingleton<IYahtzeeScoreCounter, YahtzeeScoreCounter>();
 
                     services.AddSingleton<ProcessProvider>();
                     services.AddSingleton<IProcessProvider>(sp => sp.GetRequiredService<ProcessProvider>());

@@ -19,7 +19,7 @@ namespace DiceMaster3600.ViewModel
     {
 
         #region Fields
-        private readonly IYahtzeeScoreManager scoreManager;
+        private readonly IYahtzeeScoreCounter scoreManager;
         private readonly IRealSenseCamera camera;
         private readonly IProcessProvider processProvider;
         private int diceCounter = 5;
@@ -81,7 +81,7 @@ namespace DiceMaster3600.ViewModel
         #endregion
 
         #region Constructors
-        public DiceGameViewModel(IYahtzeeScoreManager scoreManager, IRealSenseCamera camera, IProcessProvider processProvider)
+        public DiceGameViewModel(IYahtzeeScoreCounter scoreManager, IRealSenseCamera camera, IProcessProvider processProvider)
         {
             ResetGame();
 
@@ -164,8 +164,6 @@ namespace DiceMaster3600.ViewModel
             DiceRollsNumber = $"{diceRollsCounter++} / 3";
 
             scoreManager.UpdatePossibleScores(Dices.Select(dice => dice.Score).ToArray());
-            //scoreManager.AssignScoreToCategory(type!);
-
             CorrectCountDetected = false;
             AddNotification("Update successful", GameNotificationType.Success);
             AddNotification($"Use {diceInGameCounter} dice for the next roll", GameNotificationType.Information);

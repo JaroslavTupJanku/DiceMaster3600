@@ -37,9 +37,6 @@ namespace DiceMaster3600.View.Controls
             HideAllGroups();
 
             Loaded += (s, e) => StartRotation();
-            IsEnabledChanged += (s, e) => {
-                if (IsEnabled) StartRotation();
-            };
         }
 
         #endregion

@@ -8,6 +8,15 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
+        <Style x:Key="BaseStyle" TargetType="Border">
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding HasBeenScored, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}" Value="True">
+                    <Setter Property="Background" Value="LightGreen"/>
+                    <Setter Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
         <Style x:Key="CellStyle" TargetType="Label">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -19,7 +28,7 @@
         
     </UserControl.Resources>
 
-    <Border BorderThickness="0">
+    <Border BorderThickness="0" Style="{StaticResource BaseStyle}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="CommonStates">
                 <VisualState x:Name="Normal" />
@@ -48,8 +57,7 @@
             <Label x:Name="ScoreNameLabel" Grid.Column="0" Content="{Binding ScoreName, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}" Style="{StaticResource CellStyle}" />
             <Label x:Name="HowToScoreLabel" Grid.Column="1" Content="{Binding HowToScore, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}" Style="{StaticResource CellStyle}" />
             <Label x:Name="ScoreLabel" Grid.Column="2" Content="{Binding Score, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}" 
-                   Style="{StaticResource CellStyle}" Foreground="Green"
-                   Background="{StaticResource MeoptaLogoWhiteBrush}"/>
+                   Style="{StaticResource CellStyle}" FontWeight="Bold"/>
         </Grid>
     </Border>
 </UserControl>

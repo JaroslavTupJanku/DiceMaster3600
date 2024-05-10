@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace DiceMaster3600.Model.Yahtzee
 {
-    public class YahtzeeScoreManager : IYahtzeeScoreManager
+    public class YahtzeeScoreCounter : IYahtzeeScoreCounter
     {
         #region Fields
         readonly Random random = new();
@@ -17,10 +17,7 @@ namespace DiceMaster3600.Model.Yahtzee
         #endregion
 
         #region Constructors
-        public YahtzeeScoreManager()
-        {
-            Initiate();
-        }
+        public YahtzeeScoreCounter() => Initiate();
         #endregion
 
         #region Methods
@@ -52,7 +49,7 @@ namespace DiceMaster3600.Model.Yahtzee
             return (hasThreeOfAKind && hasPair) ? 25 : 0;
         }
 
-        private bool HasStraight(int[] dice, int straightLength)
+        private static bool HasStraight(int[] dice, int straightLength)
         {
             var distinctSortedDice = dice.Distinct().OrderBy(n => n).ToArray();
             int consecutiveNumbers = 1;
@@ -73,30 +70,15 @@ namespace DiceMaster3600.Model.Yahtzee
             foreach (var calculator in scoreCalculators!)
             {
                 var possibleScore = calculator.Value?.Invoke(dice);
-                ScoreChanged?.Invoke((possibleScore, calculator.Key));
+                ScoreChanged?.Invoke(possibleScore, calculator.Key);
             }
         }
 
-        //public void AssignScoreToCategory(ScoreTypes selectedType)
-        //{
-        //    var model = YahtzeeModels?.FirstOrDefault(x=> x.ScoreType == selectedType);
-        //    if ( model != null && model.IsSelected && !model.HasBeenScored)
-        //    {
-        //        var scoreValue = scoreCalculators![selectedType](currentDiceValues);
-        //        model.UpdateScore(scoreValue);
-        //        ScoreChanged?.Invoke();
-        //    }
-        //}
-
-        //public int GetUpperSum() => YahtzeeModels!.Where(model => model.ScoreType >= ScoreTypes.Aces && model.ScoreType <= ScoreTypes.Sixes).Sum(x => x.Score);
-        //public int GetLowerSum() => YahtzeeModels!.Where(model => model.ScoreType < ScoreTypes.Aces || model.ScoreType > ScoreTypes.Sixes).Sum(x => x.Score);
-       // public int GetCurrentTotalScore() => YahtzeeModels!.Where(s => s.HasBeenScored).Sum(s => s.Score);
         public void GenerateDiceRolls() => UpdatePossibleScores(Enumerable.Range(0, 5).Select(x => random.Next(1, 7)).ToArray());
         #endregion
 
         #region Events
-        public event Action<(int?, ScoreTypes)>? ScoreChanged;
+        public event Action<int?, ScoreTypes>? ScoreChanged;
         #endregion
-
     }
 }

@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiceMaster3600.Core", "..\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiceMaster3600.Data", "..\DiceMaster3600.Data\DiceMaster3600.Data.csproj", "{07BFC232-2C80-4E31-BA45-BAFA0065167C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiceMaster3600.Devices", "..\DiceMaster3600.Devices\DiceMaster3600.Devices.csproj", "{060741D4-514C-45EE-8AA0-9DBDF1AD5EE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiceMaster3600.Devices", "..\DiceMaster3600.Devices\DiceMaster3600.Devices.csproj", "{060741D4-514C-45EE-8AA0-9DBDF1AD5EE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

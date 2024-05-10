@@ -66,9 +66,7 @@ namespace DiceMaster3600.ViewModel
             datamanager = manager;
             this.generator = generator;
 
-            TestNevim();
             Update().ConfigureAwait(false);
-
             ShowSuccessMessageCommand = new RelayCommand(() => snackbarMessageQueue.Enqueue(LoginSuccessMessage));
             datamanager.OnDatabaseUpdated += async (s, e) => await Update();
         }
@@ -79,101 +77,41 @@ namespace DiceMaster3600.ViewModel
         {
             try
             {
-                //var topPlayers = await datamanager!.GetTopThreePlayersAsync();
-                //var topUniversities = await datamanager!.GetTopThreeUniversityAsync();
+                var topPlayers = await datamanager!.GetTopThreePlayersAsync();
+                var topUniversities = await datamanager!.GetTopThreeUniversityAsync();
+                var users = datamanager.GetAllUniversityDTOs()
+                                        .SelectMany(u => u.Faculties)
+                                        .SelectMany(f => f.Users)
+                                        .Select(u => u.NumberOfPoints)
+                                        .ToList();
+                                             
+                TopThreePlayerList = new ObservableCollection<RankedUserDTO>(topPlayers);
+                TopThreeUniversityList = new ObservableCollection<UniversityRankingDTO>(topUniversities);
+                UpdateHistogramSeries(users);
 
-                //TopThreePlayerList = new ObservableCollection<RankedUserDTO>(topPlayers);
-                //TopThreeUniversityList = new ObservableCollection<UniversityRankingDTO>(topUniversities);
+                TestPieGraphSeries = new ISeries[]
+                {
+                    new PieSeries<double> { Values = new double[] { 20 }, Name = "Fakulta A" },
+                    new PieSeries<double> { Values = new double[] { 30 }, Name = "Fakulta B" },
+                    new PieSeries<double> { Values = new double[] { 40 }, Name = "Fakulta C" },
+                    new PieSeries<double> { Values = new double[] { 10 }, Name = "Fakulta D" },
+                };
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Error in Update: " + ex.Message);
             }
         }
+
+        public void UpdateHistogramSeries(List<int> values)
+        {
+            var data = generator.GenerateHistogram(values.ToArray(), 0, 375, 30);
+            SeriesCollection = data.Series;
+            XAxes = data.XAxes;
+        }
         #endregion
 
         #region Events
         #endregion
-
-
-        public void TestNevim()
-        {
-            GetAllUniversityDTOs();
-        }
-
-        public void GetAllUniversityDTOs()
-        {
-            var userArray1 = new UserDTO[] {
-                new UserDTO() {Name = "Hana", Surname= "Černý", NumberOfPoints = 129, Gender = Gender.None},
-                new UserDTO() {Name = "Pavel", Surname= "Horák", NumberOfPoints = 208, Gender = Gender.Male},
-                new UserDTO() {Name = "Pavel", Surname= "Dvořák", NumberOfPoints = 38, Gender = Gender.Male},
-            };
-
-            var userArray2 = new UserDTO[] {
-                new UserDTO() {Name = "Pavel", Surname= "Kučera", NumberOfPoints = 91, Gender = Gender.Male},
-                new UserDTO() {Name = "Jan", Surname= "Kučera", NumberOfPoints = 14, Gender = Gender.Male},
-                new UserDTO() {Name = "Jan", Surname= "Kučera", NumberOfPoints = 86, Gender = Gender.Male},
-            };
-
-            var userArray3 = new UserDTO[] {
-                new UserDTO() {Name = "Jan", Surname= "Novotný", NumberOfPoints = 101, Gender = Gender.Male},
-                new UserDTO() {Name = "Marie", Surname= "Dvořák", NumberOfPoints = 20, Gender = Gender.Female},
-                new UserDTO() {Name = "Anna", Surname= "Krhutová", NumberOfPoints = 109, Gender = Gender.Female},
-            };
-
-            var userArray4 = new UserDTO[] {
-                new UserDTO() {Name = "Martin", Surname= "Svoboda", NumberOfPoints = 195, Gender = Gender.Male},
-                new UserDTO() {Name = "Petr", Surname= "Novotný", NumberOfPoints = 278, Gender = Gender.Male},
-                new UserDTO() {Name = "Marie", Surname= "Novotný", NumberOfPoints = 102, Gender = Gender.Female},
-            };
-
-            var userArray5 = new UserDTO[] {
-                new UserDTO() {Name = "Lucie", Surname= "Procházka", NumberOfPoints = 197, Gender = Gender.Female},
-                new UserDTO() {Name = "Marie", Surname= "Novotný", NumberOfPoints = 155, Gender = Gender.Female},
-                new UserDTO() {Name = "Lucie", Surname= "Svoboda", NumberOfPoints = 111, Gender = Gender.Female},
-            };
-
-
-            //University procenta
-            TestPieGraphSeries = new ISeries[]
-            {
-                new PieSeries<double> { Values = new double[] { 20 }, Name = "Fakulta A" },
-                new PieSeries<double> { Values = new double[] { 30 }, Name = "Fakulta B" },
-                new PieSeries<double> { Values = new double[] { 40 }, Name = "Fakulta C" },
-                new PieSeries<double> { Values = new double[] { 10 }, Name = "Fakulta D" },
-            };
-
-            //Propabily
-            UpdateHistogramSeries(userArray1, userArray2, userArray3, userArray4, userArray5);
-
-            //Top Three Player
-            var first = new RankedUserDTO(userArray4[1], 1);
-            var second = new RankedUserDTO(userArray1[1], 2);
-            var third = new RankedUserDTO(userArray5[0], 3);
-            var topPlayers = new List<RankedUserDTO>() { first, second, third };
-            TopThreePlayerList = new ObservableCollection<RankedUserDTO>(topPlayers);
-
-            //Top Three university
-            var firstUniversity = new UniversityRankingDTO() { AveragePoints = 255, StudentCount = 10, UniversityName = UniversityType.Unknown2, Position = 1 };
-            var secondUniversity = new UniversityRankingDTO() { AveragePoints = 205, StudentCount = 8, UniversityName = UniversityType.Unknown2, Position = 2 };
-            var thirdUniversity = new UniversityRankingDTO() { AveragePoints = 194, StudentCount = 5, UniversityName = UniversityType.Unknown2, Position = 3 };
-            var topUniversities = new List<UniversityRankingDTO>() { firstUniversity, secondUniversity, thirdUniversity };
-            TopThreeUniversityList = new ObservableCollection<UniversityRankingDTO>(topUniversities);
-        }
-
-        public void UpdateHistogramSeries(UserDTO[] userArray1, UserDTO[] userArray2, UserDTO[] userArray3, UserDTO[] userArray4, UserDTO[] userArray5)
-        {
-            var values = new List<int>();
-            values.AddRange(userArray1.Select(x => x.NumberOfPoints));
-            values.AddRange(userArray2.Select(x => x.NumberOfPoints));
-            values.AddRange(userArray3.Select(x => x.NumberOfPoints));
-            values.AddRange(userArray4.Select(x => x.NumberOfPoints));
-            values.AddRange(userArray5.Select(x => x.NumberOfPoints));
-
-            var data = generator.GenerateHistogram(values.ToArray(), 0, 375, 30);
-            SeriesCollection = data.Series;
-            XAxes = data.XAxes;
-
-        }
     }
 }

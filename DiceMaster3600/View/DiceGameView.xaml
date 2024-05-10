@@ -94,23 +94,17 @@
         </Grid.ColumnDefinitions>
 
         <Grid Height="100">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
             <Border CornerRadius="5" Background="{StaticResource MeoptaLogoWhiteBrush}"
-                    Padding="10" 
-                    Margin="0,0,0,20" >
+                    Padding="10" Margin="0,0,0,20" >
                 <ToggleButton Style="{StaticResource StyledToggleButton}" 
                               HorizontalAlignment="Left"
                               Command="{Binding StartStreamCommand}"
                               CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
-                              Background="{StaticResource MeoptaBackgroundBrush}"/>
+                              Background="{StaticResource MeoptaBackgroundBrush}">
+                </ToggleButton>
             </Border>
-            <Border Grid.Column="1" CornerRadius="0,5,5,0" 
-                    Background="White" 
-                    Width="20" Margin="0,0,0,20">
-            </Border>
+            <!--<TextBlock Text="Yahtzee!!" FontWeight="Bold" FontSize="40"  Foreground="{StaticResource MeoptaBlueBrush}" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20"/>-->
+
         </Grid>
 
         <Border x:Name="ImageSection" Grid.Row="1"
@@ -228,9 +222,14 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Gamecard" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{StaticResource MeoptaLogoBlackBrush}" FontSize="30"/>
                 <controls:YahtzeeTable Grid.Row="2" IsEnabled="{Binding CorrectCountDetected}" />
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="3">
+                    <TextBlock Text="Game: " FontWeight="Bold" FontSize="40"  Foreground="Black"  TextAlignment="Center"/>
+                    <TextBlock  Text="rolls" FontSize="40" Foreground="Black" TextAlignment="Center"/>
+                </StackPanel>
             </Grid>
         </Border>
 
@@ -265,7 +264,7 @@
                     </Grid>
                 </Border>
                 <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemTemplate="{StaticResource NotificationTemplate}" ItemsSource="{Binding Notifications}" />
+                    <ItemsControl ItemTemplate="{StaticResource NotificationTemplate}" ItemsSource="{Binding Notifications}" Background="White" />
                 </ScrollViewer>
             </Grid>
         </Border>
