@@ -74,11 +74,17 @@ namespace DiceMaster3600.Model.Yahtzee
             }
         }
 
+        public void Enable(bool nevim)
+        {
+            IsEnabled?.Invoke(nevim);
+        }
+
         public void GenerateDiceRolls() => UpdatePossibleScores(Enumerable.Range(0, 5).Select(x => random.Next(1, 7)).ToArray());
         #endregion
 
         #region Events
         public event Action<int?, ScoreTypes>? ScoreChanged;
+        public event Action<bool>? IsEnabled;
         #endregion
     }
 }

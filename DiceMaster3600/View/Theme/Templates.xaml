@@ -20,7 +20,7 @@
                              Fill="{Binding Position, Converter={StaticResource ColorConverter}}"
                              StrokeThickness="2">
                     </Ellipse>
-                    <materialIcons:MaterialIcon Kind="Medal" Foreground="White" 
+                    <materialIcons:MaterialIcon Kind="Medal" Foreground="Black" 
                                                 VerticalAlignment="Center" 
                                                 Height="20" 
                                                 HorizontalAlignment="Center"/>
@@ -66,14 +66,14 @@
                                     <DataTrigger Binding="{Binding Gender}" Value="Male">
                                         <Setter Property="Content">
                                             <Setter.Value>
-                                                <materialIcons:MaterialIcon Kind="GenderMale" Foreground="White" Height="20"/>
+                                                <materialIcons:MaterialIcon Kind="GenderMale" Foreground="Black" Height="20"/>
                                             </Setter.Value>
                                         </Setter>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding Gender}" Value="Female">
                                         <Setter Property="Content">
                                             <Setter.Value>
-                                                <materialIcons:MaterialIcon Kind="GenderFemale" Foreground="White" Height="20"/>
+                                                <materialIcons:MaterialIcon Kind="GenderFemale" Foreground="Black" Height="20"/>
                                             </Setter.Value>
                                         </Setter>
                                     </DataTrigger>

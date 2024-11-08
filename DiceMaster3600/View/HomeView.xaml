@@ -36,7 +36,7 @@
 
             <controls:InfoDisplayPanel TitleText="Games played"
                                    Grid.Column="1"
-                                   ValueText="2"
+                                   ValueText="13"
                                    UnitText="games"
                                    TargetGridBackground="{StaticResource MeoptaYellowBrush}"/>
 
@@ -115,7 +115,7 @@
                                ItemsSource="{Binding Path=TopThreePlayerList}"/>
                 </StackPanel>
             </Border>
-            
+
             <Border Padding="10"
                     Grid.Column="2"
                     BorderBrush="Black" 
@@ -167,6 +167,12 @@
             HorizontalAlignment="Center" 
             VerticalAlignment="Bottom" 
             Margin="0,0,0,20"/>
+
+        <materialDesign:Snackbar x:Name="MySnackbar"
+                                 Grid.Row="3"
+                                 MessageQueue="{Binding Path=MessageQueue}"
+                                 Style="{StaticResource DynamicSnackbarStyle}"/>
+        
     </Grid>
 </UserControl>
 

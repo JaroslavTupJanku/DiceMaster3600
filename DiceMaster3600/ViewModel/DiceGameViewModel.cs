@@ -83,11 +83,11 @@ namespace DiceMaster3600.ViewModel
         #region Constructors
         public DiceGameViewModel(IYahtzeeScoreCounter scoreManager, IRealSenseCamera camera, IProcessProvider processProvider)
         {
-            ResetGame();
 
             this.camera = camera;
             this.processProvider = processProvider;
             this.scoreManager = scoreManager;
+            ResetGame();
 
             RollCommand = new RelayCommand(Roll);
             ResetCommand = new RelayCommand(ResetGame);
@@ -144,6 +144,7 @@ namespace DiceMaster3600.ViewModel
 
         private void ResetGame()
         {
+            scoreManager.Enable(true);
             diceInGameCounter = 5;
             diceRollsCounter = 0;
             diceCounter = 0;
@@ -159,9 +160,10 @@ namespace DiceMaster3600.ViewModel
 
         private void Roll()
         {
+            scoreManager.Enable(true);
             diceInGameCounter = Dices.Count(x => !x.IsSelected);
             DiceInGameNumber = $"{diceInGameCounter} / 5";
-            DiceRollsNumber = $"{diceRollsCounter++} / 3";
+            DiceRollsNumber = $"{++diceRollsCounter} / 3";
 
             scoreManager.UpdatePossibleScores(Dices.Select(dice => dice.Score).ToArray());
             CorrectCountDetected = false;
@@ -179,10 +181,19 @@ namespace DiceMaster3600.ViewModel
                 {
                     if (!dice.IsSelected)
                     {
-                        dice.Score = result;
+                        dice.AddResult(result);
+                        if (dice.ChangeCounter >= 3)
+                        {
+                            dice.Score = result;
+                        }
                     }
                 }
-                scoreManager.UpdatePossibleScores(Dices.Select(dice => dice.Score).ToArray());
+
+                if (Dices.All(d => d.ChangeCounter >= 3))
+                {
+                    scoreManager.UpdatePossibleScores(Dices.Select(dice => dice.Score).ToArray());
+                    AddNotification("Possible scores updated after stable results", GameNotificationType.Success);
+                }
             }
             else
             {
@@ -190,7 +201,34 @@ namespace DiceMaster3600.ViewModel
             }
         }
 
-        private void AddNotification(string text, GameNotificationType type) => Notifications.Add(new NotificationModel(text, type));
+        //private void Update()
+        //{
+        //    var res = processProvider.DiceRecognitionProcess?.Result;
+        //    if (diceInGameCounter == res?.Length && res.All(s => s > 0))
+        //    {
+        //        CorrectCountDetected = true;
+        //        foreach (var (dice, result) in Dices.Zip(res, (d, r) => (d, r)))
+        //        {
+        //            if (!dice.IsSelected)
+        //            {
+        //                dice.Score = result;
+        //            }
+        //        }
+        //        scoreManager.UpdatePossibleScores(Dices.Select(dice => dice.Score).ToArray());
+        //    }
+        //    else
+        //    {
+        //        CorrectCountDetected = false;
+        //    }
+        //}
+
+        private void AddNotification(string text, GameNotificationType type)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Notifications.Add(new NotificationModel(text, type));
+            });
+        }
         #endregion
 
         #region Events

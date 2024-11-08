@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Media.Imaging;
 using Point = System.Drawing.Point;
 
@@ -90,6 +91,7 @@ namespace DiceMaster3600.Model.FrameProcesses
             List<int> dotsCount = new();
             foreach (var die in dice)
             {
+
                 Image<Bgr, byte> dieImage = image.GetSubRect(die);
                 var grayDieImage = dieImage.Convert<Gray, byte>().ThresholdBinaryInv(new Gray(intensityThreshold), new Gray(255));
 
@@ -99,16 +101,25 @@ namespace DiceMaster3600.Model.FrameProcesses
                 var dotcounter = 0;
                 for (int i = 0; i < contours.Size; i++)
                 {
+                    if (contours[i].Size < 10 )  //TO motom yaloyit na min area asi.
+                        continue;
+
                     Rectangle dot = CvInvoke.BoundingRectangle(contours[i]);
-                    if (HasValidSize(dot, minArea / 5)
-                        && !dots.Any(b => b.IntersectsWith(dot)
-                        && HasCircularShape(contours[i])))
+                    //if (HasValidShape(dot)
+                    //    && !dots.Any(b => b.IntersectsWith(dot)
+                    //    && HasCircularShape(contours[i]))
+                    //    && IsInsideInnerRect(dot, innerRect)
+                    //    && !IsInCorner(dot, die, offset))
+                    //{
+
+                    if (HasValidShape(dot) && IsInsideInnerRect(dot, die))
                     {
                         dot.Offset(die.Location);
                         dots.Add(dot);
                         dotcounter++;
                         CvInvoke.Rectangle(image, dot, new Bgr(Color.Red).MCvScalar, 1);
                     }
+                    //}
                 }
                 dotsCount.Add(dotcounter);
             }
@@ -128,13 +139,37 @@ namespace DiceMaster3600.Model.FrameProcesses
             return false;
         }
 
-        private bool HasValidSize(Rectangle rect, double size)
+        private bool HasValidShape(Rectangle rect, double min = 0.5, double max = 1.5)
         {
             double aspectRatio = (double)rect.Width / rect.Height;
-            return aspectRatio >= minAspectRatio
-                && aspectRatio <= maxAspectRatio
+            return aspectRatio >= min && aspectRatio <= max;
+        }
+
+        private bool HasValidSize(Rectangle rect, double size, double min = 0.9, double max = 1.1)
+        {
+            return HasValidShape(rect, min, max)
                 && rect.Width > size && rect.Height > size
                 && rect.Width < 2*size && rect.Height < 2 * size;
+        }
+
+        private bool IsInsideInnerRect(Rectangle dot, Rectangle dice)
+        {
+            return dot.Left >= 4 && dot.Top >= 4 && dot.Right <= dice.Width - 4 && dot.Bottom <= dice.Height -4;
+        }
+
+        private bool IsInCorner(Rectangle dot, Rectangle die, int offset)
+        {
+            // Kontrola, zda je tečka v rozích kostky
+            int cornerSize = offset;
+            Rectangle topLeftCorner = new Rectangle(die.X, die.Y, cornerSize, cornerSize);
+            Rectangle topRightCorner = new Rectangle(die.Right - cornerSize, die.Y, cornerSize, cornerSize);
+            Rectangle bottomLeftCorner = new Rectangle(die.X, die.Bottom - cornerSize, cornerSize, cornerSize);
+            Rectangle bottomRightCorner = new Rectangle(die.Right - cornerSize, die.Bottom - cornerSize, cornerSize, cornerSize);
+
+            return topLeftCorner.IntersectsWith(dot) ||
+                   topRightCorner.IntersectsWith(dot) ||
+                   bottomLeftCorner.IntersectsWith(dot) ||
+                   bottomRightCorner.IntersectsWith(dot);
         }
 
         public double CalculateAverageDepth(Rectangle diceBox, Image<Gray, ushort> depthImage)

@@ -49,7 +49,7 @@ namespace DiceMaster3600
                     services.AddSingleton<IProcessProvider>(sp => sp.GetRequiredService<ProcessProvider>());
                     services.AddSingleton<IProcessManager>(sp => sp.GetRequiredService<ProcessProvider>());
 
-                    services.AddTransient<HomeViewModel>();
+                    services.AddSingleton<HomeViewModel>();
                     services.AddTransient<DiceGameViewModel>();
                     services.AddTransient<MainViewModel>();
                     services.AddTransient<PasswordToggleControlViewModel>();

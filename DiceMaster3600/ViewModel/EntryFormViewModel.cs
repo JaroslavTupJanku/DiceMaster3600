@@ -22,7 +22,6 @@ namespace DiceMaster3600.ViewModel
         private UniversityType university = UniversityType.None;
         private Gender selectedGender = Gender.None;
         private bool isSavingInProgress = false;
-        // Ostatní privátní fieldy
         private DateTime dateOfBirth;
         private readonly IDataAccessManager dataManager;
         #endregion
@@ -70,7 +69,6 @@ namespace DiceMaster3600.ViewModel
         set => SetProperty(ref dateOfBirth, value);
     }
 
-    //Ostatní vlastnosti
 
         public UniversityType University
         {

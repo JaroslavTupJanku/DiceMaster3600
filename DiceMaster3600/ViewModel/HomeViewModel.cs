@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using DiceMaster3600.Core.DTOs;
 using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Core.InterFaces;
+using DiceMaster3600.Model;
 using DiceMaster3600.Model.Services;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
@@ -17,11 +18,12 @@ using System.Windows.Input;
 
 namespace DiceMaster3600.ViewModel
 {
-    public class HomeViewModel : ObservableObject, IMenuControlViewModel
+    public class HomeViewModel : ReactiveViewModel, IMenuControlViewModel
     {
         #region Fields
         private readonly IDataAccessManager? datamanager;
         private readonly GraphGenerator generator;
+        private readonly IMessageService messageService;
         private readonly SnackbarMessageQueue snackbarMessageQueue = new(TimeSpan.FromSeconds(3));
 
         private string loginSuccessMessage = "You have successfully logged in!";
@@ -61,11 +63,11 @@ namespace DiceMaster3600.ViewModel
 
         #region Constructors
 
-        public HomeViewModel(IDataAccessManager manager, GraphGenerator generator)
+        public HomeViewModel(IDataAccessManager manager, GraphGenerator generator, IMessageService messageService) : base(messageService)
         {
             datamanager = manager;
             this.generator = generator;
-
+            this.messageService = messageService;
             Update().ConfigureAwait(false);
             ShowSuccessMessageCommand = new RelayCommand(() => snackbarMessageQueue.Enqueue(LoginSuccessMessage));
             datamanager.OnDatabaseUpdated += async (s, e) => await Update();
@@ -73,20 +75,31 @@ namespace DiceMaster3600.ViewModel
         #endregion
 
         #region Methods
+
+        public void Smazat()
+        {
+            messageService.NotifyImmediately($"User login was successful.");
+        }
+
         public async Task Update()
         {
             try
             {
-                var topPlayers = await datamanager!.GetTopThreePlayersAsync();
-                var topUniversities = await datamanager!.GetTopThreeUniversityAsync();
+
+
                 var users = datamanager.GetAllUniversityDTOs()
                                         .SelectMany(u => u.Faculties)
                                         .SelectMany(f => f.Users)
                                         .Select(u => u.NumberOfPoints)
                                         .ToList();
-                                             
+
+                DataAccessManager X = (DataAccessManager)datamanager; //SMAYAT
+                var topPlayers = X.TOPThreePlayersSmazat(); //await datamanager!.GetTopThreePlayersAsync();
                 TopThreePlayerList = new ObservableCollection<RankedUserDTO>(topPlayers);
+
+                var topUniversities = X.TOPThreeUNIVERSSmazat(); //await datamanager!.GetTopThreeUniversityAsync();
                 TopThreeUniversityList = new ObservableCollection<UniversityRankingDTO>(topUniversities);
+
                 UpdateHistogramSeries(users);
 
                 TestPieGraphSeries = new ISeries[]
@@ -108,6 +121,16 @@ namespace DiceMaster3600.ViewModel
             var data = generator.GenerateHistogram(values.ToArray(), 0, 375, 30);
             SeriesCollection = data.Series;
             XAxes = data.XAxes;
+        }
+
+        public override void RefreshCommand()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Dispose()
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

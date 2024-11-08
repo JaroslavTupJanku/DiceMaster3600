@@ -346,6 +346,7 @@
     
     <Style x:Key="DynamicSnackbarStyle" TargetType="materialDesign:Snackbar">
         <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="LightGreen"/>
         <Setter Property="FontSize" Value="16"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=MessageType}" Value="Error">

@@ -14,6 +14,8 @@ namespace DiceMaster3600.Model
         #region Fields
         private readonly RepositoryFasade dbModel;
         private bool isworking;
+
+        List<UniversityDTO> smazat = new List<UniversityDTO>(); 
         #endregion
 
         #region Properties
@@ -103,6 +105,44 @@ namespace DiceMaster3600.Model
         #endregion
 
 
+        public RankedUserDTO[] TOPThreePlayersSmazat()
+        {
+            RankedUserDTO u = new RankedUserDTO(smazat[1].Faculties[1].Users[1], 1);
+            RankedUserDTO V = new RankedUserDTO(smazat[0].Faculties[0].Users[1], 2);
+            RankedUserDTO W = new RankedUserDTO(smazat[0].Faculties[2].Users[0], 3);
+
+            return new RankedUserDTO[] {u, V, W };
+        }
+
+        public UniversityRankingDTO[] TOPThreeUNIVERSSmazat()
+        {
+            UniversityRankingDTO u = new UniversityRankingDTO()
+            {
+                UniversityName = UniversityType.Unknown2,
+                Position = 1,
+                StudentCount = 6,
+                AveragePoints=135             
+            };
+
+            UniversityRankingDTO V = new UniversityRankingDTO()
+            {
+                UniversityName = UniversityType.Unknown2,
+                Position = 2,
+                StudentCount = 5,
+                AveragePoints = 112
+            };
+
+            UniversityRankingDTO B = new UniversityRankingDTO()
+            {
+                UniversityName = UniversityType.Unknown2,
+                Position = 3,
+                StudentCount = 2,
+                AveragePoints = 101
+            };
+
+            return new UniversityRankingDTO[] { u, V, B };
+        }
+
         public UniversityDTO[] GetAllUniversityDTOs()
         {
             var userArray1 = new UserDTO[] {
@@ -141,9 +181,10 @@ namespace DiceMaster3600.Model
             var faculty4 = new FacultyDTO() { Name = Core.Enum.FacultyType.Unknown4, Users = userArray4.ToList() };
             var faculty5 = new FacultyDTO() { Name = Core.Enum.FacultyType.Unknown5, Users = userArray5.ToList() };
 
-            var university1 = new UniversityDTO() { Name = Core.Enum.UniversityType.Unknown5, Faculties = new List<FacultyDTO>() { faculty1, faculty2 } };
+            var university1 = new UniversityDTO() { Name = Core.Enum.UniversityType.Unknown5, Faculties = new List<FacultyDTO>() { faculty1, faculty2, faculty5 } };
             var university2 = new UniversityDTO() { Name = Core.Enum.UniversityType.Unknown2, Faculties = new List<FacultyDTO>() { faculty3, faculty4 } };
 
+            smazat = new UniversityDTO[] { university1, university2 }.ToList();
             return new UniversityDTO[] { university1, university2 };
         }
 

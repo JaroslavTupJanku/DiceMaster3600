@@ -18,6 +18,7 @@ namespace DiceMaster3600.ViewModel.Control
 
         private int totalScoreUpperSection;
         private int totalScore;
+        private bool isEnabled;
         #endregion
 
         #region Properties
@@ -47,6 +48,12 @@ namespace DiceMaster3600.ViewModel.Control
             set => SetProperty(ref totalScore, value);
         }
 
+        public bool IsEnabled
+        {
+            get => isEnabled;
+            set => SetProperty(ref isEnabled, value);
+        }
+
         public int TotalScoreUpperSection
         {
             get => totalScoreUpperSection;
@@ -67,8 +74,10 @@ namespace DiceMaster3600.ViewModel.Control
         public YahtzeeViewModel(IYahtzeeScoreCounter scoreManager)
         {
             InitiateCollection();
-            scoreManager.ScoreChanged += ScoreManager_ScoreChanged1; ;
+            IsEnabled = true;
+            scoreManager.ScoreChanged += ScoreManager_ScoreChanged1;
             ScoreCommand = new RelayCommand<ScoreTypes>((st) => SelectCategory(st));
+            scoreManager.IsEnabled += (st) => IsEnabled = st;
         }
 
         private void ScoreManager_ScoreChanged1(int? score, ScoreTypes type)
@@ -100,6 +109,7 @@ namespace DiceMaster3600.ViewModel.Control
                 UpperSectionScore = GetUpperSum();
                 LowerSectionScore = GetLowerSum();
                 TotalScore = UpperSectionScore + LowerSectionScore;
+                IsEnabled = false;
             }
         }
 
