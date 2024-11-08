@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DiceMaster3600")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a9b0ceed7aa383c6aa9f89ab4dc4ed89565955a")]
 [assembly: System.Reflection.AssemblyProductAttribute("DiceMaster3600")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DiceMaster3600")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
