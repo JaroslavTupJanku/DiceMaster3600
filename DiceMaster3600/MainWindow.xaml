@@ -94,14 +94,14 @@
 
 
         <StackPanel Grid.Row="1" Background="{StaticResource TopBarBackgroundColor}">
-            <RadioButton Content="Home"
-                        Style="{StaticResource menuButtonStyle}"
-                        Command="{Binding MenuCommad}"
-                        CommandParameter="{x:Static enum:MenuControlType.DashBoard}"/>
             <RadioButton Content="Game"
                         Style="{StaticResource menuButtonStyle}"
                         Command="{Binding MenuCommad}"
                         CommandParameter="{x:Static enum:MenuControlType.GamePanel}"/>
+            <RadioButton Content="Stats"
+                        Style="{StaticResource menuButtonStyle}"
+                        Command="{Binding MenuCommad}"
+                        CommandParameter="{x:Static enum:MenuControlType.DashBoard}"/>
             <RadioButton Content="Settings"
                          Command="{Binding MenuCommad}"
                          Style="{StaticResource menuButtonStyle}"/>

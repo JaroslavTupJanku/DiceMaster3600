@@ -1,18 +1,15 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Core.InterFaces;
 using DiceMaster3600.Model.Services;
 using DiceMaster3600.View.Dialogs;
 using System;
-using System.Windows;
 using System.Windows.Input;
 
-namespace DiceMaster3600.ViewModel
+namespace DiceMaster3600.ViewModel.Control
 {
     public class LoginFormViewModel : NotifyViewModel
     {
-
         #region Fields
         private readonly IDataAccessManager datamanager;
         #endregion
@@ -32,11 +29,9 @@ namespace DiceMaster3600.ViewModel
                 viewmodel.Smazat();
 
             });
+
             RegisterCMD = new RelayCommand(() => new EntryForm().ShowDialog());
-
-            SubsribeNotification(NotificationContext.RegistrationSuccess, 
-                (m) => Notify(m, MessageType.Success));
-
+            SubsribeNotification(NotificationContext.RegistrationSuccess, (m) => Notify(m, MessageType.Success));
             this.datamanager = datamanager;
         }
 

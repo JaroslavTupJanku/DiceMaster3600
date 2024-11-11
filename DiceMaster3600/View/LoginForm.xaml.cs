@@ -1,4 +1,4 @@
-﻿using DiceMaster3600.ViewModel;
+﻿using DiceMaster3600.ViewModel.Control;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
@@ -13,14 +13,11 @@ namespace DiceMaster3600.View
         public LoginForm()
         {
             InitializeComponent();
-            var v = App.AppHost!.Services.GetService<LoginFormViewModel>();
-            DataContext = v;
+            var viewModel = App.AppHost!.Services.GetService<LoginFormViewModel>();
+            DataContext = viewModel;
 
 
-            if (v.CloseAction == null)
-            {
-                v.CloseAction = new Action(this.Close);
-            }
+            viewModel!.CloseAction ??= new Action(Close);
 
             Closed += (sender, args) =>
             {

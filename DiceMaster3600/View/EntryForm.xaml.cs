@@ -1,4 +1,4 @@
-﻿using DiceMaster3600.ViewModel;
+﻿using DiceMaster3600.ViewModel.Control;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;

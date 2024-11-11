@@ -8,7 +8,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace DiceMaster3600.ViewModel
+namespace DiceMaster3600.ViewModel.Control
 {
     public class EntryFormViewModel : ReactiveViewModel
     {
@@ -57,18 +57,17 @@ namespace DiceMaster3600.ViewModel
             set => SetTrigger(ref email, value);
         }
 
-    public string? Password
-    {
-        get => password;
-        set => SetTrigger(ref password, value);
-    }
+        public string? Password
+        {
+            get => password;
+            set => SetTrigger(ref password, value);
+        }
 
-    public DateTime DateOfBirth
-    {
-        get => dateOfBirth;
-        set => SetProperty(ref dateOfBirth, value);
-    }
-
+        public DateTime DateOfBirth
+        {
+            get => dateOfBirth;
+            set => SetProperty(ref dateOfBirth, value);
+        }
 
         public UniversityType University
         {
@@ -97,7 +96,7 @@ namespace DiceMaster3600.ViewModel
                 () => await ExecuteExampleCommand(),
                 () => CanSaveExecute());
 
-            dataManager.OnProcessingStatusChanged += (isInProgress) 
+            dataManager.OnProcessingStatusChanged += (isInProgress)
                 => IsSavingInProgress = isInProgress;
 
             CancelCommand = new RelayCommand(() => RequestClose?.Invoke());
@@ -115,7 +114,7 @@ namespace DiceMaster3600.ViewModel
                 && !string.IsNullOrWhiteSpace(Password)
                 && University != UniversityType.None
                 && Faculty != FacultyType.None
-                && (DateTime.Now.Year - DateOfBirth.Year) >= 15;
+                && DateTime.Now.Year - DateOfBirth.Year >= 15;
         }
 
         private async Task ExecuteExampleCommand()
@@ -136,7 +135,7 @@ namespace DiceMaster3600.ViewModel
         }
 
         public override void Dispose()
-            => UnsubsribeNotification(NotificationContext.RegistrationFailure);      
+            => UnsubsribeNotification(NotificationContext.RegistrationFailure);
 
         public override void RefreshCommand()
         {
