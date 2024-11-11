@@ -3,6 +3,7 @@ using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Model;
 using DiceMaster3600.Model.Services;
 using DiceMaster3600.View;
+using DiceMaster3600.View.Dialogs;
 using System;
 using System.Windows.Input;
 
@@ -37,16 +38,16 @@ namespace DiceMaster3600.ViewModel
         #endregion
 
         #region Constructors
-        public MainViewModel(IActiveUserManager activeUser, 
-            IViewModelFactory factory, 
-            IMessageService messageService, 
-            IProcessManager provider) : base(messageService)
+        public MainViewModel(IActiveUserManager activeUser, IViewModelFactory factory, 
+                             IMessageService messageService, IProcessManager provider) : base(messageService)
         {
             this.activeUser = activeUser;
             this.factory = factory;
             provider.RegisterAllProcesses();
 
-            CurrentView = factory.CreateViewModel<HomeViewModel>() ?? throw new InvalidOperationException("HomeViewModel cannot be created.");
+            CurrentView = factory.CreateViewModel<DiceGameViewModel>() 
+                ?? throw new InvalidOperationException("HomeViewModel cannot be created.");
+
             MenuCommad = new RelayCommand<MenuControlType>((type) => OnChangeView(type));
             LogCommand = new RelayCommand(LogIn);
         }
@@ -57,9 +58,7 @@ namespace DiceMaster3600.ViewModel
         {
             IsPlayerLogged = !IsPlayerLogged;
 
-            _ = IsPlayerLogged
-                ? new LoginForm().ShowDialog()
-                : activeUser.Logout();
+            _ = IsPlayerLogged ? new EntryForm().ShowDialog() : activeUser.Logout();
         }
 
         private void OnChangeView(MenuControlType viewName)
@@ -79,7 +78,6 @@ namespace DiceMaster3600.ViewModel
             {
                 Notify(ex.Message, MessageType.Failed);
             }
-
         }
 
         public override void Dispose() => GC.SuppressFinalize(this);

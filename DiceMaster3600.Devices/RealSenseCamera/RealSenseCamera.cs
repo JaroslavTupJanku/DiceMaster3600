@@ -1,7 +1,6 @@
 ﻿using DiceMaster3600.Core;
 using DiceMaster3600.Core.InterFaces;
 using Intel.RealSense;
-using Microsoft.Windows.Themes;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -29,7 +28,8 @@ namespace DiceMaster3600.Devices.RealSenseCamera
 
         public async Task ConnectAsync()
         {
-            if (IsConnected) {
+            if (IsConnected)
+            {
                 return;
             }
 
@@ -105,7 +105,8 @@ namespace DiceMaster3600.Devices.RealSenseCamera
 
         public async Task DisconnectAsync()
         {
-            if (!IsConnected) {
+            if (!IsConnected)
+            {
                 return;
             }
 
