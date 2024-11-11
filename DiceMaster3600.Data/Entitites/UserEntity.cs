@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiceMaster3600.Core.Enum;
+using System;
 
 namespace DiceMaster3600.Data.Entitites
 {
@@ -7,6 +8,8 @@ namespace DiceMaster3600.Data.Entitites
         public int Id { get; set; }
         public DateTime? DeletedDate { get; set; }
         public int NumberOfPoints { get; set; }
+        public Gender Gender { get; set; }
+        public string PasswordHash { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Surname { get; set; } = string.Empty;
         public string EmailAddress { get; set; } = string.Empty;

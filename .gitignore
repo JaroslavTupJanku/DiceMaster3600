@@ -403,3 +403,26 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/DiceMaster3600/obj/Debug/net6.0-windows/DiceMaster3600.designer.deps.json
+/DiceMaster3600/bin/Debug/net6.0-windows/DiceMaster3600.Core.dll
+/DiceMaster3600/bin/Debug/net6.0-windows/DiceMaster3600.Core.pdb
+/DiceMaster3600/bin/Debug/net6.0-windows/DiceMaster3600.Data.dll
+/DiceMaster3600/bin/Debug/net6.0-windows/DiceMaster3600.Data.pdb
+/DiceMaster3600.Core/bin/Debug/net6.0-windows/DiceMaster3600.Core.dll
+/DiceMaster3600.Core/bin/Debug/net6.0-windows/DiceMaster3600.Core.pdb
+/DiceMaster3600.Core/obj/Debug/net6.0-windows/ref/DiceMaster3600.Core.dll
+/DiceMaster3600.Core/obj/Debug/net6.0-windows/refint/DiceMaster3600.Core.dll
+/DiceMaster3600.Core/obj/Debug/net6.0-windows/DiceMaster3600.Core.csproj.CoreCompileInputs.cache
+/DiceMaster3600.Core/obj/Debug/net6.0-windows/DiceMaster3600.Core.dll
+/DiceMaster3600.Core/obj/Debug/net6.0-windows/DiceMaster3600.Core.pdb
+/DiceMaster3600.Data/bin/Debug/net6.0-windows/DiceMaster3600.Core.dll
+/DiceMaster3600.Data/bin/Debug/net6.0-windows/DiceMaster3600.Core.pdb
+/DiceMaster3600.Data/bin/Debug/net6.0-windows/DiceMaster3600.Data.dll
+/DiceMaster3600.Data/bin/Debug/net6.0-windows/DiceMaster3600.Data.pdb
+/DiceMaster3600.Data/obj/Debug/net6.0-windows/ref/DiceMaster3600.Data.dll
+/DiceMaster3600.Data/obj/Debug/net6.0-windows/refint/DiceMaster3600.Data.dll
+/DiceMaster3600.Data/obj/Debug/net6.0-windows/DiceMaster3600.Data.csproj.AssemblyReference.cache
+/DiceMaster3600.Data/obj/Debug/net6.0-windows/DiceMaster3600.Data.dll
+/DiceMaster3600.Data/obj/Debug/net6.0-windows/DiceMaster3600.Data.pdb
+/DiceMaster3600/obj/Debug/net6.0-windows/View/HomeView.g.i.cs
+/DiceMaster3600/obj/Debug/net6.0-windows/App.g.i.cs

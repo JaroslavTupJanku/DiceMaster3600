@@ -4,46 +4,49 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DiceMaster3600.View.Controls"
+             xmlns:conv="clr-namespace:DiceMaster3600.View.Converters"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <Style TargetType="UserControl">
-            <Style.Triggers>
-                <EventTrigger RoutedEvent="MouseEnter">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.05" Duration="0:0:0.2"/>
-                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.05" Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.0" Duration="0:0:0.2"/>
-                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.0" Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Style.Triggers>
-            <Setter Property="RenderTransform">
-                <Setter.Value>
-                    <ScaleTransform ScaleX="1.0" ScaleY="1.0"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
-        </Style>
+        <SolidColorBrush x:Key="BackgroundBrush" Color="White"/>
+        <conv:FontSizeConverter x:Key="fontSizeConverter"/>
     </UserControl.Resources>
 
-    <Border Background="White" CornerRadius="5" Grid.ColumnSpan="3" Grid.Row="3" BorderBrush="#FFDEDEDE" BorderThickness="1"  >
-        <Border.Effect>
-            <DropShadowEffect BlurRadius="20" Color="#FFDEDEDE" RenderingBias="Quality" ShadowDepth="1"/>
-        </Border.Effect>
+    <Border BorderBrush="#FFDEDEDE" 
+            x:Name="BorderBackground" 
+            Background="{StaticResource BackgroundBrush}"
+            CornerRadius="5" 
+            Grid.ColumnSpan="3" 
+            Grid.Row="3" 
+            RenderTransformOrigin="0.5,0.5">
+        <Border.RenderTransform>
+            <ScaleTransform ScaleX="1.0" ScaleY="1.0"/>
+        </Border.RenderTransform>
+        <Border.Triggers>
+            <EventTrigger RoutedEvent="MouseEnter">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.05" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.05" Duration="0:0:0.2"/>
+                        <ColorAnimation Storyboard.TargetProperty="Background.Color" To="#F0F0F0" Duration="0:0:0.2"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="MouseLeave">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.0" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.0" Duration="0:0:0.2"/>
+                        <ColorAnimation Storyboard.TargetProperty="Background.Color" To="White" Duration="0:0:0.2"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Border.Triggers>
         <Grid Background="Transparent">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*" MinWidth="20"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -54,6 +57,7 @@
 
             <Grid x:Name="TargetGrid" Grid.RowSpan="2" MinHeight="70" MinWidth="50" 
                   Background="{Binding TargetGridBackground, RelativeSource={RelativeSource AncestorType={x:Type local:InfoDisplayPanel}}}" 
+                  Margin="30,0,0,0"
                   HorizontalAlignment="Center" 
                   VerticalAlignment="Top">
                 <Grid.Effect>
@@ -70,18 +74,20 @@
                 <TextBlock x:Name="ValueTextBox" 
                            Text="{Binding ValueText, RelativeSource={RelativeSource AncestorType={x:Type local:InfoDisplayPanel}}}"
                            VerticalAlignment="Center" 
-                           Foreground="{StaticResource MeoptaDarkBackgroundBrush}" FontSize="50"/>
+                           Foreground="{StaticResource MeoptaLogoBlackBrush}" 
+                           FontSize="50"/>
                 <TextBlock x:Name="UnitTextBox" 
                            Text="{Binding UnitText, RelativeSource={RelativeSource AncestorType={x:Type local:InfoDisplayPanel}}}" 
                            Margin="0, 5" 
-                           Foreground="{StaticResource MeoptaDarkBackgroundBrush}" 
+                           Foreground="{StaticResource MeoptaLogoBlackBrush}" 
                            FontSize="20" VerticalAlignment="Bottom"/>
             </StackPanel>
 
             <TextBlock Grid.Column="2" Grid.ColumnSpan="2" 
                                Text="{Binding TitleText, RelativeSource={RelativeSource AncestorType={x:Type local:InfoDisplayPanel}}}" 
                                HorizontalAlignment="Right" VerticalAlignment="Top" 
-                               Margin="0,10,10,0" Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
+                               Margin="0,10,10,0" 
+                               Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
         </Grid>
     </Border>
 </UserControl>

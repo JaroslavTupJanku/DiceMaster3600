@@ -3,19 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
              xmlns:view="clr-namespace:DiceMaster3600.View"
+             xmlns:control="clr-namespace:DiceMaster3600.View.Controls"
+             xmlns:controls="clr-namespace:DiceMaster3600.ViewModel.Control"
              StartupUri="MainWindow.xaml">
+    
     <Application.Resources>
         <ResourceDictionary>
-
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
                 <ResourceDictionary Source="View/Theme/ColoursTheme.xaml"/>
                 <ResourceDictionary Source="View/Theme/FontTheme.xaml"/>
                 <ResourceDictionary Source="View/Theme/Styles.xaml"/>
                 <ResourceDictionary Source="View/Theme/DiceItemTemplate.xaml"/>
+                <ResourceDictionary Source="View/Theme/Templates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type vm:HomeViewModel}">
                 <view:HomeView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:DiceGameViewModel}">
+                <view:DiceGameView/>
             </DataTemplate>
 
         </ResourceDictionary>

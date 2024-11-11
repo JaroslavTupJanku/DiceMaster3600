@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DiceMaster3600.ViewModel;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DiceMaster3600.View
 {
@@ -22,6 +13,24 @@ namespace DiceMaster3600.View
         public LoginForm()
         {
             InitializeComponent();
+            var v = App.AppHost!.Services.GetService<LoginFormViewModel>();
+            DataContext = v;
+
+
+            if (v.CloseAction == null)
+            {
+                v.CloseAction = new Action(this.Close);
+            }
+
+            Closed += (sender, args) =>
+            {
+                if (this.DataContext is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+            };
+
+
         }
     }
 }

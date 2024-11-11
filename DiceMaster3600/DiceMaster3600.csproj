@@ -11,13 +11,21 @@
     <None Remove="Fonts\Museo300-Regular.otf" />
     <None Remove="Fonts\Museo500-Regular.otf" />
     <None Remove="Fonts\Museo700-Regular.otf" />
-    <None Remove="Images\Dices.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc2" />
+    <PackageReference Include="Emgu.CV" Version="4.9.0.5494" />
+    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.9.0.5494" />
+    <PackageReference Include="Intel.RealSenseWithNativeDll" Version="2.51.1.1" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc1" />
     <PackageReference Include="Material.Icons.WPF" Version="2.1.0" />
+    <PackageReference Include="MaterialDesignColors" Version="3.1.0-ci589" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.0.1-ci589" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
@@ -26,13 +34,13 @@
   <ItemGroup>
     <ProjectReference Include="..\DiceMaster3600.Core\DiceMaster3600.Core.csproj" />
     <ProjectReference Include="..\DiceMaster3600.Data\DiceMaster3600.Data.csproj" />
+    <ProjectReference Include="..\DiceMaster3600.Devices\DiceMaster3600.Devices.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Fonts\Museo500-Regular.otf" />
     <Resource Include="Fonts\Museo300-Regular.otf" />
     <Resource Include="Fonts\Museo700-Regular.otf" />
-    <Resource Include="Images\Dices.png" />
   </ItemGroup>
 
 </Project>

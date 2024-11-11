@@ -5,54 +5,174 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
              xmlns:controls="clr-namespace:DiceMaster3600.View.Controls"
-             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
-             mc:Ignorable="d" Background="#ffffff">
+             d:DataContext="{d:DesignInstance Type=vm:HomeViewModel}"
+             mc:Ignorable="d" Background="{StaticResource InvoiceBackgroundColor}">
 
-    <UserControl.DataContext>
-        <vm:HomeViewModel/>
-    </UserControl.DataContext>
+    <Grid Margin="20">
 
-    <Grid Margin="30">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <Grid >
+        <Grid>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto" MinWidth="400"/>
-                <ColumnDefinition Width="*" MinWidth="20"/>
-                <ColumnDefinition Width="Auto" MinWidth="400"/>
-                <ColumnDefinition Width="*" MinWidth="20"/>
-                <ColumnDefinition Width="Auto" MinWidth="400"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
-            <controls:InfoDisplayPanel UnitText="Pt" 
-                                       TitleText="Best Score"
-                                   ValueText="3600/1000" 
-                                   Grid.Column="1" 
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <controls:InfoDisplayPanel TitleText="Games played"
+                                   Grid.Column="1"
+                                   ValueText="13"
+                                   UnitText="games"
                                    TargetGridBackground="{StaticResource MeoptaYellowBrush}"/>
 
-            <controls:InfoDisplayPanel UnitText="pt"
-                                   TitleText="Avarage Score"
-                                   Grid.Column="3"       
-                                   ValueText="100030"
+            <controls:InfoDisplayPanel UnitText="Pt" 
+                                   TitleText="Best Score"
+                                   ValueText="278/375"
+                                   Grid.Column="3" 
                                    TargetGridBackground="{StaticResource MeoptaBlueBrush}"/>
+            <!--ValueText="{Binding TopThreePlayerList[0].NumberOfPoints}"-->
 
-            <controls:InfoDisplayPanel TitleText="Best Player"
-                                   Grid.Column="5"
-                                   ValueText="Jaroslav Janků"
+            <controls:InfoDisplayPanel UnitText="points"
+                                   TitleText="Avarage Score"
+                                   Grid.Column="5"       
+                                   ValueText="115"
                                    TargetGridBackground="{StaticResource MeoptaBronzeBrush}"/>
+
+            <Border Grid.Row="2" 
+                    Grid.ColumnSpan="9"
+                    Name="MyBorder"
+                    CornerRadius="5"
+                    Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Probability distribution"
+                               Margin="20,20,0,0"
+                               FontWeight="Bold"
+                               FontSize="20"/>
+                    <TextBlock Text="According to the results of the game."
+                               Grid.Row="1"
+                               Margin="20,0,0,10"
+                               FontSize="15"/>
+                    <lvc:CartesianChart  Grid.Row="2" 
+                                         Series="{Binding SeriesCollection}" 
+                                         XAxes="{Binding XAxes}"
+                                         Background="White">
+                    </lvc:CartesianChart>
+                </Grid>
+            </Border>
         </Grid>
 
-        <lvc:CartesianChart Series="{Binding Series}" 
-                            Grid.Row="1"/>
+        <Grid x:Name="MyGrid" Grid.Column="2" Grid.RowSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
+            <Border Padding="10"
+                    BorderBrush="Black" 
+                    Background="White"
+                    CornerRadius="5">
+                <StackPanel>
+                    <TextBlock Text="Player list" 
+                               Margin="10" 
+                               FontSize="15" 
+                               FontWeight="Bold"/>
+                    <TextBlock Text="This is a list of the top three players of all time." 
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Left"
+                               Width="180"
+                               Margin="10,0,10,0" 
+                               Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
+                    <ListBox Name="UserListBox" Grid.Column="1" 
+                               Background="White"
+                               BorderThickness="0"
+                               ItemTemplate="{StaticResource UserItemTemplate}" 
+                               ItemsSource="{Binding Path=TopThreePlayerList}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Padding="10"
+                    Grid.Column="2"
+                    BorderBrush="Black" 
+                    Background="White"
+                    CornerRadius="5">
+                <StackPanel>
+                    <TextBlock Text="University list" 
+                               Margin="10" 
+                               FontSize="15" 
+                               FontWeight="Bold"/>
+                    <TextBlock Text="This is a list of the top three universities of all time." 
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Left"
+                               Width="180"
+                               Margin="10,0,10,0" 
+                               Foreground="{StaticResource MeoptaDarkBackgroundBrush}"/>
+                    <ListBox Name="UserLidstBox" Grid.Column="1" 
+                     Background="White"
+                     BorderThickness="0"
+                     ItemTemplate="{StaticResource UniversityItemTemplate}" 
+                     ItemsSource="{Binding Path=TopThreeUniversityList}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="2" Grid.ColumnSpan="3" CornerRadius="5" Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Results by Faculty"
+                               Margin="20,20,0,0"
+                               FontWeight="Bold"
+                               FontSize="20"/>
+                    <TextBlock Text="(In percentage)"
+                               Margin="20,0,0,0"
+                               Grid.Row="1"
+                               FontSize="15"/>
+                    <lvc:PieChart Background="White" 
+                              InitialRotation="-90"
+                              Grid.Row="2"
+                              Series="{Binding TestPieGraphSeries}"/>
+                </Grid>
+            </Border>
+        </Grid>
+        <materialDesign:Snackbar 
+            x:Name="homeSnackbar" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Bottom" 
+            Margin="0,0,0,20"/>
+
+        <materialDesign:Snackbar x:Name="MySnackbar"
+                                 Grid.Row="3"
+                                 MessageQueue="{Binding Path=MessageQueue}"
+                                 Style="{StaticResource DynamicSnackbarStyle}"/>
+        
     </Grid>
 </UserControl>
+

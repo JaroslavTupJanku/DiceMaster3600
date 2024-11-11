@@ -1,0 +1,272 @@
+﻿<UserControl x:Class="DiceMaster3600.View.Controls.YahtzeeTable"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:DiceMaster3600.ViewModel.Control"
+             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+             xmlns:enums="clr-namespace:DiceMaster3600.Core.Enum;assembly=DiceMaster3600.Core"
+             xmlns:control="clr-namespace:DiceMaster3600.View.Controls"
+             d:DataContext="{d:DesignInstance Type=vm:YahtzeeViewModel}"           
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <GridLength x:Key="StandardColumnWidth">120</GridLength>
+
+        <Style x:Key="HeaderStyle" TargetType="Label">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="{StaticResource MeoptaLightBlueBrush}"/>
+        </Style>
+
+        <Style x:Key="TotalLabelStyle" TargetType="Label">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{StaticResource MeoptaBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="{StaticResource MeoptaLogoBlackBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="2"/>
+        </Style>
+
+        <Style x:Key="ArrowRightBoldBoxStyle" TargetType="materialIcons:MaterialIcon">
+            <Setter Property="Kind" Value="ArrowRightBoldBox"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="29"/>
+            <Setter Property="BorderBrush" Value="{StaticResource MeoptaLogoBlackBrush}"/>
+            <Setter Property="Background" Value="{StaticResource MeoptaBackgroundBrush}"/>
+        </Style>
+
+        <Style TargetType="control:YahtzeeInteractiveRow">
+            <Setter Property="Grid.ColumnSpan" Value="3"/>
+            <Setter Property="FirstColumnWidth" Value="120"/>
+            <Setter Property="SecondColumnWidth" Value="120"/>
+            <Setter Property="ThirdColumnWidth" Value="80"/>
+            <Setter Property="SelectCategoryCommand" Value="{Binding SelectCategoryCommand}"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid IsEnabled="{Binding IsEnabled}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Border >
+            <Grid>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{StaticResource StandardColumnWidth}"/>
+                    <ColumnDefinition Width="{StaticResource StandardColumnWidth}"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Name="Header1" Grid.Column="0" Content="UPPER SECTION" Style="{StaticResource HeaderStyle}" />
+                <Label Grid.Row="0" Name="Header2" Grid.Column="1" Content="HOW TO SCORE" Style="{StaticResource HeaderStyle}" />
+                <Label Grid.Row="0" Name="Header3" Grid.Column="2" Content="GAME #1" Style="{StaticResource HeaderStyle}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="1" Grid.ColumnSpan="3"
+                                               SelectCategoryCommand="{Binding ScoreCommand}"
+                                               CommandParameter="{x:Static enums:ScoreTypes.Aces}"
+                                               ScoreName="Aces"
+                                               HasBeenScored="{Binding YahtzeeModels[0].HasBeenScored}"
+                                               IsEnabled="{Binding YahtzeeModels[0].IsSelected, FallbackValue=False}"
+                                               HowToScore="Count Only Aces"
+                                               Score="{Binding YahtzeeModels[0].Score }"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="2" Grid.ColumnSpan="3"
+                                               SelectCategoryCommand="{Binding ScoreCommand}"
+                                               CommandParameter="{x:Static enums:ScoreTypes.Twos}"
+                                               ScoreName="Twos"
+                                               HasBeenScored="{Binding YahtzeeModels[1].HasBeenScored}"
+                                               IsEnabled="{Binding YahtzeeModels[1].IsSelected, FallbackValue=False}"
+                                               HowToScore="Count Only Twos"
+                                               Score="{Binding YahtzeeModels[1].Score, FallbackValue=0}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="3" Grid.ColumnSpan="3"
+                                   SelectCategoryCommand="{Binding ScoreCommand}"
+                                   CommandParameter="{x:Static enums:ScoreTypes.Threes}"
+                                   ScoreName="Threes"
+                                   HasBeenScored="{Binding YahtzeeModels[2].HasBeenScored}"
+                                   IsEnabled="{Binding YahtzeeModels[2].IsSelected, FallbackValue=False}"
+                                   HowToScore="Count Only Threes"
+                                   Score="{Binding YahtzeeModels[2].Score, FallbackValue=0}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="4" Grid.ColumnSpan="3"
+                                   SelectCategoryCommand="{Binding ScoreCommand}"
+                                   CommandParameter="{x:Static enums:ScoreTypes.Fours}"
+                                   ScoreName="Fours"
+                                   HasBeenScored="{Binding YahtzeeModels[3].HasBeenScored}"
+                                   IsEnabled="{Binding YahtzeeModels[3].IsSelected, FallbackValue=False}"
+                                   HowToScore="Count Only Fours"
+                                   Score="{Binding YahtzeeModels[3].Score, FallbackValue=0}"/>
+                
+                <control:YahtzeeInteractiveRow Grid.Row="5" Grid.ColumnSpan="3"
+                                   SelectCategoryCommand="{Binding ScoreCommand}"
+                                   CommandParameter="{x:Static enums:ScoreTypes.Fives}"
+                                   ScoreName="Fives"
+                                   HasBeenScored="{Binding YahtzeeModels[4].HasBeenScored}"
+                                   IsEnabled="{Binding YahtzeeModels[4].IsSelected, FallbackValue=False}"
+                                   HowToScore="Count Only Fives"
+                                   Score="{Binding YahtzeeModels[4].Score, FallbackValue=0}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="6" Grid.ColumnSpan="3"
+                                   SelectCategoryCommand="{Binding ScoreCommand}"
+                                   CommandParameter="{x:Static enums:ScoreTypes.Sixes}"
+                                   ScoreName="Sixes"
+                                   HasBeenScored="{Binding YahtzeeModels[5].HasBeenScored}"
+                                   IsEnabled="{Binding YahtzeeModels[5].IsSelected, FallbackValue=False}"
+                                   HowToScore="Count Only Sixes"
+                                   Score="{Binding YahtzeeModels[5].Score, FallbackValue=0}"/>
+
+                <Label Grid.Row="7" Grid.Column="0" Content="TOTAL SCORE" Style="{StaticResource TotalLabelStyle}"/>
+                <materialIcons:MaterialIcon Grid.Row="7" Grid.Column="1" Style="{StaticResource ArrowRightBoldBoxStyle}"/>
+                <Label Grid.Row="7" Grid.Column="2" Style="{StaticResource TotalLabelStyle}" Content="{Binding UpperSectionScore}"/>
+
+                <Label Grid.Row="8" Grid.Column="0" Style="{StaticResource TotalLabelStyle}" Padding="10"/>
+                <TextBlock Grid.Row="8" TextAlignment="Center" VerticalAlignment="Center">
+                    <Run Text="EXTRA BONUS" FontSize="12" FontWeight="Bold" /> 
+                    <LineBreak/>
+                    <Run Text="if total score ≤ 63" FontSize="9"/>
+                </TextBlock>
+                <Label Grid.Row="8" Grid.Column="1" Content="35 points" Style="{StaticResource TotalLabelStyle}"/>
+                <Label Grid.Row="8" Grid.Column="2" Style="{StaticResource TotalLabelStyle}" Content="{Binding ExtraBonus, FallbackValue= - }"/>
+                
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{StaticResource StandardColumnWidth}"/>
+                    <ColumnDefinition Width="{StaticResource StandardColumnWidth}"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="UPPER SECTION" Style="{StaticResource HeaderStyle}" />
+                <Label Grid.Row="0" Grid.Column="1" Content="HOW TO SCORE" Style="{StaticResource HeaderStyle}" />
+                <Label Grid.Row="0" Grid.Column="2" Content="GAME #1" Style="{StaticResource HeaderStyle}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="1" Grid.ColumnSpan="3"
+                                   SelectCategoryCommand="{Binding ScoreCommand}"
+                                   CommandParameter="{x:Static enums:ScoreTypes.ThreeOfAKind}"
+                                   ScoreName="Three of a kind"
+                                   HasBeenScored="{Binding YahtzeeModels[6].HasBeenScored}"
+                                   IsEnabled="{Binding YahtzeeModels[6].IsSelected, FallbackValue=False}"
+                                   HowToScore="Total of all 5 dices"
+                                   Score="{Binding YahtzeeModels[6].Score, FallbackValue=0}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="2" Grid.ColumnSpan="3"
+                                   SelectCategoryCommand="{Binding ScoreCommand}"
+                                   CommandParameter="{x:Static enums:ScoreTypes.FourOfAKind}"
+                                   ScoreName="Four of a kind"
+                                   HasBeenScored="{Binding YahtzeeModels[7].HasBeenScored}"         
+                                   IsEnabled="{Binding YahtzeeModels[7].IsSelected, FallbackValue=False}"
+                                   HowToScore="Total of all 5 dices"
+                                   Score="{Binding YahtzeeModels[7].Score, FallbackValue=0}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="3" Grid.ColumnSpan="3"
+                                   SelectCategoryCommand="{Binding ScoreCommand}"
+                                   CommandParameter="{x:Static enums:ScoreTypes.FullHouse}"
+                                   ScoreName="Full house"
+                                   HasBeenScored="{Binding YahtzeeModels[8].HasBeenScored}" 
+                                   IsEnabled="{Binding YahtzeeModels[8].IsSelected, FallbackValue=False}"
+                                   HowToScore="25 points"
+                                   Score="{Binding YahtzeeModels[8].Score, FallbackValue=0}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="4" Grid.ColumnSpan="3"
+                                   SelectCategoryCommand="{Binding ScoreCommand}"
+                                   CommandParameter="{x:Static enums:ScoreTypes.SmallStraight}"
+                                   ScoreName="Small Straight"
+                                   HasBeenScored="{Binding YahtzeeModels[9].HasBeenScored}" 
+                                   IsEnabled="{Binding YahtzeeModels[9].IsSelected, FallbackValue=False}"
+                                   HowToScore="30 points"
+                                   Score="{Binding YahtzeeModels[9].Score, FallbackValue=0}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="5" Grid.ColumnSpan="3"
+                                   SelectCategoryCommand="{Binding ScoreCommand}"
+                                   CommandParameter="{x:Static enums:ScoreTypes.LargeStraight}"
+                                   ScoreName="Large Straight"
+                                   HasBeenScored="{Binding YahtzeeModels[10].HasBeenScored}" 
+                                   IsEnabled="{Binding YahtzeeModels[10].IsSelected, FallbackValue=False}"
+                                   HowToScore="40 points"
+                                   Score="{Binding YahtzeeModels[10].Score, FallbackValue=0}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="6" Grid.ColumnSpan="3"
+                                   SelectCategoryCommand="{Binding ScoreCommand}"
+                                   CommandParameter="{x:Static enums:ScoreTypes.HighestScore}"
+                                   ScoreName="Highest Score"                                               
+                                   HasBeenScored="{Binding YahtzeeModels[11].HasBeenScored}" 
+                                   IsEnabled="{Binding YahtzeeModels[11].IsSelected, FallbackValue=False}"
+                                   HowToScore="50 points"
+                                   Score="{Binding YahtzeeModels[11].Score, FallbackValue=0}"/>
+
+                <control:YahtzeeInteractiveRow Grid.Row="7" Grid.ColumnSpan="3"
+                                   SelectCategoryCommand="{Binding ScoreCommand}"
+                                   CommandParameter="{x:Static enums:ScoreTypes.Chance}"
+                                   ScoreName="Chance"
+                                   HasBeenScored="{Binding YahtzeeModels[12].HasBeenScored}" 
+                                   IsEnabled="{Binding YahtzeeModels[12].IsSelected, FallbackValue=False}"
+                                   HowToScore="Total of all 5 dices"
+                                   Score="{Binding YahtzeeModels[12].Score, FallbackValue=0}"/>
+
+                <Label Grid.Row="8" Grid.Column="0" Style="{StaticResource TotalLabelStyle}" Padding="10"/>
+                <TextBlock Grid.Row="8" TextAlignment="Center" VerticalAlignment="Center">
+                    <Run Text="Total Score" FontSize="12" FontWeight="Bold" /> 
+                    <LineBreak/>
+                    <Run Text="lower section" FontSize="9"/>
+                </TextBlock>
+                <materialIcons:MaterialIcon Grid.Row="8" Grid.Column="1" Style="{StaticResource ArrowRightBoldBoxStyle}"/>
+                <Label Grid.Row="8" Grid.Column="2" Style="{StaticResource TotalLabelStyle}" Content="{Binding LowerSectionScore}"/>
+
+                <Label Grid.Row="9" Grid.Column="0" Style="{StaticResource TotalLabelStyle}" Padding="10"/>
+                <TextBlock Grid.Row="9" TextAlignment="Center" VerticalAlignment="Center">
+                    <Run Text="Total Score" FontSize="12" FontWeight="Bold" /> 
+                    <LineBreak/>
+                    <Run Text="Upper section" FontSize="9"/>
+                </TextBlock>
+                <materialIcons:MaterialIcon Grid.Row="9" Grid.Column="1" Style="{StaticResource ArrowRightBoldBoxStyle}"/>
+                <Label Grid.Row="9" Grid.Column="2" Style="{StaticResource TotalLabelStyle}" Content="{Binding TotalScoreUpperSection}"/>
+
+                <Label Grid.Row="10" Content="TOTAL SCORE" Grid.Column="0" Style="{StaticResource TotalLabelStyle}" />
+                <materialIcons:MaterialIcon Grid.Row="10" Grid.Column="1" Style="{StaticResource ArrowRightBoldBoxStyle}"/>
+                <Label Grid.Row="10" Grid.Column="2" Style="{StaticResource TotalLabelStyle}" Content="{Binding TotalScore}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

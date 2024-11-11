@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0-windows7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Intel.RealSenseWithNativeDll" Version="2.51.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DiceMaster3600.Core\DiceMaster3600.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="C:\Users\Jaros\.nuget\packages\intel.realsensewithnativedll\2.51.1.1\build\\realsense2.dll" Link="dll\realsense2.dll" />
+  </ItemGroup>
+
+</Project>

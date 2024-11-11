@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="DiceMaster3600.View.Controls.RoundedIcon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DiceMaster3600.View.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="50">
+    <Grid>
+        <Ellipse x:Name="Ellipse"           
+                 Fill="{Binding EllipseFill, RelativeSource={RelativeSource AncestorType={x:Type local:RoundedIcon}}}"       
+                 Height="{Binding Size, RelativeSource={RelativeSource AncestorType={x:Type local:RoundedIcon}}}"
+                 Width="{Binding Size, RelativeSource={RelativeSource AncestorType={x:Type local:RoundedIcon}}}"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"/>
+        <materialIcons:MaterialIcon 
+                x:Name="MaterialIcon"
+                Kind="{Binding IconKind, RelativeSource={RelativeSource AncestorType={x:Type local:RoundedIcon}}}"
+                Foreground="{Binding IconForeground, RelativeSource={RelativeSource AncestorType={x:Type local:RoundedIcon}}}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"/>
+    </Grid>
+</UserControl>
+

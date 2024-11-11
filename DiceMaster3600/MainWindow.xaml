@@ -4,15 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
+        xmlns:enum="clr-namespace:DiceMaster3600.Core.Enum;assembly=DiceMaster3600.Core"
         xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
         xmlns:h="clr-namespace:DiceMaster3600.View.Helpers"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
         mc:Ignorable="d"
         WindowState="Maximized"
         Background="WhiteSmoke">
-
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,8 +23,16 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Name="Logo" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource LogoColor}">
-            <materialIcons:MaterialIcon Kind="DiceMultiple" Foreground="WhiteSmoke" VerticalAlignment="Center" Height="50" HorizontalAlignment="Center"/>
+        <Grid Name="Logo" 
+              VerticalAlignment="Stretch" 
+              HorizontalAlignment="Stretch" 
+              Background="{StaticResource LogoColor}">
+            
+            <materialIcons:MaterialIcon Kind="DiceMultiple" 
+                            Foreground="WhiteSmoke" 
+                            VerticalAlignment="Center" 
+                            Height="50" 
+                            HorizontalAlignment="Center"/>
         </Grid>
 
         <Grid Name="TopBar" Background="{StaticResource MeoptaLightBlueBrush}" Grid.Column="1">
@@ -46,7 +52,11 @@
                      Width="200"
                      Margin="10"/>
             
-            <ComboBox VerticalAlignment="Center" Grid.Column="2" SelectedIndex="0" MinWidth="65" Style="{StaticResource MeoComboBox}">
+            <ComboBox VerticalAlignment="Center" 
+                      Grid.Column="2" 
+                      SelectedIndex="0" 
+                      MinWidth="65" 
+                      Style="{StaticResource MeoComboBox}">
                 <ComboBoxItem Content="English" />
                 <ComboBoxItem Content="Česky"/>
             </ComboBox>
@@ -57,48 +67,52 @@
                 </Separator.LayoutTransform>
             </Separator>
 
-            <Button Content="Logout" 
+            <Button Grid.Column="4"
                     Foreground="WhiteSmoke"
                     Margin="5,0"
                     Width="70"
+                    Command="{Binding LogCommand}"
                     Background="Transparent"
                     BorderThickness="0"
                     VerticalContentAlignment="Center" 
-                    HorizontalContentAlignment="Center"
-                    Grid.Column="4"/>
+                    HorizontalContentAlignment="Center">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="Login"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsPlayerLogged}" Value="True">
+                                <Setter Property="Content" Value="Logout"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsPlayerLogged}" Value="False">
+                                <Setter Property="Content" Value="Login"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
-
 
 
         <StackPanel Grid.Row="1" Background="{StaticResource TopBarBackgroundColor}">
             <RadioButton Content="Home"
-                             Style="{StaticResource menuButtonStyle}"
-                             Height="50"
-                             Foreground="WhiteSmoke"
-                             FontSize="14"/>
-            <RadioButton Content="LeaderBoard"
-                             Style="{StaticResource menuButtonStyle}"
-                             Height="50"
-                             Foreground="WhiteSmoke"
-                             FontSize="14"/>
+                        Style="{StaticResource menuButtonStyle}"
+                        Command="{Binding MenuCommad}"
+                        CommandParameter="{x:Static enum:MenuControlType.DashBoard}"/>
             <RadioButton Content="Game"
-                             Style="{StaticResource menuButtonStyle}"
-                             Height="50"
-                             Foreground="WhiteSmoke"
-                             FontSize="14"/>
+                        Style="{StaticResource menuButtonStyle}"
+                        Command="{Binding MenuCommad}"
+                        CommandParameter="{x:Static enum:MenuControlType.GamePanel}"/>
             <RadioButton Content="Settings"
-                             Style="{StaticResource menuButtonStyle}"
-                             Height="50"
-                                 Foreground="WhiteSmoke"
-                             FontSize="14"/>
+                         Command="{Binding MenuCommad}"
+                         Style="{StaticResource menuButtonStyle}"/>
             <RadioButton Content="Admin Panel"
-                             Style="{StaticResource menuButtonStyle}"
-                             Height="50"
-                             Foreground="WhiteSmoke"
-                             FontSize="14"/>
+                         Style="{StaticResource menuButtonStyle}"/>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="2" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="2" 
+                      Grid.Column="1" 
+                      VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Auto">
             <ContentControl Content="{Binding CurrentView}"/>
         </ScrollViewer >
     </Grid>

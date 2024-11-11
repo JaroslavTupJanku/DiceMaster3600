@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
+using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace DiceMaster3600.View.Controls
 {
@@ -14,7 +15,7 @@ namespace DiceMaster3600.View.Controls
             "Value", typeof(int), typeof(DiceControl), new PropertyMetadata(0, OnValueChanged));
 
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
-            nameof(IsSelected), typeof(bool), typeof(DiceControl), new PropertyMetadata(false, OnIsSelectedChanged));
+            nameof(IsSelected), typeof(bool), typeof(DiceControl), new PropertyMetadata(false));
 
         public int Value
         {
@@ -29,33 +30,32 @@ namespace DiceMaster3600.View.Controls
         }
         #endregion
 
-
         #region Constructors
         public DiceControl()
         {
             InitializeComponent();
+            HideAllGroups();
+
+            Loaded += (s, e) => StartRotation();
         }
+
         #endregion
-        
 
         #region Methods
+        private void StartRotation()
+        {
+            Storyboard? storyboard = FindResource("RotateAnimation") as Storyboard;
+            storyboard?.Begin(this);
+        }
+
         private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is DiceControl control)
+            if (d is DiceControl control && !control.IsSelected)
             {
                 int newValue = (int)e.NewValue;
 
                 control.HideAllGroups();
                 control.ShowGroup(newValue);
-            }
-        }
-        private static void OnIsSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is DiceControl control)
-            {
-                control.Background = (bool)e.NewValue 
-                    ? new SolidColorBrush(Color.FromRgb(255, 204, 203)) 
-                    : Brushes.Transparent;
             }
         }
 
@@ -82,8 +82,14 @@ namespace DiceMaster3600.View.Controls
             Five.Visibility = Visibility.Collapsed;
             Six.Visibility = Visibility.Collapsed;
         }
-        #endregion
 
+        private void UserControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            IsSelected = !IsSelected;
+            if (IsSelected) StartRotation();
+        }
+
+        #endregion
 
         #region Events
         #endregion

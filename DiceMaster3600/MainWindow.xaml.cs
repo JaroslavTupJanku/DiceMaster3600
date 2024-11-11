@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using DiceMaster3600.ViewModel;
+using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 
 namespace DiceMaster3600
 {
@@ -9,6 +11,7 @@ namespace DiceMaster3600
     {
         public MainWindow()
         {
+            DataContext = App.AppHost!.Services.GetService<MainViewModel>();            
             InitializeComponent();
         }
     }

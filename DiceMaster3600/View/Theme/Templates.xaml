@@ -1,0 +1,146 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:conv="clr-namespace:DiceMaster3600.View.Converters"
+                    xmlns:enums="clr-namespace:DiceMaster3600.Core.Enum;assembly=DiceMaster3600.Core"
+                    xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF">
+
+    <conv:PositionToColorConverter x:Key="ColorConverter"/>
+    
+    <DataTemplate x:Key="UniversityItemTemplate">
+        <Border Margin="5" Padding="10" BorderBrush="Gray" CornerRadius="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" MinWidth="130"/>
+                </Grid.ColumnDefinitions>
+                <Grid >
+                    <Ellipse Width="50" Height="50" 
+                             Stroke="DarkBlue"
+                             Fill="{Binding Position, Converter={StaticResource ColorConverter}}"
+                             StrokeThickness="2">
+                    </Ellipse>
+                    <materialIcons:MaterialIcon Kind="Medal" Foreground="Black" 
+                                                VerticalAlignment="Center" 
+                                                Height="20" 
+                                                HorizontalAlignment="Center"/>
+                </Grid>
+                <Grid Grid.Column="1" Margin="10,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding WholeName}" FontWeight="Bold"/>
+                    <StackPanel Grid.Row="1" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Average Points: "/>
+                            <TextBlock Text="{Binding AveragePoints}" FontWeight="Bold"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Nb. of players: "/>
+                            <TextBlock Text="{Binding StudentCount}" FontWeight="Bold"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="UserItemTemplate">
+        <Border Margin="5" Padding="10" BorderBrush="Gray" CornerRadius="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" MinWidth="130"/>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Ellipse Width="50" Height="50" 
+                         Stroke="DarkBlue"
+                         Fill="{Binding Position, Converter={StaticResource ColorConverter}}"
+                         StrokeThickness="2">
+                    </Ellipse>
+                    <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Gender}" Value="Male">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <materialIcons:MaterialIcon Kind="GenderMale" Foreground="Black" Height="20"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Gender}" Value="Female">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <materialIcons:MaterialIcon Kind="GenderFemale" Foreground="Black" Height="20"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                </Grid>
+                <Grid Grid.Column="1" Margin="10,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding WholeName}" FontWeight="Bold"/>
+                    <StackPanel Grid.Row="1" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Points: "/>
+                            <TextBlock Text="{Binding NumberOfPoints}" FontWeight="Bold"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Percentage: "/>
+                            <TextBlock Text="{Binding RelativePoints}" FontWeight="Bold"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="NotificationTemplate">
+        <Border CornerRadius="5" Margin="5">
+            <Border.Resources>
+                <conv:GameNotificationTypeToColorConverter x:Key="NotificationColorConverter"
+                                InformationBrush="{StaticResource InformationColor}"
+                                SuccessBrush="{StaticResource SuccessColor}"
+                                ErrorBrush="{StaticResource ErrorColor}"
+                                WarningBrush="{StaticResource WarningColor}"/>
+            </Border.Resources>
+            <StackPanel Orientation="Horizontal" 
+                        VerticalAlignment="Center">
+                <materialIcons:MaterialIcon Width="20" Height="20" Margin="0,0,10,0">
+                    <materialIcons:MaterialIcon.Style>
+                        <Style TargetType="materialIcons:MaterialIcon">
+                            <Setter Property="Foreground"
+                                    Value="{Binding Type, Converter={StaticResource NotificationColorConverter}}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type}" Value="{x:Static enums:GameNotificationType.Information}">
+                                    <Setter Property="Kind" Value="InformationCircleOutline"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}" Value="{x:Static enums:GameNotificationType.Success}">
+                                    <Setter Property="Kind" Value="CheckCircleOutline"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}" Value="{x:Static enums:GameNotificationType.Error}">
+                                    <Setter Property="Kind" Value="AlertCircleCheckOutline"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}" Value="{x:Static enums:GameNotificationType.Warning}">
+                                    <Setter Property="Kind" Value="WarningCircleOutline"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialIcons:MaterialIcon.Style>
+                </materialIcons:MaterialIcon>
+                <TextBlock Text="{Binding Text}" 
+                           VerticalAlignment="Center"
+                           Foreground="{Binding Type, Converter={StaticResource NotificationColorConverter}}"/>
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+</ResourceDictionary>

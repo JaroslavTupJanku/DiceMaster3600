@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="DiceMaster3600.View.Controls.YahtzeeInteractiveRow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:local="clr-namespace:DiceMaster3600.View.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style x:Key="BaseStyle" TargetType="Border">
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding HasBeenScored, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}" Value="True">
+                    <Setter Property="Background" Value="LightGreen"/>
+                    <Setter Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CellStyle" TargetType="Label">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        
+    </UserControl.Resources>
+
+    <Border BorderThickness="0" Style="{StaticResource BaseStyle}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal" />
+                <VisualState x:Name="Disabled">
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="ScoreNameLabel" Storyboard.TargetProperty="FontSize" To="16" Duration="0:0:0.3"/>
+                        <DoubleAnimation Storyboard.TargetName="HowToScoreLabel" Storyboard.TargetProperty="FontSize" To="16" Duration="0:0:0.3"/>
+                        <DoubleAnimation Storyboard.TargetName="ScoreLabel" Storyboard.TargetProperty="FontSize" To="16" Duration="0:0:0.3"/>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="MouseLeftButtonDown">
+                <i:InvokeCommandAction Command="{Binding SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}"
+                                       CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}"/>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding FirstColumnWidth, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}"/>
+                <ColumnDefinition Width="{Binding SecondColumnWidth, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}"/>
+                <ColumnDefinition Width="{Binding ThirdColumnWidth, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}"/>
+            </Grid.ColumnDefinitions>
+            <Label x:Name="ScoreNameLabel" Grid.Column="0" Content="{Binding ScoreName, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}" Style="{StaticResource CellStyle}" />
+            <Label x:Name="HowToScoreLabel" Grid.Column="1" Content="{Binding HowToScore, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}" Style="{StaticResource CellStyle}" />
+            <Label x:Name="ScoreLabel" Grid.Column="2" Content="{Binding Score, RelativeSource={RelativeSource AncestorType={x:Type local:YahtzeeInteractiveRow}}}" 
+                   Style="{StaticResource CellStyle}" FontWeight="Bold"/>
+        </Grid>
+    </Border>
+</UserControl>

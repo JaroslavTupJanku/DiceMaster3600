@@ -2,7 +2,7 @@
 {
     public enum UniversityType
     {
-        Unknown = 0,
+        None = 0,
         Unknown2 = 1,
         Unknown3 = 2,
         Unknown4 = 3,

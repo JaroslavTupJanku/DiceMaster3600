@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DiceMaster3600.Data.Repositories
 {
@@ -11,19 +12,19 @@ namespace DiceMaster3600.Data.Repositories
         protected readonly SqlEFDataContext context;
         public Repository(SqlEFDataContext context) => this.context = context;
 
-        public void Insert(TEntity entity)
+        public async Task InsertAsync(TEntity entity)
         {
-            context.Set<TEntity>().Add(entity);
-            context.SaveChanges();
+            await context.Set<TEntity>().AddAsync(entity);
+            await context.SaveChangesAsync();
         }
 
-        public void Update(TEntity entity)
+        public async Task UpdateAsync(TEntity entity)
         {
             context.Entry(entity).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void Delete(TEntity entity)
+        public async Task DeleteAsync(TEntity entity)
         {
             if (entity is ISoftDeleteEntity softDeleteEntity)
             {
@@ -34,12 +35,14 @@ namespace DiceMaster3600.Data.Repositories
                 context.Set<TEntity>().Remove(entity);
             }
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void Delete(TEntity[] entities)
+        public async Task DeleteAsync(IEnumerable<TEntity> entities)
         {
-            foreach (var entity in entities)
+            var entitiesArray = entities as TEntity[] ?? entities.ToArray();
+
+            foreach (var entity in entitiesArray)
             {
                 if (entity is ISoftDeleteEntity softDeleteEntity)
                 {
@@ -51,7 +54,7 @@ namespace DiceMaster3600.Data.Repositories
                 }
             }
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
 
