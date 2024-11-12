@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using DiceMaster3600.Core.DTOs;
 using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Core.InterFaces;
@@ -62,13 +61,14 @@ namespace DiceMaster3600.ViewModel
         #endregion
 
         #region Constructors
-
         public HomeViewModel(IDataAccessManager manager, GraphGenerator generator, IMessageService messageService) : base(messageService)
         {
             datamanager = manager;
             this.generator = generator;
             this.messageService = messageService;
+
             Update().ConfigureAwait(false);
+
             ShowSuccessMessageCommand = new RelayCommand(() => snackbarMessageQueue.Enqueue(LoginSuccessMessage));
             datamanager.OnDatabaseUpdated += async (s, e) => await Update();
         }
@@ -85,13 +85,9 @@ namespace DiceMaster3600.ViewModel
         {
             try
             {
-
-
-                var users = datamanager.GetAllUniversityDTOs()
-                                        .SelectMany(u => u.Faculties)
-                                        .SelectMany(f => f.Users)
-                                        .Select(u => u.NumberOfPoints)
-                                        .ToList();
+                var users = datamanager.GetAllUniversityDTOs().SelectMany(u => u.Faculties)
+                                       .SelectMany(f => f.Users).Select(u => u.NumberOfPoints)
+                                       .ToList();
 
                 DataAccessManager X = (DataAccessManager)datamanager; //SMAYAT
                 var topPlayers = X.TOPThreePlayersSmazat(); //await datamanager!.GetTopThreePlayersAsync();

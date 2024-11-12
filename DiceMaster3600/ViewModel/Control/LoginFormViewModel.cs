@@ -35,7 +35,6 @@ namespace DiceMaster3600.ViewModel.Control
             this.datamanager = datamanager;
         }
 
-
         public override void Dispose()
         {
             UnsubsribeNotification(NotificationContext.RegistrationSuccess);

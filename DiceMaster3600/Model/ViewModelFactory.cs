@@ -9,8 +9,7 @@ namespace DiceMaster3600.Model
     {
         public T CreateViewModel<T>() where T : class, IMenuControlViewModel
         {
-            return App.AppHost!.Services?.GetService<T>()
-                ?? HandleError<T>(); 
+            return App.AppHost!.Services?.GetService<T>() ?? HandleError<T>(); 
         }
 
         private static T HandleError<T>() where T : class

@@ -43,17 +43,17 @@ namespace DiceMaster3600.Data
             }
         }
 
-        public async Task RegisterUser(UserDTO userDto, string plainPassword, UniversityType universityType, FacultyType facultyType)
+        public async Task RegisterUser(UserDTO userDto, UniversityType universityType, FacultyType facultyType)
         {
             var universityEntity = await repos.UniversityRepository.EnsureUniversityExistsAsync(universityType);
             var facultyEntity = await repos.FacultyRepository.EnsureFacultyExistsAsync(facultyType, universityEntity.Id);
 
-            await repos.UserRepository.AddAsync(userDto, plainPassword, facultyEntity.Id);
+            await repos.UserRepository.AddAsync(userDto, facultyEntity.Id);
         }
 
-        public async Task<UserDTO?> GetUserByEmailAsync(string email, string plainPassword)
+        public async Task<UserDTO?> GetUserByEmailAsync(string email)
         {
-            var userEntity = await repos.UserRepository.GetUserByEmailAsync(email, plainPassword);
+            var userEntity = await repos.UserRepository.GetUserByEmailAsync(email);
 
             return userEntity is UserEntity e ? new UserDTO()
             {

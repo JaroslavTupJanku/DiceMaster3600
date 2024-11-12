@@ -4,7 +4,10 @@ using DiceMaster3600.Core.DTOs;
 using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Core.InterFaces;
 using DiceMaster3600.Model.Services;
+using DiceMaster3600.Model.Validators;
+using FluentValidation.Results;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -18,25 +21,38 @@ namespace DiceMaster3600.ViewModel.Control
         private string? email;
         private string? password;
 
+        private readonly IDataAccessManager dataManager;
+        private readonly EntryFormValidator validator = new();
+        private ValidationResult validationResult;
+
         private FacultyType faculty = FacultyType.None;
         private UniversityType university = UniversityType.None;
         private Gender selectedGender = Gender.None;
+
         private bool isSavingInProgress = false;
         private DateTime dateOfBirth;
-        private readonly IDataAccessManager dataManager;
         #endregion
 
         #region Properties
         public string? Name
         {
             get => name;
-            set => SetTrigger(ref name, value);
+            set
+            {
+                SetTrigger(ref name, value);
+                Validate();
+            }
         }
 
         public Gender SelectedGender
         {
             get => selectedGender;
-            set => SetTrigger(ref selectedGender, value);
+            set
+            {
+                SetTrigger(ref selectedGender, value);
+                Validate();
+            }
+
         }
 
         public bool IsSavingInProgress
@@ -48,39 +64,54 @@ namespace DiceMaster3600.ViewModel.Control
         public string? Surname
         {
             get => surname;
-            set => SetTrigger(ref surname, value);
+            set
+            {
+                SetTrigger(ref surname, value);
+                Validate();
+            }
         }
 
         public string? Email
         {
             get => email;
-            set => SetTrigger(ref email, value);
-        }
-
-        public string? Password
-        {
-            get => password;
-            set => SetTrigger(ref password, value);
+            set
+            {
+                SetTrigger(ref email, value);
+                Validate();
+            }
         }
 
         public DateTime DateOfBirth
         {
             get => dateOfBirth;
-            set => SetProperty(ref dateOfBirth, value);
+            set
+            {
+                SetProperty(ref dateOfBirth, value);
+                Validate();
+            }
         }
 
         public UniversityType University
         {
             get => university;
-            set => SetTrigger(ref university, value);
+            set
+            {
+                SetTrigger(ref university, value);
+                Validate();
+            }
         }
 
         public FacultyType Faculty
         {
             get => faculty;
-            set => SetTrigger(ref faculty, value);
+            set
+            {
+                SetTrigger(ref faculty, value);
+                Validate();
+            }
         }
 
+        public bool HasErrors => !validationResult.IsValid;
         public ICommand SaveCommand { get; }
         public ICommand GenderSelectCommand { get; }
         public ICommand CancelCommand { get; }
@@ -91,13 +122,10 @@ namespace DiceMaster3600.ViewModel.Control
         {
             this.dataManager = dataManager;
             SubsribeNotification(NotificationContext.RegistrationFailure, m => Notify(m, MessageType.Failed));
+            validationResult = validator.Validate(this);
 
-            SaveCommand = new RelayCommand(async
-                () => await ExecuteExampleCommand(),
-                () => CanSaveExecute());
-
-            dataManager.OnProcessingStatusChanged += (isInProgress)
-                => IsSavingInProgress = isInProgress;
+            SaveCommand = new RelayCommand(async () => await ExecuteExampleCommand(), () => !HasErrors);
+            dataManager.OnProcessingStatusChanged += (isInProgress) => IsSavingInProgress = isInProgress;
 
             CancelCommand = new RelayCommand(() => RequestClose?.Invoke());
             GenderSelectCommand = new RelayCommand<Gender>((g) => SelectedGender = g);
@@ -105,26 +133,14 @@ namespace DiceMaster3600.ViewModel.Control
         #endregion
 
         #region Methods
-        private bool CanSaveExecute()
-        {
-            return !string.IsNullOrWhiteSpace(Name)
-                && !string.IsNullOrWhiteSpace(Surname)
-                && !string.IsNullOrWhiteSpace(Email)
-                && Email.Contains('@')
-                && !string.IsNullOrWhiteSpace(Password)
-                && University != UniversityType.None
-                && Faculty != FacultyType.None
-                && DateTime.Now.Year - DateOfBirth.Year >= 15;
-        }
-
         private async Task ExecuteExampleCommand()
         {
             try
             {
                 var user = new UserDTO(Name!, Surname!, Email!, SelectedGender);
-                await dataManager.RegisterUserAsync(user, Password, University, Faculty);
+                await dataManager.RegisterUserAsync(user, University, Faculty);
 
-                Notify(NotificationContext.RegistrationSuccess, "Registration was byla succesfull!");
+                Notify(NotificationContext.RegistrationSuccess, "Registration was successful!");
                 RequestClose?.Invoke();
             }
             catch (Exception ex)
@@ -134,12 +150,27 @@ namespace DiceMaster3600.ViewModel.Control
             }
         }
 
-        public override void Dispose()
-            => UnsubsribeNotification(NotificationContext.RegistrationFailure);
+        private void Validate()
+        {
+            validationResult = validator.Validate(this);
+            OnPropertyChanged(nameof(HasErrors));
+        }
+
+        public string GetError(string propertyName)
+        {
+            var error = validationResult.Errors.FirstOrDefault(e => e.PropertyName == propertyName);
+            return error != null ? error.ErrorMessage : string.Empty;
+        }
+
+        public override void Dispose() => UnsubsribeNotification(NotificationContext.RegistrationFailure);
+        
 
         public override void RefreshCommand()
         {
-            (SaveCommand as RelayCommand)?.NotifyCanExecuteChanged();
+            if (SaveCommand is RelayCommand command)
+            {
+                command.NotifyCanExecuteChanged();
+            }
         }
         #endregion
 

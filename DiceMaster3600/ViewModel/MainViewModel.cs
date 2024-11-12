@@ -2,7 +2,6 @@
 using DiceMaster3600.Core.Enum;
 using DiceMaster3600.Model;
 using DiceMaster3600.Model.Services;
-using DiceMaster3600.View;
 using DiceMaster3600.View.Dialogs;
 using System;
 using System.Windows.Input;
@@ -12,7 +11,6 @@ namespace DiceMaster3600.ViewModel
     public class MainViewModel : NotifyViewModel
     {
         #region Fields
-        private bool isPlayerLogged;
         private object? currentView;
 
         private readonly IActiveUserManager activeUser;
@@ -20,12 +18,6 @@ namespace DiceMaster3600.ViewModel
         #endregion
 
         #region Properties
-        public bool IsPlayerLogged
-        {
-            get => isPlayerLogged;
-            private set => SetProperty(ref isPlayerLogged, value);
-        }
-
         public object? CurrentView
         {
             get => currentView;
@@ -34,32 +26,27 @@ namespace DiceMaster3600.ViewModel
 
         public ICommand LogCommand { get; private set; }
         public IRelayCommand<MenuControlType> MenuCommad { get; private set; }
-
         #endregion
 
         #region Constructors
-        public MainViewModel(IActiveUserManager activeUser, IViewModelFactory factory, 
-                             IMessageService messageService, IProcessManager provider) : base(messageService)
+        public MainViewModel(IActiveUserManager activeUser, 
+                             IViewModelFactory factory,
+                             IMessageService messageService, 
+                             IProcessManager provider) : base(messageService)
         {
             this.activeUser = activeUser;
             this.factory = factory;
             provider.RegisterAllProcesses();
 
-            CurrentView = factory.CreateViewModel<DiceGameViewModel>() 
+            CurrentView = factory.CreateViewModel<DiceGameViewModel>()
                 ?? throw new InvalidOperationException("HomeViewModel cannot be created.");
 
             MenuCommad = new RelayCommand<MenuControlType>((type) => OnChangeView(type));
-            LogCommand = new RelayCommand(LogIn);
+            LogCommand = new RelayCommand(() => new EntryForm().ShowDialog());
         }
         #endregion
 
         #region Methods
-        private void LogIn()
-        {
-            IsPlayerLogged = !IsPlayerLogged;
-
-            _ = IsPlayerLogged ? new EntryForm().ShowDialog() : activeUser.Logout();
-        }
 
         private void OnChangeView(MenuControlType viewName)
         {
@@ -69,7 +56,7 @@ namespace DiceMaster3600.ViewModel
                 {
                     MenuControlType.DashBoard => factory.CreateViewModel<HomeViewModel>(),
                     MenuControlType.GamePanel => factory.CreateViewModel<DiceGameViewModel>(),
-                    MenuControlType.AdminPanel => throw new NotImplementedException(),
+                    MenuControlType.AdminPanel => factory.CreateViewModel<AdminPanelViewModel>(),
                     MenuControlType.About => throw new NotImplementedException(),
                     _ => throw new NotImplementedException()
                 };

@@ -26,8 +26,6 @@ namespace DiceMaster3600.View
                     disposable.Dispose();
                 }
             };
-
-
         }
     }
 }

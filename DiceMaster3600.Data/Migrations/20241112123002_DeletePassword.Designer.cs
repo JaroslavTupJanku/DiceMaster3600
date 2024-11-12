@@ -3,6 +3,7 @@ using System;
 using DiceMaster3600.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DiceMaster3600.Data.Migrations
 {
     [DbContext(typeof(SqlEFDataContext))]
-    partial class SqlEFDataContextModelSnapshot : ModelSnapshot
+    [Migration("20241112123002_DeletePassword")]
+    partial class DeletePassword
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");

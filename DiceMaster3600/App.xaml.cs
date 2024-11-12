@@ -56,6 +56,7 @@ namespace DiceMaster3600
                     services.AddTransient<LoginFormViewModel>(); 
                     services.AddTransient<EntryFormViewModel>();
                     services.AddTransient<YahtzeeViewModel>();
+                    services.AddTransient<AdminPanelViewModel>();
 
                 }).Build();
         }

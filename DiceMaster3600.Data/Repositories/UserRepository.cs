@@ -25,8 +25,7 @@ namespace DiceMaster3600.Data.Repositories
             var topThreeUsers = await context.Users
                 .Where(user => user.DeletedDate == null)
                 .OrderByDescending(user => user.NumberOfPoints)
-                .Take(3)
-                .ToListAsync();
+                .Take(3).ToListAsync();
 
             return topThreeUsers.Select(user => new UserDTO
             {
@@ -38,17 +37,14 @@ namespace DiceMaster3600.Data.Repositories
             }).ToArray();
         }
 
-        public async Task<UserEntity?> GetUserByEmailAsync(string email, string plainPassword)
+        public async Task<UserEntity?> GetUserByEmailAsync(string email)
         {
-            var userEntity = await context.Users.FirstOrDefaultAsync(u
-                => u.EmailAddress == email && u.DeletedDate == null);
-
-            return userEntity != null && BCrypt.Net.BCrypt.Verify(plainPassword, userEntity.PasswordHash)
-                ? userEntity
-                : null;
+            return await context.Users.FirstOrDefaultAsync(u 
+                => u.EmailAddress == email 
+                && u.DeletedDate == null);
         }
 
-        public async Task AddAsync(UserDTO userDTO, string plainPassword, int facultyId)
+        public async Task AddAsync(UserDTO userDTO, int facultyId)
         {
             var userEntity = new UserEntity
             {
@@ -56,7 +52,6 @@ namespace DiceMaster3600.Data.Repositories
                 Surname = userDTO.Surname,
                 Gender = userDTO.Gender,
                 FacultyId = facultyId,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(plainPassword),
                 EmailAddress = userDTO.EmailAddress,
                 NumberOfPoints = userDTO.NumberOfPoints,
             };

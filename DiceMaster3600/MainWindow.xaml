@@ -106,7 +106,9 @@
                          Command="{Binding MenuCommad}"
                          Style="{StaticResource menuButtonStyle}"/>
             <RadioButton Content="Admin Panel"
-                         Style="{StaticResource menuButtonStyle}"/>
+                         Style="{StaticResource menuButtonStyle}"
+                         Command="{Binding MenuCommad}"
+                         CommandParameter="{x:Static enum:MenuControlType.AdminPanel}"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="2" 

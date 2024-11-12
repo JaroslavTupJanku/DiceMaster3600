@@ -16,22 +16,19 @@ namespace DiceMaster3600.Data.Repositories
         {
             var faculties = await context.Faculties
                 .Where(f => f.UniversityId == universityID && f.DeletedDate == null)
-                .Include(f => f.Users)
                 .ToListAsync();
 
-            var dtos = faculties.Select(faculty => new FacultyDTO
+            return faculties.Select(faculty => new FacultyDTO
             {
                 Name = faculty.Name,
-                Users = faculty.Users.Select(user => new UserDTO 
+                Users = faculty.Users.Where(u => u.DeletedDate == null).Select(user => new UserDTO
                 {
                     EmailAddress = user.EmailAddress,
                     Name = user.Name,
                     Surname = user.Surname,
-                    NumberOfPoints = user.NumberOfPoints, 
+                    NumberOfPoints = user.NumberOfPoints
                 }).ToList()
-            });
-
-            return dtos.ToList();
+            }).ToList();
         }
 
         public async Task<FacultyEntity> AddAsync(FacultyDTO facultyDTO, int universityId)
@@ -53,7 +50,7 @@ namespace DiceMaster3600.Data.Repositories
                 ?? throw new KeyNotFoundException($"University id {universityID} does not exist in the database");
 
             await DeleteAsync(entities);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
         public async Task<FacultyEntity?> FindByNameAndUniversityIdAsync(FacultyType name, int universityID)

@@ -9,7 +9,7 @@
         xmlns:enum="clr-namespace:DiceMaster3600.Core.Enum;assembly=DiceMaster3600.Core"
         WindowStartupLocation="CenterScreen"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:vm="clr-namespace:DiceMaster3600.ViewModel"
+        xmlns:vm="clr-namespace:DiceMaster3600.ViewModel.Control"
         d:DataContext="{d:DesignInstance Type=vm:EntryFormViewModel}"
         SizeToContent="Height"
         mc:Ignorable="d"  ResizeMode="CanResize" Title="EntryForm" Width="800"  >
@@ -43,30 +43,68 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
 
-        <Style x:Key="BaseButtonStyle" TargetType="Button">
+        <Style x:Key="InteractiveButtonStyle" TargetType="Button">
             <Setter Property="Padding" Value="10,5"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Width" Value="120"/>
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Name="ButtonBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="4">
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                SnapsToDevicePixels="True">
                             <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          Margin="{TemplateBinding Padding}"/>
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
                         </Border>
                         <ControlTemplate.Triggers>
+                            <!-- Animace při najetí kurzorem -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.75"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="ButtonBorder"
+                                                            Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                                            To="#C0C0C0" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetName="ButtonBorder"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0.9" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="ButtonBorder"
+                                                            Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                                            To="#E0E0E0" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetName="ButtonBorder"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1.0" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+
+                            <!-- Animace při stisknutí tlačítka -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#A0A0A0"/>
+                                <Setter TargetName="ButtonBorder" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="ButtonBorder" Property="RenderTransformOrigin" Value="0.5,0.5"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -74,14 +112,14 @@
             </Setter>
         </Style>
 
-        <Style x:Key="CancelButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-            <Setter Property="Background" Value="{StaticResource MeoptaBackgroundBrush}"/>
-            <Setter Property="Foreground" Value="Black"/>
+        <!-- Styl pro Save tlačítko s animacemi -->
+        <Style x:Key="SaveButtonStyle" TargetType="Button" BasedOn="{StaticResource InteractiveButtonStyle}">
+            <Setter Property="Background" Value="#60e6c4"/>
         </Style>
 
-        <Style x:Key="SaveButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-            <Setter Property="Background" Value="#60e6c4"/>
-            <Setter Property="Foreground" Value="Black"/>
+        <!-- Styl pro Cancel tlačítko s animacemi -->
+        <Style x:Key="CancelButtonStyle" TargetType="Button" BasedOn="{StaticResource InteractiveButtonStyle}">
+            <Setter Property="Background" Value="#ff6666"/>
         </Style>
     </Window.Resources>
 
@@ -200,8 +238,6 @@
                           SelectedValue="{Binding Faculty}" />
                 <TextBlock Text="Email" Style="{StaticResource BaseTextBlockStyle}"/>
                 <TextBox  Style="{StaticResource BaseTextBoxStyle}" Text="{Binding Path=Email}"/>
-                <TextBlock Text="Password" Style="{StaticResource BaseTextBlockStyle}" />
-                <controls:PasswordToggleControl x:Name="txtPassword"/>
                 <CheckBox Content="I agree to the processing of personal data"
                           IsChecked="{Binding IsConsentGiven, Mode=TwoWay}"
                           Margin="0,20,0,0"

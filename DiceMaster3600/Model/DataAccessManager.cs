@@ -12,21 +12,20 @@ namespace DiceMaster3600.Model
     public class DataAccessManager : IDataAccessManager
     {
         #region Fields
-        private readonly RepositoryFasade dbModel;
-        private bool isworking;
-
-        List<UniversityDTO> smazat = new List<UniversityDTO>(); 
+        List<UniversityDTO> smazat = new();
+        private readonly RepositoryFasade repositoryFacade;
+        private bool isWorking;
         #endregion
 
         #region Properties
         public bool IsWorking
         {
-            get => isworking;
+            get => isWorking;
             private set
             {
-                if (isworking != value)
+                if (isWorking != value)
                 {
-                    isworking = value;
+                    isWorking = value;
                     OnProcessingStatusChanged?.Invoke(value);
                 }
             }
@@ -36,7 +35,7 @@ namespace DiceMaster3600.Model
         #region Constructors
         public DataAccessManager(RepositoryFasade dbModel)
         {
-            this.dbModel = dbModel;
+            repositoryFacade = dbModel;
         }
         #endregion
 
@@ -71,31 +70,31 @@ namespace DiceMaster3600.Model
         {
             await ExecuteDataOperationAsync(async () =>
             {
-                await dbModel.DeleteUniversityById(id);
+                await repositoryFacade.DeleteUniversityById(id);
                 OnDatabaseUpdated?.Invoke(this, EventArgs.Empty);
             });
         }
 
         public async Task<RankedUserDTO[]> GetTopThreePlayersAsync() 
             => await ExecuteDataOperationAsync(() 
-            => dbModel.GetTopThree());
+            => repositoryFacade.GetTopThree());
 
         public async Task<UniversityRankingDTO[]> GetTopThreeUniversityAsync()
             => await ExecuteDataOperationAsync(() 
-            => dbModel.GetTopThreeUniversity());
+            => repositoryFacade.GetTopThreeUniversity());
 
-        public async Task<UserDTO?> GetUserByEmailAsync(string email, string plainPassword) 
+        public async Task<UserDTO?> GetUserByEmailAsync(string email) 
             => await ExecuteDataOperationAsync(() 
-            => dbModel.GetUserByEmailAsync(email, plainPassword));
+            => repositoryFacade.GetUserByEmailAsync(email));
 
-        public async Task RegisterUserAsync(UserDTO user, string plainPassword, UniversityType university, FacultyType faculty)
+        public async Task RegisterUserAsync(UserDTO user, UniversityType university, FacultyType faculty)
         {
-            await ExecuteDataOperationAsync(() => dbModel.RegisterUser(user, plainPassword, university, faculty));
+            await ExecuteDataOperationAsync(() => repositoryFacade.RegisterUser(user, university, faculty));
         }
 
         public async Task GetUniversityByID(int id)
         {
-            await ExecuteDataOperationAsync(() => dbModel.GetUniversityDTOByIdAsync(id)); 
+            _ = await ExecuteDataOperationAsync(() => repositoryFacade.GetUniversityDTOByIdAsync(id)); 
         }
         #endregion
 
@@ -187,6 +186,5 @@ namespace DiceMaster3600.Model
             smazat = new UniversityDTO[] { university1, university2 }.ToList();
             return new UniversityDTO[] { university1, university2 };
         }
-
     }
 }
